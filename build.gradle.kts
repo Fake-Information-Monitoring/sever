@@ -20,6 +20,10 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    implementation("org.springframework.boot:spring-boot-starter-activemq:1.5.0.RELEASE")//ActiveMQ
+    implementation("org.springframework.boot:spring-boot-starter-data-jdbc")//Spring Jdbc
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")//Spring Jpa
+    runtimeOnly("mysql:mysql-connector-java")//Mysql Driver
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
