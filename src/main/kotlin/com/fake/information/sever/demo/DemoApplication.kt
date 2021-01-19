@@ -1,5 +1,6 @@
 package com.fake.information.sever.demo
 
+import com.fake.information.sever.demo.Controller.Controller
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.ApplicationArguments
@@ -22,6 +23,7 @@ class DemoApplication: ApplicationRunner {
                                                                                              __/ |
                                                                                             |___/ 
         """.trimIndent())
+
     }
 }
 fun main(args: Array<String>) {
