@@ -14,4 +14,7 @@ class Commit {
     val user: User? = null
     @Column(name = "commit_at",nullable = false)
     val commitTime: Date? = null
+    @OneToOne(cascade = [CascadeType.ALL],optional = false)
+    @JoinColumn(name = "index_id",referencedColumnName = "id")
+    val index: CommitIndex? = null
 }
