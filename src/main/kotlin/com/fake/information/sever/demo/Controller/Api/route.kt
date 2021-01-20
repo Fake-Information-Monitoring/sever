@@ -1,19 +1,18 @@
 package com.fake.information.sever.demo.Controller.Api
 
+import com.fake.information.sever.demo.Controller.BuildError
 import com.fake.information.sever.demo.DAO.UserRepository
 import com.fake.information.sever.demo.Model.User
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.web.servlet.server.Session
 import org.springframework.data.domain.Example
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 
 @RestController
-@RequestMapping("/v1")
+@RequestMapping("/v1",method = [RequestMethod.POST])
 class ProductServiceController{
     @Autowired
     private lateinit var userRepository: UserRepository
@@ -23,29 +22,43 @@ class ProductServiceController{
 
 
     @ExperimentalStdlibApi
-    @PostMapping("/login")
-    fun login(@RequestParam("account") account: String,
+    @PostMapping("/login_with_email")
+    fun loginWithEmail(@RequestParam("account") account: String,
               @RequestParam("password") password: String,
               @RequestParam("CAPTCHA") captcha: String
     ): String {
-            val user = User()
+        //TODO:检验验证码是否正确
+            var tempUser: User? = null
             if (checkEmail(account)) {
-                user.email = account
+                tempUser = userRepository.findByEmail(account)
             }else {
-                try {
-                    user.phoneNumber = account.toLong()
-                }catch (e:NumberFormatException){
-                    return e.toString()
-                }
+                return BuildError.buildErrorInfo("格式有误")
             }
-            val example = Example.of(user)
-            val tempUser = userRepository.findOne(example)
-            if (tempUser.isEmpty){
-                return buildMap<String,String> {
-                    "error" to "用户不存在"
-                }.toString()
+            if (tempUser == null) {
+                return BuildError.buildErrorInfo("用户不存在")
             }
+        //TODO:添加Session
             return "success"
+    }
+
+    @ExperimentalStdlibApi
+    @PostMapping("/login_with_phone")
+    fun loginWithPhone(@RequestParam("account") account: String,
+                       @RequestParam("password") password: String,
+                       @RequestParam("CAPTCHA") captcha: String
+    ): String {
+        //TODO:检验验证码是否正确
+        var tempUser: User? = null
+        try {
+            tempUser = userRepository.findByPhoneNumber(account.toLong())
+        }catch (e:NumberFormatException){
+            return BuildError.buildErrorInfo("账号格式有误")
+        }
+        if (tempUser == null) {
+            return BuildError.buildErrorInfo("用户不存在")
+        }
+        //TODO:添加Session
+        return "success"
     }
 
     @PostMapping("/verifyCode")
