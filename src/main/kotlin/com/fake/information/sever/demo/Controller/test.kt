@@ -12,8 +12,8 @@ import java.util.*
 
 
 @RestController
-@RequestMapping("/login")
-class Controller {
+@RequestMapping("/test")
+class test {
     @Autowired
     private lateinit var userRepository: UserRepository
 
