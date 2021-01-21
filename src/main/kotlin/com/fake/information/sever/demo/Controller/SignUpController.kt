@@ -9,23 +9,34 @@ import java.net.URLDecoder
 import java.util.*
 
 @RestController
-@RequestMapping("/v1/sign_up", method = [RequestMethod.POST, RequestMethod.GET])
+@RequestMapping("/v1/signUp", method = [RequestMethod.POST, RequestMethod.GET])
 class SignUpController {
     @Autowired
     private lateinit var userRepository: UserRepository
     fun checkUserByName(name: String): Boolean {
         return userRepository.findByName(name).name != null
     }
+
     fun checkUserByEmail(email: String): Boolean {
         return userRepository.findByEmail(email).name != null
     }
+
     fun encode(str: String): String {
-        return URLDecoder.decode(str,"utf-8")
+        return URLDecoder.decode(str, "utf-8")
     }
-    @PostMapping("/update")
-    fun update(){
+    @PutMapping("/uploadImage")
+    fun putHeadImg(){
 
     }
+    @PostMapping("/update")
+    fun update(@RequestHeader("email") email: String,
+               @RequestHeader("password") password: String,
+               @RequestHeader("phoneNumber") phoneNumber: String,
+               @RequestHeader("sex") sex: String,
+               @RequestHeader("name") name: String) {
+
+    }
+
     @ExperimentalStdlibApi
     @PostMapping("/create")
     fun create(@RequestHeader("email") email: String,
@@ -38,21 +49,11 @@ class SignUpController {
         val sex = encode(sex)
         var flag = false
         val info = when {
-            !Check.checkEmail(email) -> {
-                "邮箱格式有误！"
-            }
-            !Check.checkPassword(password) -> {
-                "密码安全性过低"
-            }
-            !Check.checkSex(sex) -> {
-                "性别有误！"
-            }
-            !checkUserByName(name)->{
-                "该昵称已存在"
-            }
-            !checkUserByEmail(email)->{
-                "该邮箱已被使用"
-            }
+            !Check.checkEmail(email) -> "邮箱格式有误！"
+            !Check.checkPassword(password) -> "密码安全性过低"
+            !Check.checkSex(sex) -> "性别有误！"
+            !checkUserByName(name) -> "该昵称已存在"
+            !checkUserByEmail(email) -> "该邮箱已被使用"
             else -> {
                 flag = true
                 "success"
@@ -69,7 +70,7 @@ class SignUpController {
             userRepository.save(user)
         }
         return mapOf(
-            "status" to info
+                "status" to info
         )
     }
 }

@@ -1,4 +1,4 @@
-package com.fake.information.sever.demo.Controller.Api
+package com.fake.information.sever.demo.Controller
 
 import com.fake.information.sever.demo.Controller.tools.BuildError
 import com.fake.information.sever.demo.Controller.tools.Check
@@ -44,7 +44,7 @@ class ProductServiceController {
     }
 
     @ExperimentalStdlibApi
-    @PostMapping("/login_with_email")
+    @PostMapping("/loginWithEmail")
     fun loginWithEmail(@RequestParam("account") account: String,
                        @RequestParam("password") password: String,
                        @RequestParam("CAPTCHA") captcha: String = ""
@@ -61,7 +61,7 @@ class ProductServiceController {
     }
 
     @ExperimentalStdlibApi
-    @PostMapping("/login_with_phone")
+    @PostMapping("/loginWithPhone")
     fun loginWithPhone(@RequestParam("account") account: String,
                        @RequestParam("password") password: String,
                        @RequestParam("CAPTCHA") captcha: String = "",
@@ -82,7 +82,6 @@ class ProductServiceController {
 
     @PostMapping("/verifyCode")
     fun verifyCode(request: HttpServletRequest, response: HttpServletResponse) {
-        //TODO:返回验证码
     }
 
 }
