@@ -3,10 +3,10 @@ package com.fake.information.sever.demo.Model
 import java.io.File
 import java.sql.Blob
 import javax.persistence.*
-
+import java.io.Serializable
 @Entity
 @Table(name = "commit_index")
-class CommitIndex {
+class CommitIndex: Serializable {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id",nullable = false)
     var id: Int = 0
