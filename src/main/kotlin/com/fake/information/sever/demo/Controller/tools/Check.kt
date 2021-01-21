@@ -1,7 +1,4 @@
-package com.fake.information.sever.demo.Controller
-
-import com.fake.information.sever.demo.DAO.UserRepository
-import org.springframework.beans.factory.annotation.Autowired
+package com.fake.information.sever.demo.Controller.tools
 
 object Check {
     fun checkEmail(email: String): Boolean {
@@ -15,6 +12,6 @@ object Check {
         )
     }
     fun checkSex(sex:String):Boolean{
-        return (sex == "男" ) or (sex == "man") or (sex == "女") or (sex == "women")
+        return (sex == "男" ) or (sex == "女")
     }
 }

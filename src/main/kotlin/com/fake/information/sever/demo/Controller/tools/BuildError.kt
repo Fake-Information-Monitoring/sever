@@ -1,4 +1,4 @@
-package com.fake.information.sever.demo.Controller
+package com.fake.information.sever.demo.Controller.tools
 
 class BuildError{
     companion object {

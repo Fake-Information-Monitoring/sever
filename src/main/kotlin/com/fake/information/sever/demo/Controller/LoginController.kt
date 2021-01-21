@@ -1,7 +1,7 @@
 package com.fake.information.sever.demo.Controller.Api
 
-import com.fake.information.sever.demo.Controller.BuildError
-import com.fake.information.sever.demo.Controller.Check
+import com.fake.information.sever.demo.Controller.tools.BuildError
+import com.fake.information.sever.demo.Controller.tools.Check
 import com.fake.information.sever.demo.DAO.UserRepository
 import com.fake.information.sever.demo.Model.User
 import org.springframework.beans.factory.annotation.Autowired

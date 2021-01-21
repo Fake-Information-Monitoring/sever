@@ -1,5 +1,6 @@
 package com.fake.information.sever.demo.Controller
 
+import com.fake.information.sever.demo.Controller.tools.Check
 import com.fake.information.sever.demo.DAO.UserRepository
 import com.fake.information.sever.demo.Model.User
 import org.springframework.beans.factory.annotation.Autowired
@@ -14,6 +15,9 @@ class SignUpController {
     private lateinit var userRepository: UserRepository
     fun checkUserByName(name: String): Boolean {
         return userRepository.findByName(name).name != null
+    }
+    fun checkUserByEmail(email: String): Boolean {
+        return userRepository.findByEmail(email).name != null
     }
     fun encode(str: String): String {
         return URLDecoder.decode(str,"utf-8")
@@ -42,6 +46,12 @@ class SignUpController {
             }
             !Check.checkSex(sex) -> {
                 "性别有误！"
+            }
+            !checkUserByName(name)->{
+                "该昵称已存在"
+            }
+            !checkUserByEmail(email)->{
+                "该邮箱已被使用"
             }
             else -> {
                 flag = true
