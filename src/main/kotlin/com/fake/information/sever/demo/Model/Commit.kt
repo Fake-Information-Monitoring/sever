@@ -1,11 +1,12 @@
 package com.fake.information.sever.demo.Model
 
+import java.io.Serializable
 import java.util.*
 import javax.persistence.*
 
 @Entity
 @Table(name="commit")
-class Commit {
+class Commit: Serializable {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id",nullable = false)
     var id: Int = 0
