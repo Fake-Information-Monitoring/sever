@@ -31,6 +31,10 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")//Spring Jpa
     runtimeOnly("mysql:mysql-connector-java")//Mysql Driver
     implementation("com.github.PhilJay:JWT:1.1.5")//jwt in kotlin //https://github.com/PhilJay/JWT
+    implementation("org.springframework.session:spring-session-data-redis")//session
+    implementation("org.springframework.boot:spring-boot-starter-data-redis")//redis
+    implementation("io.lettuce:lettuce-core:6.0.2.RELEASE") //lettuce
+    implementation("com.alibaba:fastjson:1.2.73")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
 
