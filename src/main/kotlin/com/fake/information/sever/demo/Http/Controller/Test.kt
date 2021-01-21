@@ -1,4 +1,4 @@
-package com.fake.information.sever.demo.Controller
+package com.fake.information.sever.demo.Http.Controller
 
 import com.fake.information.sever.demo.DAO.UserRepository
 import com.fake.information.sever.demo.Model.User
@@ -13,7 +13,7 @@ import java.util.*
 
 @RestController
 @RequestMapping("/test")
-class test {
+class Test {
     @Autowired
     private lateinit var userRepository: UserRepository
 

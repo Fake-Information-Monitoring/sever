@@ -1,7 +1,5 @@
 package com.fake.information.sever.demo.Http.Interceptor
 
-import com.alibaba.fastjson.JSON
-import com.fake.information.sever.demo.Http.Response.ReturnData
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.redis.core.StringRedisTemplate
 import org.springframework.web.servlet.HandlerInterceptor
