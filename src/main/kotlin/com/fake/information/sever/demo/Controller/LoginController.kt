@@ -6,9 +6,7 @@ import com.fake.information.sever.demo.Model.User
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.web.servlet.server.Session
 import org.springframework.data.domain.Example
-import org.springframework.security.config.annotation.web.builders.WebSecurity
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
+
 import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
