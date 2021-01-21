@@ -28,6 +28,7 @@ class User :Serializable {
     var update: Date? = null
     @Column(name = "last_actived_at",nullable = true)
     val lastActive: Date? = null
+    @Column("id")
     @OneToMany(mappedBy = "user",cascade = [CascadeType.ALL],fetch = FetchType.EAGER)
     val commitList:List<Commit> = ArrayList()
 }

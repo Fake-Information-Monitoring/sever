@@ -1,7 +1,6 @@
 package com.fake.information.sever.demo.Model
 
 import java.io.File
-import java.sql.Blob
 import javax.persistence.*
 
 @Entity
