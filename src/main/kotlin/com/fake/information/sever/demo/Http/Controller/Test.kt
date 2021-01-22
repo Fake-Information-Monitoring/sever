@@ -28,7 +28,7 @@ class Test {
         user.name ="userName"
         user.email = "email"
         user.gender = "gender"
-        //user.password = "password"
+        user.setPassword( "password")
         user.phoneNumber = 1233
         user.update = Date()
         userRepository.save(user)
@@ -41,12 +41,12 @@ class Test {
     @PostMapping("/create")
     fun testSession1(@RequestParam("userId") userId:String,httpRequest: HttpServletRequest,response: HttpServletResponse){
         var session : SessionController = SessionController(httpRequest)
-        response.writer.print(session.createSession(userId,StatusCode.Status_200).id)
+        response.writer.print(session.createSession(userId,StatusCode.Status_200.statusCode).id)
     }
     @PostMapping("/delete")
     fun testSession2(@RequestParam("userId") userId:String,httpRequest: HttpServletRequest,response: HttpServletResponse){
         var session : SessionController = SessionController(httpRequest)
-        response.writer.println(session.createSession(userId,StatusCode.Status_200).id)
+        response.writer.println(session.createSession(userId,StatusCode.Status_200.statusCode).id)
         response.writer.println(httpRequest.getSession().id)
         response.writer.println(session.checkSessionStatusCode(userId))
         response.writer.println(session.deleteSession())

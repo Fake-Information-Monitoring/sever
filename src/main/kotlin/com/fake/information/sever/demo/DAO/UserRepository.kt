@@ -22,7 +22,7 @@ import javax.sql.DataSource
 
 @Repository
 interface UserRepository:JpaRepository<User,Int>, Serializable {
-    fun findByPhoneNumber(phoneNumber: Long):User
-    fun findByEmail(email: String):User
-    fun findByName(email: String):User
+    fun findByPhoneNumber(phoneNumber: Long):User?
+    fun findByEmail(email: String):User?
+    fun findByName(email: String):User?
 }

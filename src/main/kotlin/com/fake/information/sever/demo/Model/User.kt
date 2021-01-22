@@ -1,5 +1,6 @@
 package com.fake.information.sever.demo.Model
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import java.io.Serializable
 import java.util.*
 import javax.persistence.*
@@ -7,6 +8,7 @@ import kotlin.collections.ArrayList
 
 @Entity
 @Table(name="User",indexes =[ Index(columnList = "phone_number"),Index(columnList = "email") ] )
+@JsonIgnoreProperties(value = ["password","lastActive"])
 class User :Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,14 +28,13 @@ class User :Serializable {
     var update: Date? = null
     @Column(name = "last_actived_at",nullable = true)
     val lastActive: Date? = null
-    @Column("id")
     @OneToMany(mappedBy = "user",cascade = [CascadeType.ALL],fetch = FetchType.EAGER)
     val commitList:List<Commit> = ArrayList()
     fun getPassword(): String? {
         return password
     }
-    @OneToOne(cascade = [CascadeType.ALL], optional = false)
-    @JoinColumn(name = "avatar_id",referencedColumnName = "id")
+    @OneToOne(cascade = [CascadeType.ALL], optional = true)
+    @JoinColumn(name = "avatar_id",referencedColumnName = "id",nullable = true)
     var avatar: Avatar? = null
     fun updateInfo(name:String,gender:String){
         this.name = name
@@ -46,19 +47,19 @@ class User :Serializable {
     fun updateImg(avatar: Avatar){
         this.avatar = avatar
     }
-    @ExperimentalStdlibApi
-    fun getIndex():Map<String,Any?>{
-        return mapOf(
-                "name" to name,
-                "phoneNumber" to phoneNumber,
-                "uid" to id,
-                "gender" to gender,
-                "avatar" to avatar?.id,
-                "commit_num" to buildMap<Int,Any> {
-                    commitList.forEach {
-                        it.id to it.commitTime
-                    }
-                }
-        )
-    }
+//    @ExperimentalStdlibApi
+//    fun getIndex():Map<String,Any?>{
+//        return mapOf(
+//                "name" to name,
+//                "phoneNumber" to phoneNumber,
+//                "uid" to id,
+//                "gender" to gender,
+//                "avatar" to avatar?.id,
+//                "commit_num" to buildMap<Int,Any> {
+//                    commitList.forEach {
+//                        it.id to it.commitTime
+//                    }
+//                }
+//        )
+//    }
 }

@@ -1,7 +1,8 @@
 package com.fake.information.sever.demo.Controller.tools
 
+import com.fake.information.sever.demo.Http.Controller.StatusCode
 import com.fake.information.sever.demo.Model.User
-
+import com.fake.information.sever.demo.Http.Response.Result
 object Check {
     fun checkEmail(email: String): Boolean {
         return email.matches(Regex(
@@ -20,25 +21,26 @@ object Check {
     }
 
     @ExperimentalStdlibApi
-    fun checkAccount(user: User?, password: String): Map<String, String> {
-        var status = "error"
+    fun checkAccount(user: User?, password: String): Result<String> {
+        var success = false
         val error = when {
             user == null -> {
                 "用户不存在"
             }
-//            password != user.password -> {
-//                //TODO：生成验证码并加入Session
-//                "密码错误"
-//            }
+            password != user.getPassword() -> {
+                //TODO：生成验证码并加入Session
+                "密码错误"
+            }
             else -> {
-                status = "OK"
-                ""
+                success = true
+                "login success"
             }
         }
-        return buildMap {
-            "error" to error
-            "status" to status
-        }
+        return Result<String>(
+                success = success,
+                code = if (success) StatusCode.Status_200.statusCode else StatusCode.Status_401.statusCode,
+                msg = error
+        )
     }
 
 }

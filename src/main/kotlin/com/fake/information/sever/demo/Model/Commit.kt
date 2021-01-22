@@ -1,11 +1,13 @@
 package com.fake.information.sever.demo.Model
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import java.io.Serializable
 import java.util.*
 import javax.persistence.*
 
 @Entity
 @Table(name="commit")
+@JsonIgnoreProperties(value = ["index","user"])
 class Commit: Serializable {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id",nullable = false)

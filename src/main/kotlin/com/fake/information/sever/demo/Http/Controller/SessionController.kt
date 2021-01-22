@@ -8,8 +8,7 @@ open class SessionController(request: HttpServletRequest) {
 
      private var session: HttpSession = request.session
 
-
-    open fun createSession(userId: String, status_Code: StatusCode): HttpSession {
+    open fun createSession(userId: String, status_Code: Int): HttpSession {
         session.setAttribute(session.id,status_Code)
         return session
     }
