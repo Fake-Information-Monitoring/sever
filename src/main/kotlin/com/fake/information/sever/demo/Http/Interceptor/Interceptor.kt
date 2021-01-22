@@ -33,14 +33,13 @@ class Interceptor : WebMvcConfigurer {
             if (session.getAttribute(session.id) == StatusCode.Status_200) {//TODO: session状态码拦截
                 return true
             }
-            val gson: Gson = Gson()
             val result: Result<String> = Result(
                     success = false,
                     code = 401,
                     msg = "Bad Request",
                     data = "Please Login"
             )
-            response.writer.print(gson.toJson(result))
+            response.writer.print(result.toJson())
             return false
         }
     }

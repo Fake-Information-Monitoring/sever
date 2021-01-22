@@ -18,18 +18,15 @@ class GetUserInfo {
     @ExperimentalStdlibApi
     @PostMapping("/{user}")
     fun userInfo(@PathVariable user:Int): Map<String, Any?> {
-        //TODO:验证Session
          return userRepository.findById(user).get().getIndex()
     }
     @PostMapping("/{user}/avatar")
     fun userAvatar(@PathVariable user:Int): File? {
-        //TODO:验证Session
         return userRepository.getOne(user).avatar?.headImg
     }
     @ExperimentalStdlibApi
     @PostMapping("/{user}/{commit}")
     fun getCommit(@PathVariable user:Int,@PathVariable commit:Int): Any {
-        //TODO:验证Session
         val commit = commitRepository.getOne(commit)
         if (commit.user?.id == user){
             return commit.index?.index!!

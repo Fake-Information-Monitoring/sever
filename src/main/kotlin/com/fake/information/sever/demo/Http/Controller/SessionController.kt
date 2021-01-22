@@ -4,7 +4,7 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpSession
 
 
-class SessionController(request: HttpServletRequest) {
+open class SessionController(request: HttpServletRequest) {
 
      private var session: HttpSession = request.session
 

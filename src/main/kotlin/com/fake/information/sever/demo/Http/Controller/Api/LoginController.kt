@@ -29,7 +29,6 @@ class LoginController {
                        @RequestParam("password") password: String,
                        @RequestParam("CAPTCHA") captcha: String = ""
     ): Map<String, Any> {
-        //TODO:检验验证码是否正确
         var tempUser: User? = null
         if (Check.checkEmail(account)) {
             tempUser = userRepository.findByEmail(account)
