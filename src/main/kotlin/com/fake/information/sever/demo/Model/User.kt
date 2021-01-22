@@ -6,7 +6,7 @@ import javax.persistence.*
 import kotlin.collections.ArrayList
 
 @Entity
-@Table(name="User",indexes =[ Index(columnList = "phoneNumber"),Index(columnList = "email") ] )
+@Table(name="User",indexes =[ Index(columnList = "phone_number"),Index(columnList = "email") ] )
 class User :Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

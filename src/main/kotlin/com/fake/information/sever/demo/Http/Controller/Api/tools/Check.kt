@@ -26,10 +26,10 @@ object Check {
             user == null -> {
                 "用户不存在"
             }
-            password != user.password -> {
-                //TODO：生成验证码并加入Session
-                "密码错误"
-            }
+//            password != user.password -> {
+//                //TODO：生成验证码并加入Session
+//                "密码错误"
+//            }
             else -> {
                 status = "OK"
                 ""

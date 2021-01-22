@@ -10,7 +10,7 @@ class SessionController(request: HttpServletRequest) {
 
 
     open fun createSession(userId: String, status_Code: StatusCode): HttpSession {
-        session.setAttribute(userId,status_Code)
+        session.setAttribute(session.id,status_Code)
         return session
     }
     fun deleteSession(){

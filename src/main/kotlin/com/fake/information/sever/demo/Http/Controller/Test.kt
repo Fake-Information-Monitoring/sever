@@ -28,7 +28,7 @@ class Test {
         user.name ="userName"
         user.email = "email"
         user.gender = "gender"
-        user.password = "password"
+        //user.password = "password"
         user.phoneNumber = 1233
         user.update = Date()
         userRepository.save(user)
@@ -50,7 +50,6 @@ class Test {
         response.writer.println(httpRequest.getSession().id)
         response.writer.println(session.checkSessionStatusCode(userId))
         response.writer.println(session.deleteSession())
-        //response.writer.println(session.createSession(userId,StatusCode.Status_200).id)
     }
 
 }

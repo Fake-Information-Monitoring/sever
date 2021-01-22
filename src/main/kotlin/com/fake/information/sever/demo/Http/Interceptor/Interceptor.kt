@@ -1,5 +1,6 @@
 package com.fake.information.sever.demo.Http.Interceptor
 
+import com.fake.information.sever.demo.Http.Controller.StatusCode
 import com.fake.information.sever.demo.Http.Response.Result
 import com.google.gson.Gson
 import org.springframework.context.annotation.Configuration
@@ -19,7 +20,7 @@ class Interceptor : WebMvcConfigurer {
                 //排除拦截
                 .excludePathPatterns("/login")
                 .excludePathPatterns("/logout")
-                .excludePathPatterns("/test/**")
+                .excludePathPatterns("/test/create")
                 //拦截路径
                 .addPathPatterns("/**")
     }
@@ -28,7 +29,8 @@ class Interceptor : WebMvcConfigurer {
     class SecurityInterceptor : HandlerInterceptor {
         override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
             val session = request.session
-            if (session.getAttribute(session.id) != null) {
+
+            if (session.getAttribute(session.id) == StatusCode.Status_200) {//TODO: session状态码拦截
                 return true
             }
             val gson: Gson = Gson()
