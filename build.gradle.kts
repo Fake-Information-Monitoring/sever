@@ -34,7 +34,7 @@ dependencies {
     implementation("org.springframework.session:spring-session-data-redis")//session
     implementation("org.springframework.boot:spring-boot-starter-data-redis")//redis
     implementation("io.lettuce:lettuce-core:6.0.2.RELEASE") //lettuce
-    implementation("com.google.code.gson:gson:2.8.6")
+    implementation("com.google.code.gson:gson:2.8.6")//gson
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
 
