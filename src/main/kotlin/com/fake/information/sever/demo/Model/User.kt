@@ -29,7 +29,9 @@ class User :Serializable {
     @Column("id")
     @OneToMany(mappedBy = "user",cascade = [CascadeType.ALL],fetch = FetchType.EAGER)
     val commitList:List<Commit> = ArrayList()
-
+    fun getPassword(): String? {
+        return password
+    }
     @OneToOne(cascade = [CascadeType.ALL], optional = false)
     @JoinColumn(name = "avatar_id",referencedColumnName = "id")
     var avatar: Avatar? = null
