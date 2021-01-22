@@ -12,37 +12,16 @@ import javax.servlet.http.HttpSession
 
 
 @RestController
-@RequestMapping("/api/v1/login", method = [RequestMethod.POST,RequestMethod.GET])
-class ProductServiceController {
+@RequestMapping("/v1/login", method = [RequestMethod.POST, RequestMethod.GET])
+class LoginController {
+    @Autowired
+    private lateinit var userRepository: UserRepository
+
     @GetMapping("/")
     fun login(): String {
         return "Login!"
     }
-    @Autowired
-    private lateinit var userRepository: UserRepository
 
-    @ExperimentalStdlibApi
-    fun checkAccount(user:User?, password: String): Map<String, String> {
-        var status = "failed"
-        var error = ""
-        when {
-            user == null -> {
-                error = "用户不存在"
-            }
-            password!=user.password -> {
-                //TODO：生成验证码并加入Session
-                error = "密码错误"
-
-            }
-            else -> {
-                status = "success"
-            }
-        }
-        return buildMap<String,String> {
-            "error" to error
-            "status" to status
-        }
-    }
 
     @ExperimentalStdlibApi
     @PostMapping("/loginWithEmail")
@@ -55,9 +34,9 @@ class ProductServiceController {
         if (Check.checkEmail(account)) {
             tempUser = userRepository.findByEmail(account)
         }
-        val check = checkAccount(tempUser,password)
+        val check = Check.checkAccount(tempUser, password)
 
-        //TODO:添加Session
+        //TODO:添加Session,如果第一次密码不正确就生成验证码
         return check
     }
 
@@ -69,13 +48,13 @@ class ProductServiceController {
                        session: HttpSession
     ): Map<String, Any> {
         //TODO:检验验证码是否正确
-        var tempUser: User? = null
+         val tempUser: User?
         try {
             tempUser = userRepository.findByPhoneNumber(account.toLong())
         } catch (e: NumberFormatException) {
             return BuildError.buildErrorInfo("账号格式有误")
         }
-        val check = checkAccount(tempUser,password)
+        val check = Check.checkAccount(tempUser, password)
 //        session.setAttribute()
         //TODO:添加Session
         return check

@@ -6,7 +6,7 @@ import javax.persistence.*
 import kotlin.collections.ArrayList
 
 @Entity
-@Table(name="User")
+@Table(name="User",indexes =[ Index(columnList = "phoneNumber"),Index(columnList = "email") ] )
 class User :Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,7 +19,7 @@ class User :Serializable {
     @Column(name = "gender",nullable = true)
     var gender: String? = null
     @Column(name = "password",nullable = false)
-    var password: String? = null
+    private var password: String? = null
     @Column(name = "email",nullable = false)
     var email: String? = null
     @Column(name = "updated_at",nullable = false)
@@ -32,5 +32,31 @@ class User :Serializable {
 
     @OneToOne(cascade = [CascadeType.ALL], optional = false)
     @JoinColumn(name = "avatar_id",referencedColumnName = "id")
-    val avatar: Avatar? = null
+    var avatar: Avatar? = null
+    fun updateInfo(name:String,gender:String){
+        this.name = name
+        this.gender = gender
+        update = Date()
+    }
+    fun setPassword(password:String){
+        this.password = password
+    }
+    fun updateImg(avatar: Avatar){
+        this.avatar = avatar
+    }
+    @ExperimentalStdlibApi
+    fun getIndex():Map<String,Any?>{
+        return mapOf(
+                "name" to name,
+                "phoneNumber" to phoneNumber,
+                "uid" to id,
+                "gender" to gender,
+                "avatar" to avatar?.id,
+                "commit_num" to buildMap<Int,Any> {
+                    commitList.forEach {
+                        it.id to it.commitTime
+                    }
+                }
+        )
+    }
 }
