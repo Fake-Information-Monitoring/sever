@@ -49,6 +49,7 @@ class SignUpController {
                         @RequestHeader("sex") sex: String,
                         @RequestHeader("name") name: String
     ): Map<String, Any> {
+        //TODO:验证Session
         val thisName = encode(name)
         val thisSex = encode(sex)
         val info = checking(email, password, thisSex, thisName)
@@ -56,7 +57,7 @@ class SignUpController {
             val user = User()
             user.email = email
             user.phoneNumber = phoneNumber.toLong()
-            user.password = password
+            user.setPassword(password)
             user.gender = sex
             user.name = name
             user.update = Date()

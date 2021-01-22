@@ -19,7 +19,7 @@ class User :Serializable {
     @Column(name = "gender",nullable = true)
     var gender: String? = null
     @Column(name = "password",nullable = false)
-    var password: String? = null
+    private var password: String? = null
     @Column(name = "email",nullable = false)
     var email: String? = null
     @Column(name = "updated_at",nullable = false)
@@ -37,7 +37,25 @@ class User :Serializable {
         this.gender = gender
         update = Date()
     }
+    fun setPassword(password:String){
+        this.password = password
+    }
     fun updateImg(avatar: Avatar){
         this.avatar = avatar
+    }
+    @ExperimentalStdlibApi
+    fun getIndex():Map<String,Any?>{
+        return mapOf(
+                "name" to name,
+                "phoneNumber" to phoneNumber,
+                "uid" to id,
+                "gender" to gender,
+                "avatar" to avatar?.id,
+                "commit_num" to buildMap<Int,Any> {
+                    commitList.forEach {
+                        it.id to it.commitTime
+                    }
+                }
+        )
     }
 }

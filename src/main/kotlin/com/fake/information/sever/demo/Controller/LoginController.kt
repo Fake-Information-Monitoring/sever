@@ -13,7 +13,7 @@ import javax.servlet.http.HttpSession
 
 @RestController
 @RequestMapping("/v1/login", method = [RequestMethod.POST, RequestMethod.GET])
-class ProductServiceController {
+class LoginController {
     @Autowired
     private lateinit var userRepository: UserRepository
 
@@ -36,7 +36,7 @@ class ProductServiceController {
         }
         val check = Check.checkAccount(tempUser, password)
 
-        //TODO:添加Session
+        //TODO:添加Session,如果第一次密码不正确就生成验证码
         return check
     }
 
@@ -48,7 +48,7 @@ class ProductServiceController {
                        session: HttpSession
     ): Map<String, Any> {
         //TODO:检验验证码是否正确
-        var tempUser: User? = null
+         val tempUser: User?
         try {
             tempUser = userRepository.findByPhoneNumber(account.toLong())
         } catch (e: NumberFormatException) {
