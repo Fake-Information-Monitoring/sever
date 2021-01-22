@@ -12,36 +12,16 @@ import javax.servlet.http.HttpSession
 
 
 @RestController
-@RequestMapping("/v1/login", method = [RequestMethod.POST,RequestMethod.GET])
+@RequestMapping("/v1/login", method = [RequestMethod.POST, RequestMethod.GET])
 class ProductServiceController {
+    @Autowired
+    private lateinit var userRepository: UserRepository
+
     @GetMapping("/")
     fun login(): String {
         return "Login!"
     }
-    @Autowired
-    private lateinit var userRepository: UserRepository
 
-    @ExperimentalStdlibApi
-    fun checkAccount(user:User?, password: String): Map<String, String> {
-        var status = "failed"
-        var error = ""
-        when {
-            user == null -> {
-                error = "用户不存在"
-            }
-            password!=user.password -> {
-                //TODO：生成验证码并加入Session
-                error = "密码错误"
-            }
-            else -> {
-                status = "success"
-            }
-        }
-        return buildMap<String,String> {
-            "error" to error
-            "status" to status
-        }
-    }
 
     @ExperimentalStdlibApi
     @PostMapping("/loginWithEmail")
@@ -54,7 +34,7 @@ class ProductServiceController {
         if (Check.checkEmail(account)) {
             tempUser = userRepository.findByEmail(account)
         }
-        val check = checkAccount(tempUser,password)
+        val check = Check.checkAccount(tempUser, password)
 
         //TODO:添加Session
         return check
@@ -74,7 +54,7 @@ class ProductServiceController {
         } catch (e: NumberFormatException) {
             return BuildError.buildErrorInfo("账号格式有误")
         }
-        val check = checkAccount(tempUser,password)
+        val check = Check.checkAccount(tempUser, password)
 //        session.setAttribute()
         //TODO:添加Session
         return check

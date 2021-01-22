@@ -6,7 +6,7 @@ import javax.persistence.*
 import kotlin.collections.ArrayList
 
 @Entity
-@Table(name="User")
+@Table(name="User",indexes =[ Index(columnList = "phoneNumber"),Index(columnList = "email") ] )
 class User :Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,5 +31,13 @@ class User :Serializable {
 
     @OneToOne(cascade = [CascadeType.ALL], optional = false)
     @JoinColumn(name = "avatar_id",referencedColumnName = "id")
-    val avatar: Avatar? = null
+    var avatar: Avatar? = null
+    fun updateInfo(name:String,gender:String){
+        this.name = name
+        this.gender = gender
+        update = Date()
+    }
+    fun updateImg(avatar: Avatar){
+        this.avatar = avatar
+    }
 }

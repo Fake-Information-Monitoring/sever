@@ -1,5 +1,6 @@
 package com.fake.information.sever.demo.Controller
 
+import com.fake.information.sever.demo.Controller.tools.BuildError
 import com.fake.information.sever.demo.Controller.tools.Check
 import com.fake.information.sever.demo.DAO.UserRepository
 import com.fake.information.sever.demo.Model.User
@@ -13,53 +14,45 @@ import java.util.*
 class SignUpController {
     @Autowired
     private lateinit var userRepository: UserRepository
-    fun checkUserByName(name: String): Boolean {
+    private fun checkUserByName(name: String): Boolean {
         return userRepository.findByName(name).name != null
     }
 
-    fun checkUserByEmail(email: String): Boolean {
+    private fun checkUserByEmail(email: String): Boolean {
         return userRepository.findByEmail(email).name != null
     }
 
-    fun encode(str: String): String {
+    private fun encode(str: String): String {
         return URLDecoder.decode(str, "utf-8")
     }
-    @PutMapping("/uploadImage")
-    fun putHeadImg(){
 
+    private fun checking(email: String = "",
+                 password: String = "",
+                 sex: String = "",
+                 name: String = ""): String {
+        return when {
+            (!Check.checkEmail(email) && email.isNotEmpty()) -> "邮箱格式有误！"
+            !Check.checkPassword(password) && password.isNotEmpty() -> "密码安全性过低"
+            !Check.checkSex(sex) && sex.isNotEmpty() -> "性别有误！"
+            !checkUserByName(name) && name.isNotEmpty() -> "该昵称已存在"
+            !checkUserByEmail(email) && email.isNotEmpty() -> "该邮箱已被使用"
+            else -> "OK"
+        }
     }
-    @PostMapping("/update")
-    fun update(@RequestHeader("email") email: String,
-               @RequestHeader("password") password: String,
-               @RequestHeader("phoneNumber") phoneNumber: String,
-               @RequestHeader("sex") sex: String,
-               @RequestHeader("name") name: String) {
 
-    }
 
     @ExperimentalStdlibApi
     @PostMapping("/create")
     fun create(@RequestHeader("email") email: String,
-               @RequestHeader("password") password: String,
-               @RequestHeader("phoneNumber") phoneNumber: String,
-               @RequestHeader("sex") sex: String,
-               @RequestHeader("name") name: String
+                        @RequestHeader("password") password: String,
+                        @RequestHeader("phoneNumber") phoneNumber: String,
+                        @RequestHeader("sex") sex: String,
+                        @RequestHeader("name") name: String
     ): Map<String, Any> {
-        val name = encode(name)
-        val sex = encode(sex)
-        var flag = false
-        val info = when {
-            !Check.checkEmail(email) -> "邮箱格式有误！"
-            !Check.checkPassword(password) -> "密码安全性过低"
-            !Check.checkSex(sex) -> "性别有误！"
-            !checkUserByName(name) -> "该昵称已存在"
-            !checkUserByEmail(email) -> "该邮箱已被使用"
-            else -> {
-                flag = true
-                "success"
-            }
-        }
-        if (flag) {
+        val thisName = encode(name)
+        val thisSex = encode(sex)
+        val info = checking(email, password, thisSex, thisName)
+        if (info == "OK") {
             val user = User()
             user.email = email
             user.phoneNumber = phoneNumber.toLong()
