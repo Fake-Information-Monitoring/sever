@@ -12,7 +12,7 @@ import javax.servlet.http.HttpSession
 
 
 @RestController
-@RequestMapping("/v1/login", method = [RequestMethod.POST,RequestMethod.GET])
+@RequestMapping("/api/v1/login", method = [RequestMethod.POST,RequestMethod.GET])
 class ProductServiceController {
     @GetMapping("/")
     fun login(): String {
@@ -32,6 +32,7 @@ class ProductServiceController {
             password!=user.password -> {
                 //TODO：生成验证码并加入Session
                 error = "密码错误"
+
             }
             else -> {
                 status = "success"

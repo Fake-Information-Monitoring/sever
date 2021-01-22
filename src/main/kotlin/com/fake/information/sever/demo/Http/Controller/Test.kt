@@ -17,7 +17,7 @@ class Test {
     @Autowired
     private lateinit var userRepository: UserRepository
 
-    @RequestMapping("add")
+    @RequestMapping("/add")
     fun saveUser(): String {
         val user = User()
         user.name ="userName"
