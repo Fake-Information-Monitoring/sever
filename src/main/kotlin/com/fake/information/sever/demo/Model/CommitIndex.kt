@@ -11,7 +11,7 @@ class CommitIndex: Serializable {
     var id: Int = 0
     @Column(name = "index",nullable = false)
     val index: File? = null
-    @OneToOne(cascade = [CascadeType.ALL],optional = false)
+    @OneToOne(targetEntity = Commit::class,cascade = [CascadeType.ALL],optional = false)
     @JoinColumn(name = "commit_id",nullable = false,referencedColumnName = "id")
     val commit: Commit? = null
 }

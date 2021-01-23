@@ -12,7 +12,7 @@ class Commit: Serializable {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id",nullable = false)
     var id: Int = 0
-    @ManyToOne(cascade = [CascadeType.ALL],optional = false)
+    @ManyToOne(targetEntity = User::class,cascade = [CascadeType.ALL],optional = false)
     @JoinColumn(name = "user_id",referencedColumnName = "id")
     val user: User? = null
     @Column(name = "commit_at",nullable = false)

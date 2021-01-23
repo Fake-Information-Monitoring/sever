@@ -16,7 +16,7 @@ class GetUserInfo {
     private lateinit var commitRepository: CommitRepository
     @ExperimentalStdlibApi
     @GetMapping("/{user}")
-    fun userInfo(@PathVariable user:Int): Any {
+    fun getUserInfo(@PathVariable user:Int): Any {
         try{
             return Result<User>(
                     success = true,
@@ -32,8 +32,8 @@ class GetUserInfo {
             )
         }
     }
-    @GetMapping("/{user}/avatar")
-    fun userAvatar(@PathVariable user:Int): Any {
+    @GetMapping("/{user}/avatar",produces = ["image/png"])
+    fun getUserAvatar(@PathVariable user:Int): Any {
         try {
             return userRepository.getOne(user).avatar?.headImg!!
         }catch (e:NoSuchElementException){

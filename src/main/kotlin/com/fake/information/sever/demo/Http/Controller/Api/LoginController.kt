@@ -9,7 +9,6 @@ import com.fake.information.sever.demo.Model.User
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
 
 @RestController
 @RequestMapping("/v1/login",
@@ -19,13 +18,13 @@ class LoginController {
     private lateinit var userRepository: UserRepository
 
     @GetMapping("/")
-    fun login(): String {
+    fun getLogin(): String {
 
         return "Login!"
     }
 
     @DeleteMapping("/logout")
-    fun logout(
+    fun deleteLogout(
             @RequestHeader("id") Id: Int,
             request: HttpServletRequest
     ): Result<String> {
@@ -47,7 +46,7 @@ class LoginController {
 
     @ExperimentalStdlibApi
     @PostMapping("/loginWithEmail")
-    fun loginWithEmail(@RequestHeader("account") account: String,
+    fun postLoginWithEmail(@RequestHeader("account") account: String,
                        @RequestHeader("password") password: String,
                        @RequestHeader("CAPTCHA") captcha: String,
                        request:HttpServletRequest
@@ -73,7 +72,7 @@ class LoginController {
 
     @ExperimentalStdlibApi
     @PostMapping("/loginWithPhone")
-    fun loginWithPhone(@RequestHeader("account") account: String,
+    fun postLoginWithPhone(@RequestHeader("account") account: String,
                        @RequestHeader("password") password: String,
                        @RequestHeader("CAPTCHA") captcha: String,
                        request:HttpServletRequest
@@ -97,7 +96,7 @@ class LoginController {
     }
 
     @GetMapping("/verifyCode")
-    fun verifyCode() {
+    fun getVerifyCode() {
     }
 
 }
