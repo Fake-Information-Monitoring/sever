@@ -15,7 +15,7 @@ class GetUserInfo {
     @Autowired
     private lateinit var commitRepository: CommitRepository
     @ExperimentalStdlibApi
-    @PostMapping("/{user}")
+    @GetMapping("/{user}")
     fun userInfo(@PathVariable user:Int): Any {
         try{
             return Result<User>(
@@ -32,7 +32,7 @@ class GetUserInfo {
             )
         }
     }
-    @PostMapping("/{user}/avatar")
+    @GetMapping("/{user}/avatar")
     fun userAvatar(@PathVariable user:Int): Any {
         try {
             return userRepository.getOne(user).avatar?.headImg!!
@@ -45,7 +45,7 @@ class GetUserInfo {
         }
     }
     @ExperimentalStdlibApi
-    @PostMapping("/{user}/{commit}")
+    @GetMapping("/{user}/{commit}")
     fun getCommit(@PathVariable user:Int,@PathVariable commit:Int): Any {
         try{
                 return commitRepository.getOne(commit).index?.index!!

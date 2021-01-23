@@ -6,15 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 import com.fake.information.sever.demo.Http.Response.Result
 @RestController
-@RequestMapping("/v1/update", method = [RequestMethod.POST])
+@RequestMapping("/v1/update", method = [RequestMethod.PUT])
 class UpdateController {
     @Autowired
     private lateinit var userRepository: UserRepository
 
-
-
     @ExperimentalStdlibApi
-    @PostMapping("/update")
+    @PutMapping("/update")
     fun update(@RequestHeader("sex") sex: String,
                @RequestHeader("name") name: String,
                @RequestHeader("id") id:Int): Result<String> {

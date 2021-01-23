@@ -28,9 +28,9 @@ class SignUpController {
     }
 
     private fun checking(email: String = "",
-                 password: String = "",
-                 sex: String = "",
-                 name: String = ""): String {
+                         password: String = "",
+                         sex: String = "",
+                         name: String = ""): String {
         return when {
             (!Check.checkEmail(email) && email.isNotEmpty()) -> "邮箱格式有误！"
             (!Check.checkPassword(password) && password.isNotEmpty()) -> "密码安全性过低"
@@ -44,11 +44,12 @@ class SignUpController {
 
     @ExperimentalStdlibApi
     @PostMapping("/create")
-    fun create(@RequestHeader("email") email: String,
-                        @RequestHeader("password") password: String,
-                        @RequestHeader("phoneNumber") phoneNumber: String,
-                        @RequestHeader("sex") sex: String,
-                        @RequestHeader("name") name: String
+    fun create(
+            @RequestHeader("email") email: String,
+            @RequestHeader("password") password: String,
+            @RequestHeader("phoneNumber") phoneNumber: String,
+            @RequestHeader("sex") sex: String,
+            @RequestHeader("name") name: String
     ): String {
         val thisName = encode(name)
         val thisSex = encode(sex)
@@ -66,7 +67,7 @@ class SignUpController {
             flag = true
         }
         return Result<String>(
-                 success = flag,
+                success = flag,
                 code = if (flag) StatusCode.Status_200.statusCode else StatusCode.Status_401.statusCode,
                 msg = info
         ).toJson()

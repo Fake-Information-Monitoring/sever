@@ -12,7 +12,8 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 @RestController
-@RequestMapping("/v1/login", method = [RequestMethod.POST, RequestMethod.GET])
+@RequestMapping("/v1/login",
+        method = [RequestMethod.POST, RequestMethod.GET,RequestMethod.DELETE])
 class LoginController {
     @Autowired
     private lateinit var userRepository: UserRepository
@@ -23,7 +24,7 @@ class LoginController {
         return "Login!"
     }
 
-    @PostMapping("/logout")
+    @DeleteMapping("/logout")
     fun logout(
             @RequestHeader("id") Id: Int,
             request: HttpServletRequest
@@ -95,7 +96,7 @@ class LoginController {
         return check.toJson()
     }
 
-    @PostMapping("/verifyCode")
+    @GetMapping("/verifyCode")
     fun verifyCode() {
     }
 
