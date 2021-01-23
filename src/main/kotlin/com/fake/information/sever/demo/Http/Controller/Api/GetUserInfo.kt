@@ -1,14 +1,11 @@
 package com.fake.information.sever.demo.Controller
 
-import com.fake.information.sever.demo.Controller.tools.BuildError
 import com.fake.information.sever.demo.DAO.CommitRepository
 import com.fake.information.sever.demo.DAO.UserRepository
 import com.fake.information.sever.demo.Http.Controller.StatusCode
-import com.fake.information.sever.demo.Model.Commit
 import com.fake.information.sever.demo.Model.User
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
-import java.io.File
 import com.fake.information.sever.demo.Http.Response.Result
 @RestController
 @RequestMapping("/v1/getInfo",method = [ RequestMethod.GET])

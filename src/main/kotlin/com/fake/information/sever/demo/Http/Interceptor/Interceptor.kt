@@ -18,8 +18,8 @@ class Interceptor : WebMvcConfigurer {
                 .addPathPatterns("/**")
                 //排除拦截
                 .excludePathPatterns(arrayListOf(
-                        "/login/",
-                        "/login/loginWithPhone",
+                        "/v1/login/",
+                        "/v1/login/loginWithPhone",
                         "/v1/signUp/create"
                 ))
                 //拦截路径

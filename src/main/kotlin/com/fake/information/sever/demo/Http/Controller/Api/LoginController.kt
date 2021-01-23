@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 @RestController
-@RequestMapping("/login", method = [RequestMethod.POST, RequestMethod.GET])
+@RequestMapping("/v1/login", method = [RequestMethod.POST, RequestMethod.GET])
 class LoginController {
     @Autowired
     private lateinit var userRepository: UserRepository
@@ -23,6 +23,26 @@ class LoginController {
         return "Login!"
     }
 
+    @PostMapping("/logout")
+    fun logout(
+            @RequestHeader("id") Id: Int,
+            request: HttpServletRequest
+    ): Result<String> {
+        try {
+            SessionController(request).deleteSession()
+            return Result<String>(
+                    success = true,
+                    code = StatusCode.Status_200.statusCode,
+                    msg = "success"
+            )
+        }catch (e:Exception){
+            return Result<String>(
+                    success = false,
+                    code = StatusCode.Status_502.statusCode,
+                    msg = e.toString()
+            )
+        }
+    }
 
     @ExperimentalStdlibApi
     @PostMapping("/loginWithEmail")
