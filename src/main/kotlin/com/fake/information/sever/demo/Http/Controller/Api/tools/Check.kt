@@ -1,8 +1,11 @@
 package com.fake.information.sever.demo.Controller.tools
 
+import com.fake.information.sever.demo.DAO.UserRepository
 import com.fake.information.sever.demo.Http.Controller.StatusCode
 import com.fake.information.sever.demo.Model.User
 import com.fake.information.sever.demo.Http.Response.Result
+import java.net.URLDecoder
+
 object Check {
     fun checkEmail(email: String): Boolean {
         return email.matches(Regex(
@@ -43,4 +46,31 @@ object Check {
         )
     }
 
+    private fun checkUserByName(userRepository: UserRepository, name: String): Boolean {
+        return userRepository.findByName(name) == null
+    }
+
+    private fun checkUserByEmail(userRepository: UserRepository, email: String): Boolean {
+        return userRepository.findByEmail(email) == null
+    }
+
+    fun encode(str: String): String {
+        return URLDecoder.decode(str, "utf-8")
+    }
+
+    fun checking(email: String = "",
+                         password: String = "",
+                         sex: String = "",
+                         name: String = "",
+                         userRepository: UserRepository
+    ): String {
+        return when {
+            (!Check.checkEmail(email) && email.isNotEmpty()) -> "邮箱格式有误！"
+            (!Check.checkPassword(password) && password.isNotEmpty()) -> "密码安全性过低"
+            (!Check.checkSex(sex) && sex.isNotEmpty()) -> "性别有误！"
+            (!checkUserByName(userRepository,name) && name.isNotEmpty()) -> "该昵称已存在"
+            (!checkUserByEmail(userRepository,email) && email.isNotEmpty()) -> "该邮箱已被使用"
+            else -> "OK"
+        }
+    }
 }
