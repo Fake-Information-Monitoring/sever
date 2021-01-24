@@ -48,7 +48,7 @@ class GetUserInfo {
     @GetMapping("/{user}/{commit}")
     fun getCommit(@PathVariable user:Int,@PathVariable commit:Int): Any {
         try{
-                return commitRepository.getOne(commit).index?.index!!
+                return commitRepository.getOne(commit).indexOSSUrl!!
         }catch (e:NoSuchElementException){
             return Result<String>(
                     success = false,

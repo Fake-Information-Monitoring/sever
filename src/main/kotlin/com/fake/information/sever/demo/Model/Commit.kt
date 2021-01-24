@@ -7,7 +7,7 @@ import javax.persistence.*
 
 @Entity
 @Table(name="commit")
-@JsonIgnoreProperties(value = ["index","user"])
+@JsonIgnoreProperties(value = ["user"])
 class Commit: Serializable {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id",nullable = false)
@@ -17,7 +17,6 @@ class Commit: Serializable {
     var user: User? = null
     @Column(name = "commit_at",nullable = false)
     var commitTime: Date? = null
-    @OneToOne( cascade = [CascadeType.ALL])
-    @JoinColumn(name = "index_id",referencedColumnName = "id",nullable = true)
-    var index: CommitIndex? = null
+    @Column(name = "index",nullable = false)
+    var indexOSSUrl: String? = null
 }
