@@ -13,7 +13,7 @@ class UpdateController {
 
     @ExperimentalStdlibApi
     @PutMapping("/update")
-    fun update(@RequestHeader("sex") sex: String,
+    fun putUpdate(@RequestHeader("sex") sex: String,
                @RequestHeader("name") name: String,
                @RequestHeader("id") id:Int): Result<String> {
         val user = userRepository.findById(id).get()

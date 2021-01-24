@@ -6,7 +6,6 @@ import com.fake.information.sever.demo.Http.Controller.StatusCode
 import com.fake.information.sever.demo.Model.User
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
-import java.net.URLDecoder
 import java.util.*
 import com.fake.information.sever.demo.Http.Response.Result
 
@@ -18,7 +17,7 @@ class SignUpController {
 
     @ExperimentalStdlibApi
     @PostMapping("/create")
-    fun create(
+    fun postCreate(
             @RequestHeader("email") email: String,
             @RequestHeader("password") password: String,
             @RequestHeader("phoneNumber") phoneNumber: String,

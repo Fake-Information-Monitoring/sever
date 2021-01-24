@@ -14,10 +14,11 @@ class Avatar {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     val id: Int = 0
-
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
     @Column(name = "avatar_img")
-    var headImg: File? = null
-    @OneToOne(cascade = [CascadeType.ALL], optional = false)
+    var headImg: ByteArray? = null
+    @OneToOne(targetEntity = User::class, optional = false)
     @JoinColumn(name = "user_id",referencedColumnName = "id")
-    val user: User? = null
+    var user: User? = null
 }

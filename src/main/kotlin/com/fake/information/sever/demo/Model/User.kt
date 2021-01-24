@@ -8,7 +8,7 @@ import kotlin.collections.ArrayList
 
 @Entity
 @Table(name="User",indexes =[ Index(columnList = "phone_number"),Index(columnList = "email") ] )
-@JsonIgnoreProperties(value = ["password","lastActive"])
+@JsonIgnoreProperties(value = ["password","lastActive","avatar"])
 class User :Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,7 +29,7 @@ class User :Serializable {
     @Column(name = "last_actived_at",nullable = true)
     val lastActive: Date? = null
     @OneToMany(mappedBy = "user",cascade = [CascadeType.ALL],fetch = FetchType.EAGER)
-    val commitList:List<Commit> = ArrayList()
+    val commitList:MutableList<Commit> = LinkedList()
     fun getPassword(): String? {
         return password
     }
