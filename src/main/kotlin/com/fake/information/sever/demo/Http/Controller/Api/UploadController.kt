@@ -1,6 +1,7 @@
 package com.fake.information.sever.demo.Http.Controller.Api
 
 import com.fake.information.sever.demo.DAO.AvatarRepository
+import com.fake.information.sever.demo.DAO.CommitRepository
 import com.fake.information.sever.demo.DAO.UserRepository
 import com.fake.information.sever.demo.Http.Controller.StatusCode
 import com.fake.information.sever.demo.Model.Avatar
@@ -12,6 +13,8 @@ import java.io.FileOutputStream
 import java.io.InputStream
 import java.io.OutputStream
 import com.fake.information.sever.demo.Http.Response.Result
+import com.fake.information.sever.demo.Model.Commit
+import com.fake.information.sever.demo.Model.CommitIndex
 import java.util.*
 
 @RestController
@@ -19,9 +22,32 @@ import java.util.*
 class UploadController {
     @Autowired
     private lateinit var userRepository: UserRepository
-
+    @Autowired
+    private lateinit var commitRepository: CommitRepository
     @Autowired
     private lateinit var avatarRepository: AvatarRepository
+    @PostMapping("/uploadFile")
+    fun postCommitFile(
+            @RequestBody file: MultipartFile,
+            @RequestHeader("id") id: Int
+    ): Result<String>{
+        val user = userRepository.getOne(id)
+        val commit = Commit()
+        val commitIndex = CommitIndex()
+        commitIndex.index = file.bytes
+        commitIndex.commit = commit
+        commit.user = user
+        commit.index = commitIndex
+        commit.commitTime = Date()
+        user.commitList.add(commit)
+        commitRepository.save(commit)
+        userRepository.save(user)
+        return Result<String>(
+                success = true,
+                code = StatusCode.Status_200.statusCode,
+                msg = "OK"
+        )
+    }
 
     @PostMapping("/uploadImage")
     fun postHeadImg(
@@ -40,7 +66,6 @@ class UploadController {
                 code = StatusCode.Status_200.statusCode,
                 msg = "OK"
         )
-        //TODO:头像上传
     }
 
     fun inputStreamToFile(ins: InputStream, file: File?) {
