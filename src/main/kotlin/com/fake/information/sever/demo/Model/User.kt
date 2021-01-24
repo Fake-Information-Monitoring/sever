@@ -33,9 +33,8 @@ class User :Serializable {
     fun getPassword(): String? {
         return password
     }
-    @OneToOne(cascade = [CascadeType.ALL], optional = true)
-    @JoinColumn(name = "avatar_id",referencedColumnName = "id",nullable = true)
-    var avatar: Avatar? = null
+    @Column(name = "avatar_id",nullable = true)
+    var avatar: String? = null
     fun updateInfo(name:String,gender:String){
         this.name = name
         this.gender = gender
@@ -43,9 +42,6 @@ class User :Serializable {
     }
     fun setPassword(password:String){
         this.password = password
-    }
-    fun updateImg(avatar: Avatar){
-        this.avatar = avatar
     }
 //    @ExperimentalStdlibApi
 //    fun getIndex():Map<String,Any?>{

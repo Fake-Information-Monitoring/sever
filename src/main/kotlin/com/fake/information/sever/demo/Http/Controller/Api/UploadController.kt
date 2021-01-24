@@ -1,10 +1,8 @@
 package com.fake.information.sever.demo.Http.Controller.Api
 
-import com.fake.information.sever.demo.DAO.AvatarRepository
 import com.fake.information.sever.demo.DAO.CommitRepository
 import com.fake.information.sever.demo.DAO.UserRepository
 import com.fake.information.sever.demo.Http.Controller.StatusCode
-import com.fake.information.sever.demo.Model.Avatar
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
@@ -24,9 +22,15 @@ class UploadController {
     @Autowired
     private lateinit var commitRepository: CommitRepository
 
-    @Autowired
-    private lateinit var avatarRepository: AvatarRepository
 
+    fun multipartFileToFile(multipartFile: MultipartFile,fileName:String):File{
+        val newFile = File(fileName)
+        val os = FileOutputStream(newFile)
+        os.write(multipartFile.bytes)
+        os.close()
+        multipartFile.transferTo(newFile)
+        return newFile
+    }
     @PostMapping("/uploadFile")
     fun postCommitFile(
             @RequestBody file: MultipartFile,
@@ -37,11 +41,7 @@ class UploadController {
         commit.user = user
         val filename = file.originalFilename
         if ("" != filename?.trim { it <= ' ' }) {
-            val newFile = File(filename)
-            val os = FileOutputStream(newFile)
-            os.write(file.bytes)
-            os.close()
-            file.transferTo(newFile)
+            val newFile = multipartFileToFile(file,filename!!)
             //上传到OSS
             val uploadUrl: String? = OSSUpload.upload(newFile)
             commit.indexOSSUrl = uploadUrl
@@ -64,16 +64,13 @@ class UploadController {
             @RequestHeader("id") id: Int
     ): Result<String> {
         val user = userRepository.getOne(id)
-        if (user.avatar == null) {
-            user.avatar = Avatar()
-            user.avatar!!.user = user
-        }
-        user.avatar!!.headImg = img.bytes
+        user.avatar =  OSSUpload.upload(multipartFileToFile(img,img.originalFilename!!))
         userRepository.save(user)
         return Result<String>(
                 success = true,
                 code = StatusCode.Status_200.statusCode,
-                msg = "OK"
+                msg = "OK",
+                data = user.avatar
         )
     }
 }
