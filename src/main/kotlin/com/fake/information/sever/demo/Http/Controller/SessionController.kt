@@ -8,14 +8,16 @@ open class SessionController(request: HttpServletRequest) {
 
      private var session: HttpSession = request.session
 
-    open fun createSession(userId: String, status_Code: Int): HttpSession {
+    open fun createSession(userId: String, status_Code: Any): HttpSession {
         session.setAttribute(session.id,status_Code)
         return session
     }
     fun deleteSession(){
         session.invalidate()
     }
-    fun checkSessionStatusCode(userId: String): Any? {
-        return session.getAttribute(userId)
+
+    fun getSessionValue(sessionId:String):Any?{
+        return session.getAttribute(sessionId)
     }
+
 }

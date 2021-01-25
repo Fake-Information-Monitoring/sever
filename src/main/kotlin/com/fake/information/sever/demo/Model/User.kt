@@ -1,6 +1,8 @@
 package com.fake.information.sever.demo.Model
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import org.hibernate.annotations.Fetch
+import org.hibernate.annotations.FetchMode
 import java.io.Serializable
 import java.util.*
 import javax.persistence.*
@@ -27,18 +29,22 @@ class User :Serializable {
     @Column(name = "updated_at",nullable = false)
     var update: Date? = null
     @Column(name = "last_actived_at",nullable = true)
-    val lastActive: Date? = null
+    var lastActive: Date? = null
     @OneToMany(mappedBy = "user",cascade = [CascadeType.ALL],fetch = FetchType.EAGER)
     val commitList:MutableList<Commit> = LinkedList()
-    fun getPassword(): String? {
-        return password
-    }
+    @Fetch(FetchMode.SUBSELECT)
+    @OneToMany(mappedBy = "user",cascade = [CascadeType.ALL],fetch = FetchType.EAGER)
+    val keyList:MutableList<CDKey> = LinkedList()
+
     @Column(name = "avatar_id",nullable = true)
     var avatar: String? = null
     fun updateInfo(name:String,gender:String){
         this.name = name
         this.gender = gender
         update = Date()
+    }
+    fun getPassword(): String? {
+        return password
     }
     fun setPassword(password:String){
         this.password = password

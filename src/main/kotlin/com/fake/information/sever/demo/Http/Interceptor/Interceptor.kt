@@ -20,7 +20,8 @@ class Interceptor : WebMvcConfigurer {
                 .excludePathPatterns(arrayListOf(
                         "/v1/login/",
                         "/v1/login/loginWithPhone",
-                        "/v1/signUp/create"
+                        "/v1/signUp/create",
+                        "/v1/login/getPublicKey"
                 ))
                 //拦截路径
 
