@@ -20,15 +20,15 @@ class GetUserInfo {
     @ExperimentalStdlibApi
     @GetMapping("/{user}")
     fun getUserInfo(@PathVariable user: Int): Any {
-        try {
-            return Result<User>(
+        return try {
+            Result<User>(
                     success = true,
                     code = StatusCode.Status_200.statusCode,
                     msg = "success",
                     data = userRepository.findById(user).get()
             )
         } catch (e: NoSuchElementException) {
-            return Result<String>(
+            Result<String>(
                     success = false,
                     code = StatusCode.Status_502.statusCode,
                     msg = e.toString()
@@ -38,15 +38,15 @@ class GetUserInfo {
 
     @GetMapping("/{user}/avatar")
     fun getUserAvatar(@PathVariable user: Int): Any {
-        try {
-            return Result<String>(
+        return try {
+            Result<String>(
                     success = true,
                     code = StatusCode.Status_200.statusCode,
                     msg = "success",
                     data = userRepository.getOne(user).avatar!!
             )
         } catch (e: NoSuchElementException) {
-            return Result<String>(
+            Result<String>(
                     success = false,
                     code = StatusCode.Status_502.statusCode,
                     msg = e.toString()
@@ -57,10 +57,10 @@ class GetUserInfo {
     @ExperimentalStdlibApi
     @GetMapping("/{user}/{commit}")
     fun getCommit(@PathVariable user: Int, @PathVariable commit: Int): Any {
-        try {
-            return commitRepository.getOne(commit).indexOSSUrl!!
+        return try {
+            commitRepository.getOne(commit).indexOSSUrl!!
         } catch (e: NoSuchElementException) {
-            return Result<String>(
+            Result<String>(
                     success = false,
                     code = StatusCode.Status_502.statusCode,
                     msg = e.toString()

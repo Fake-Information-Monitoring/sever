@@ -31,7 +31,10 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jdbc")//Spring Jdbc
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")//Spring Jpa
     runtimeOnly("mysql:mysql-connector-java")//Mysql Driver
-    implementation("com.github.PhilJay:JWT:1.1.5")//jwt in kotlin //https://github.com/PhilJay/JWT
+    implementation("io.jsonwebtoken:jjwt-api:0.11.2") // jjwt
+    implementation("io.jsonwebtoken:jjwt-impl:0.11.2") // jjwt\
+    implementation("io.jsonwebtoken:jjwt-gson:0.11.2")
+    runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.2") // or 'io.jsonwebtoken:jjwt-gson:0.11.2' for gson
     implementation("org.springframework.session:spring-session-data-redis")//session
     implementation("org.springframework.boot:spring-boot-starter-data-redis")//redis
     implementation("io.lettuce:lettuce-core:6.0.2.RELEASE") //lettuce
@@ -40,8 +43,10 @@ dependencies {
     implementation("javax.xml.bind:jaxb-api:2.3.1")//oss依赖
     implementation("javax.activation:activation:1.1.1")//oss依赖
     implementation("org.glassfish.jaxb:jaxb-runtime:2.3.3")//oss依赖
+
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
+
 
 }
 
