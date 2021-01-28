@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 import com.fake.information.sever.demo.Http.Response.Result
 import com.fake.information.sever.demo.Http.Upload.OSSUpload
+import com.fake.information.sever.demo.JWT.JWTManage
 import com.fake.information.sever.demo.Model.Commit
 import java.io.File
 import java.io.FileOutputStream
@@ -34,8 +35,16 @@ class UploadController {
     @PostMapping("/uploadFile")
     fun postCommitFile(
             @RequestBody file: MultipartFile,
-            @RequestHeader("id") id: Int
+            @RequestHeader("id") id: Int,
+            @RequestHeader("token") token:String
     ): Result<String> {
+        if (JWTManage.verifyToken(token) != JWTManage.TokenVerifyCode.Success.verifyCode) {
+            return Result<String>(
+                    success = false,
+                    code = StatusCode.Status_401.statusCode,
+                    msg = "Token无效"
+            )
+        }
         val user = userRepository.getOne(id)
         val commit = Commit()
         commit.user = user

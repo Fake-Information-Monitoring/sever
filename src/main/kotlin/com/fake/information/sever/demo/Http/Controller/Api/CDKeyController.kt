@@ -18,6 +18,27 @@ class CDKeyController {
     @Autowired
     private lateinit var cdKeyRepository: CDKeyRepository
 
+    @GetMapping("/verify")
+    fun verifyFakeNews(
+            @RequestHeader("token") token:String,
+            @RequestHeader("txt") txt:String
+    ): Result<String> {
+        if (JWTManage.verifyToken(token) != JWTManage.TokenVerifyCode.Success.verifyCode) {
+            return Result<String>(
+                    success = false,
+                    code = StatusCode.Status_401.statusCode,
+                    msg = "Token无效"
+            )
+        }
+        //TODO:验证txt是否属于FakeNews,再发起一个向AI服务器的请求即可
+        return Result<String>(
+                success = true,
+                code = StatusCode.Status_200.statusCode,
+                msg = "success",
+                data = ""
+        )
+    }
+
     @PostMapping("/createKey")
     fun createKey(
             @RequestHeader("id") userId:Int,
