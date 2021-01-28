@@ -72,9 +72,9 @@ class LoginController {
                            @RequestHeader("User-Agent") userAgent: String,
                            request: HttpServletRequest
     ): String {
-//        val privateKey: PrivateKey = SessionController(request).getSessionValue(userAgent) as PrivateKey
-//        val passwordWithPrivateKey = RSA.decryptByPrivateKey(password, privateKey)
-        val passwordWithPrivateKey = password
+        val privateKey: PrivateKey = SessionController(request).getSessionValue(userAgent) as PrivateKey
+        val passwordWithPrivateKey = RSA.decryptByPrivateKey(password, privateKey)
+//        val passwordWithPrivateKey = password
         var tempUser: User? = null
         if (Check.checkEmail(account)) {
             tempUser = userRepository.findByEmail(account)
@@ -103,9 +103,9 @@ class LoginController {
                            request: HttpServletRequest
     ): String {
         //TODO:检验验证码是否正确
-//        val privateKey: PrivateKey = SessionController(request).getSessionValue(userAgent) as PrivateKey
-//        val passwordWithPrivateKey = RSA.decryptByPrivateKey(password, privateKey)
-        val passwordWithPrivateKey = password
+        val privateKey: PrivateKey = SessionController(request).getSessionValue(userAgent) as PrivateKey
+        val passwordWithPrivateKey = RSA.decryptByPrivateKey(password, privateKey)
+//        val passwordWithPrivateKey = password
         val tempUser: User?
         try {
             tempUser = userRepository.findByPhoneNumber(account.toLong())
@@ -125,5 +125,6 @@ class LoginController {
 
     @GetMapping("/verifyCode")
     fun getVerifyCode() {
+        //TODO:验证码GKD
     }
 }
