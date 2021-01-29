@@ -7,7 +7,7 @@ import com.fake.information.sever.demo.Http.Controller.Api.Until.RSA
 import com.fake.information.sever.demo.Http.Controller.StatusCode
 import com.fake.information.sever.demo.Http.Response.Result
 import com.fake.information.sever.demo.Model.User
-import com.fake.information.sever.demo.SessionManager.SessionController
+import com.fake.information.sever.demo.SessionManager.SessionManage
 import com.fake.information.sever.demo.VerifyCode.VerifyCode
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
@@ -32,7 +32,7 @@ class LoginController {
     fun getPublicKey(@RequestHeader("User-Agent") userAgent: String,
                      request: HttpServletRequest): Result<ByteArray?> {
         val key = RSA.getKeyPair()
-        SessionController(request).createSession(userAgent, key?.private!!)
+        SessionManage(request).createSession(userAgent, key?.private!!)
         return Result<ByteArray?>(
                 success = true,
                 code = StatusCode.Status_200.statusCode,
@@ -47,7 +47,7 @@ class LoginController {
             request: HttpServletRequest
     ): Result<String> {
         try {
-            SessionController(request).deleteSession()
+            SessionManage(request).deleteSession()
             val tempUser = userRepository.getOne(Id)
             tempUser.lastActive = Date()
             userRepository.save(tempUser)
@@ -97,7 +97,7 @@ class LoginController {
         }
         val check = Check.checkAccount(tempUser, passwordWithPrivateKey)
         if (check.success == true && tempUser != null) {
-            SessionController(request).createSession(tempUser.id.toString(), check.code)
+            SessionManage(request).createSession(tempUser.id.toString(), check.code)
         }
         //TODO:如果第一次密码不正确就生成验证码
         return check
@@ -134,7 +134,7 @@ class LoginController {
         }
         val check = Check.checkAccount(tempUser, passwordWithPrivateKey)
         if (check.success == true) {
-            SessionController(request).createSession(tempUser?.id.toString(), check.code)
+            SessionManage(request).createSession(tempUser?.id.toString(), check.code)
         }
         return check
     }

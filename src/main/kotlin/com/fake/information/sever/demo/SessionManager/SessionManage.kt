@@ -4,9 +4,9 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpSession
 
 
-open class SessionController(request: HttpServletRequest) {
+open class SessionManage(request: HttpServletRequest) {
 
-     private var session: HttpSession = request.session
+    private var session: HttpSession = request.session
 
     open fun createSession(userId: String, status_Code: Any): HttpSession {
         session.setAttribute(session.id,status_Code)
@@ -15,9 +15,7 @@ open class SessionController(request: HttpServletRequest) {
     fun deleteSession(){
         session.invalidate()
     }
-
     fun getSessionValue(sessionId:String):Any?{
         return session.getAttribute(sessionId)
     }
-
 }

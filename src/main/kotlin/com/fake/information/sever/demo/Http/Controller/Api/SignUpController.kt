@@ -23,26 +23,29 @@ class SignUpController {
             @RequestHeader("phoneNumber") phoneNumber: String,
             @RequestHeader("sex") sex: String,
             @RequestHeader("name") name: String
-    ): String {
+    ): Result<String> {
         val thisName = Check.encode(name)
         val thisSex = Check.encode(sex)
-        val info = Check.checking(email, password, thisSex, thisName,userRepository)
-        var flag = false
-        if (info == "OK") {
-            val user = User()
-            user.email = email
-            user.phoneNumber = phoneNumber.toLong()
-            user.setPassword(password)
-            user.gender = thisSex
-            user.name = thisName
-            user.update = Date()
-            userRepository.save(user)
-            flag = true
+        val info = Check.checking(email, password, thisSex, thisName, userRepository)
+        if (info != true) {
+            return Result<String>(
+                    success = false,
+                    code = StatusCode.Status_401.statusCode,
+                    msg = info as String
+            )
         }
+        val user = User()
+        user.email = email
+        user.phoneNumber = phoneNumber.toLong()
+        user.setPassword(password)
+        user.gender = thisSex
+        user.name = thisName
+        user.update = Date()
+        userRepository.save(user)
         return Result<String>(
-                success = flag,
-                code = if (flag) StatusCode.Status_200.statusCode else StatusCode.Status_401.statusCode,
-                msg = info
-        ).toJson()
+                success = true,
+                code = StatusCode.Status_200.statusCode,
+                msg = "success"
+        )
     }
 }

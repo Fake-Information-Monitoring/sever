@@ -59,8 +59,3 @@ object JWTManage {
         return Jwts.parserBuilder().deserializeJsonWith(GsonDeserializer(gson)).setSigningKey(secretKey).build().parseClaimsJws(token).body
     }
 }
-
-fun main() {
-    val t = JWTManage.createJWT("fuck", mapOf("fuck" to "fuck"))
-    println(t.key)
-}

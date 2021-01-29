@@ -3,7 +3,7 @@ package com.fake.information.sever.demo.Http.Controller
 import com.fake.information.sever.demo.DAO.UserRepository
 import com.fake.information.sever.demo.Http.Response.Result
 import com.fake.information.sever.demo.Model.User
-import com.fake.information.sever.demo.SessionManager.SessionController
+import com.fake.information.sever.demo.SessionManager.SessionManage
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 import java.util.*
@@ -38,12 +38,12 @@ class Test {
     }
     @PostMapping("/create")
     fun testSession1(@RequestParam("userId") userId:String,httpRequest: HttpServletRequest,response: HttpServletResponse){
-        var session : SessionController = SessionController(httpRequest)
+        var session : SessionManage = SessionManage(httpRequest)
         response.writer.print(session.createSession(userId,StatusCode.Status_200.statusCode).id)
     }
     @PostMapping("/delete")
     fun testSession2(@RequestParam("userId") userId:String,httpRequest: HttpServletRequest,response: HttpServletResponse){
-        var session : SessionController = SessionController(httpRequest)
+        var session : SessionManage = SessionManage(httpRequest)
         response.writer.println(session.createSession(userId,StatusCode.Status_200.statusCode).id)
         response.writer.println(httpRequest.getSession().id)
         response.writer.println(session.getSessionValue(userId))

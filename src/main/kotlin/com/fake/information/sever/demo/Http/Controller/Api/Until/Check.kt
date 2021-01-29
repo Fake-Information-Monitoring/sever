@@ -63,14 +63,14 @@ object Check {
                          sex: String = "",
                          name: String = "",
                          userRepository: UserRepository
-    ): String {
+    ): Any {
         return when {
             (!Check.checkEmail(email) && email.isNotEmpty()) -> "邮箱格式有误！"
             (!Check.checkPassword(password) && password.isNotEmpty()) -> "密码安全性过低"
             (!Check.checkSex(sex) && sex.isNotEmpty()) -> "性别有误！"
             (!checkUserByName(userRepository,name) && name.isNotEmpty()) -> "该昵称已存在"
             (!checkUserByEmail(userRepository,email) && email.isNotEmpty()) -> "该邮箱已被使用"
-            else -> "OK"
+            else -> true
         }
     }
 }
