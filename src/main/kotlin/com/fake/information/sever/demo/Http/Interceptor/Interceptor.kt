@@ -22,7 +22,8 @@ class Interceptor : WebMvcConfigurer {
                         "/v1/login/loginWithPhone",
                         "/v1/signUp/create",
                         "/v1/login/getPublicKey",
-                        "/v1/cdKey/verify"
+                        "/v1/cdKey/verify",
+                        "/v1/login/verifyCode"
                 ))
                 //拦截路径
 

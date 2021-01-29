@@ -43,7 +43,7 @@ dependencies {
     implementation("javax.xml.bind:jaxb-api:2.3.1")//oss依赖
     implementation("javax.activation:activation:1.1.1")//oss依赖
     implementation("org.glassfish.jaxb:jaxb-runtime:2.3.3")//oss依赖
-
+    implementation("cn.hutool:hutool-all:4.5.15") // 图片验证码库
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
 

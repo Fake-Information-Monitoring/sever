@@ -1,16 +1,17 @@
 package com.fake.information.sever.demo.Controller
 
+import cn.hutool.core.codec.Base64
 import com.fake.information.sever.demo.Controller.tools.Check
 import com.fake.information.sever.demo.DAO.UserRepository
-import com.fake.information.sever.demo.Http.Controller.Api.tools.RSA
-import com.fake.information.sever.demo.Http.Controller.SessionController
+import com.fake.information.sever.demo.Http.Controller.Api.Until.RSA
 import com.fake.information.sever.demo.Http.Controller.StatusCode
 import com.fake.information.sever.demo.Http.Response.Result
 import com.fake.information.sever.demo.Model.User
+import com.fake.information.sever.demo.SessionManager.SessionController
+import com.fake.information.sever.demo.VerifyCode.VerifyCode
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
-import java.security.PrivateKey
-import java.security.PublicKey
 import java.util.*
 import javax.servlet.http.HttpServletRequest
 
@@ -71,10 +72,18 @@ class LoginController {
                            @RequestHeader("CAPTCHA") captcha: String,
                            @RequestHeader("User-Agent") userAgent: String,
                            request: HttpServletRequest
-    ): String {
-        val privateKey: PrivateKey = SessionController(request).getSessionValue(userAgent) as PrivateKey
-        val passwordWithPrivateKey = RSA.decryptByPrivateKey(password, privateKey)
-//        val passwordWithPrivateKey = password
+    ): Result<String> {
+        if (!VerifyCode().verifyCode(request, captcha)){
+            VerifyCode().createCode(request)
+            return Result<String>(
+                    success = true,
+                    code = StatusCode.Status_401.statusCode,
+                    msg = "验证码错误"
+            )
+        }
+//        val privateKey: PrivateKey = SessionController(request).getSessionValue(userAgent) as PrivateKey
+//        val passwordWithPrivateKey = RSA.decryptByPrivateKey(password, privateKey)
+        val passwordWithPrivateKey = password
         var tempUser: User? = null
         if (Check.checkEmail(account)) {
             tempUser = userRepository.findByEmail(account)
@@ -83,7 +92,7 @@ class LoginController {
                         success = false,
                         code = StatusCode.Status_401.statusCode,
                         msg = "该用户不存在"
-                ).toJson()
+                )
             }
         }
         val check = Check.checkAccount(tempUser, passwordWithPrivateKey)
@@ -91,7 +100,7 @@ class LoginController {
             SessionController(request).createSession(tempUser.id.toString(), check.code)
         }
         //TODO:如果第一次密码不正确就生成验证码
-        return check.toJson()
+        return check
     }
 
     @ExperimentalStdlibApi
@@ -101,11 +110,18 @@ class LoginController {
                            @RequestHeader("CAPTCHA") captcha: String,
                            @RequestHeader("User-Agent") userAgent: String,
                            request: HttpServletRequest
-    ): String {
-        //TODO:检验验证码是否正确
-        val privateKey: PrivateKey = SessionController(request).getSessionValue(userAgent) as PrivateKey
-        val passwordWithPrivateKey = RSA.decryptByPrivateKey(password, privateKey)
-//        val passwordWithPrivateKey = password
+    ): Result<String> {
+        if (!VerifyCode().verifyCode(request, captcha)){
+            VerifyCode().createCode(request)
+            return Result<String>(
+                    success = true,
+                    code = StatusCode.Status_401.statusCode,
+                    msg = "验证码错误"
+            )
+        }
+//        val privateKey: PrivateKey = SessionController(request).getSessionValue(userAgent) as PrivateKey
+//        val passwordWithPrivateKey = RSA.decryptByPrivateKey(password, privateKey)
+        val passwordWithPrivateKey = password
         val tempUser: User?
         try {
             tempUser = userRepository.findByPhoneNumber(account.toLong())
@@ -114,17 +130,17 @@ class LoginController {
                     success = false,
                     code = StatusCode.Status_401.statusCode,
                     msg = "输入格式非法"
-            ).toJson()
+            )
         }
         val check = Check.checkAccount(tempUser, passwordWithPrivateKey)
         if (check.success == true) {
             SessionController(request).createSession(tempUser?.id.toString(), check.code)
         }
-        return check.toJson()
+        return check
     }
 
-    @GetMapping("/verifyCode")
-    fun getVerifyCode() {
-        //TODO:验证码GKD
+    @GetMapping("/verifyCode", produces = [MediaType.IMAGE_PNG_VALUE, "image/png"])
+    fun getVerifyCode(request: HttpServletRequest): ByteArray? {
+        return Base64.decode(VerifyCode().createCode(request).imageBase64)
     }
 }

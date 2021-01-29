@@ -1,7 +1,7 @@
 package com.fake.information.sever.demo.JWT
 
 
-import com.fake.information.sever.demo.Http.Controller.Api.tools.RSA
+import com.fake.information.sever.demo.Http.Controller.Api.Until.RSA
 import com.fake.information.sever.demo.Model.CDKey
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder

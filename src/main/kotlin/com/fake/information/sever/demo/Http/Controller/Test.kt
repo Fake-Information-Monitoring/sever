@@ -3,11 +3,9 @@ package com.fake.information.sever.demo.Http.Controller
 import com.fake.information.sever.demo.DAO.UserRepository
 import com.fake.information.sever.demo.Http.Response.Result
 import com.fake.information.sever.demo.Model.User
+import com.fake.information.sever.demo.SessionManager.SessionController
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.context.annotation.Bean
 import org.springframework.web.bind.annotation.*
-import java.net.http.HttpRequest
-import java.time.DateTimeException
 import java.util.*
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse

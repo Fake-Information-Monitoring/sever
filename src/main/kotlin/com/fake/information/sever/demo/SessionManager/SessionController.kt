@@ -1,4 +1,4 @@
-package com.fake.information.sever.demo.Http.Controller
+package com.fake.information.sever.demo.SessionManager
 
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpSession
