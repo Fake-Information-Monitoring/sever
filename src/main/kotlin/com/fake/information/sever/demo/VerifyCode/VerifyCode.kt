@@ -2,7 +2,6 @@ package com.fake.information.sever.demo.VerifyCode
 
 import cn.hutool.captcha.CaptchaUtil
 import cn.hutool.captcha.ShearCaptcha
-import com.fake.information.sever.demo.SessionManager.SessionManage
 import com.fake.information.sever.demo.ThreadPool.FakeNewsThreadPool
 import javax.servlet.http.HttpServletRequest
 import kotlinx.coroutines.*

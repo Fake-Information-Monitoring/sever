@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 import java.util.*
 import com.fake.information.sever.demo.Http.Response.Result
-import com.fake.information.sever.demo.SessionManager.SessionManage
 import com.fake.information.sever.demo.VerifyCode.VerifyCode
 import kotlinx.coroutines.ObsoleteCoroutinesApi
 import javax.servlet.http.HttpServletRequest

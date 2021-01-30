@@ -7,7 +7,6 @@ import com.fake.information.sever.demo.Http.Controller.Api.Until.RSA
 import com.fake.information.sever.demo.Http.Controller.StatusCode
 import com.fake.information.sever.demo.Http.Response.Result
 import com.fake.information.sever.demo.Model.User
-import com.fake.information.sever.demo.SessionManager.SessionManage
 import com.fake.information.sever.demo.VerifyCode.VerifyCode
 import kotlinx.coroutines.ObsoleteCoroutinesApi
 import org.springframework.beans.factory.annotation.Autowired
@@ -32,9 +31,11 @@ class LoginController {
 
     @GetMapping("/getPublicKey")
     fun getPublicKey(@RequestHeader("User-Agent") userAgent: String,
-                     request: HttpServletRequest): Result<ByteArray?> {
+                     request: HttpServletRequest,
+                     session: HttpSession
+    ): Result<ByteArray?> {
         val key = RSA.getKeyPair()
-        SessionManage(request).createSession(userAgent, key?.private!!)
+        session.setAttribute(userAgent, key?.private!!)
         return Result<ByteArray?>(
                 success = true,
                 code = StatusCode.Status_200.statusCode,
@@ -46,10 +47,11 @@ class LoginController {
     @DeleteMapping("/logout")
     fun deleteLogout(
             @RequestHeader("id") Id: Int,
-            request: HttpServletRequest
+            request: HttpServletRequest,
+            session: HttpSession
     ): Result<String> {
         try {
-            SessionManage(request).deleteSession()
+            session.invalidate()
             val tempUser = userRepository.getOne(Id)
             tempUser.lastActive = Date()
             userRepository.save(tempUser)
@@ -101,7 +103,7 @@ class LoginController {
         }
         val check = Check.checkAccount(tempUser, passwordWithPrivateKey)
         if (check.success == true && tempUser != null) {
-            SessionManage(request).createSession(tempUser.id.toString(), check.code)
+            session.setAttribute(tempUser.id.toString(), check.code)
         }
         //TODO:如果第一次密码不正确就生成验证码
         return check
@@ -139,8 +141,8 @@ class LoginController {
             )
         }
         val check = Check.checkAccount(tempUser, passwordWithPrivateKey)
-        if (check.success == true) {
-            SessionManage(request).createSession(tempUser?.id.toString(), check.code)
+        if (check.success) {
+            session.setAttribute(tempUser?.id.toString(), check.code)
         }
         return check
     }
