@@ -45,14 +45,3 @@ class MailService : IMailService {
         TODO("Not yet implemented")
     }
 }
-
-fun main() {
-    @SpringBootTest
-    class MailServiceTest{
-        @Autowired lateinit var email: MailService
-        @Test
-        fun testSend(){
-            email.sendSimpleMail("735647571@qq.com","Test","No Body Knows Fake News Better Than Me")
-        }
-    }
-}
