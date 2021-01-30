@@ -9,11 +9,13 @@ import com.fake.information.sever.demo.Http.Response.Result
 import com.fake.information.sever.demo.Model.User
 import com.fake.information.sever.demo.SessionManager.SessionManage
 import com.fake.information.sever.demo.VerifyCode.VerifyCode
+import kotlinx.coroutines.ObsoleteCoroutinesApi
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
 import java.util.*
 import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpSession
 
 @RestController
 @RequestMapping("/v1/login",
@@ -65,16 +67,18 @@ class LoginController {
         }
     }
 
+    @ObsoleteCoroutinesApi
     @ExperimentalStdlibApi
     @PostMapping("/loginWithEmail")
     fun postLoginWithEmail(@RequestHeader("account") account: String,
                            @RequestHeader("password") password: String,
                            @RequestHeader("CAPTCHA") captcha: String,
                            @RequestHeader("User-Agent") userAgent: String,
-                           request: HttpServletRequest
+                           request: HttpServletRequest,
+                           session:HttpSession
     ): Result<String> {
-        if (!VerifyCode().verifyCode(request, captcha)){
-            VerifyCode().createCode(request)
+        if (!VerifyCode().verifyCode(session, captcha,"verifyCode")){
+            VerifyCode().createCode(session,"verifyCode")
             return Result<String>(
                     success = true,
                     code = StatusCode.Status_401.statusCode,
@@ -103,16 +107,18 @@ class LoginController {
         return check
     }
 
+    @ObsoleteCoroutinesApi
     @ExperimentalStdlibApi
     @PostMapping("/loginWithPhone")
     fun postLoginWithPhone(@RequestHeader("account") account: String,
                            @RequestHeader("password") password: String,
                            @RequestHeader("CAPTCHA") captcha: String,
                            @RequestHeader("User-Agent") userAgent: String,
-                           request: HttpServletRequest
+                           request: HttpServletRequest,
+                           session:HttpSession
     ): Result<String> {
-        if (!VerifyCode().verifyCode(request, captcha)){
-            VerifyCode().createCode(request)
+        if (!VerifyCode().verifyCode(session, captcha,"verifyCode")){
+            VerifyCode().createCode(session,"verifyCode")
             return Result<String>(
                     success = true,
                     code = StatusCode.Status_401.statusCode,
@@ -139,8 +145,9 @@ class LoginController {
         return check
     }
 
+    @ObsoleteCoroutinesApi
     @GetMapping("/verifyCode", produces = [MediaType.IMAGE_PNG_VALUE, "image/png"])
-    fun getVerifyCode(request: HttpServletRequest): ByteArray? {
-        return Base64.decode(VerifyCode().createCode(request).imageBase64)
+    fun getVerifyCode(session:HttpSession): ByteArray? {
+        return Base64.decode(VerifyCode().createCode(session,"verifyCode").imageBase64)
     }
 }

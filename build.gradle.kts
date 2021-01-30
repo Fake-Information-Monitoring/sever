@@ -31,9 +31,11 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jdbc")//Spring Jdbc
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")//Spring Jpa
     implementation("org.springframework.boot:spring-boot-starter-mail")//Spring Email
+    implementation("org.springframework.boot:spring-boot-starter-test")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2")
     runtimeOnly("mysql:mysql-connector-java")//Mysql Driver
     implementation("io.jsonwebtoken:jjwt-api:0.11.2") // jjwt
-    implementation("io.jsonwebtoken:jjwt-impl:0.11.2") // jjwt\
+    implementation("io.jsonwebtoken:jjwt-impl:0.11.2") // jjwt
     implementation("io.jsonwebtoken:jjwt-gson:0.11.2")
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.2") // or 'io.jsonwebtoken:jjwt-gson:0.11.2' for gson
     implementation("org.springframework.session:spring-session-data-redis")//session

@@ -3,22 +3,29 @@ package com.fake.information.sever.demo.VerifyCode
 import cn.hutool.captcha.CaptchaUtil
 import cn.hutool.captcha.ShearCaptcha
 import com.fake.information.sever.demo.SessionManager.SessionManage
+import com.fake.information.sever.demo.ThreadPool.FakeNewsThreadPool
 import javax.servlet.http.HttpServletRequest
+import kotlinx.coroutines.*
+import javax.security.auth.Subject
+import javax.servlet.http.HttpSession
 
 /*
 * @TODO:验证码生成以及验证
 */
 class VerifyCode {
-    fun createCode(request: HttpServletRequest): ShearCaptcha {
+    @ObsoleteCoroutinesApi
+    fun createCode(session:HttpSession,subject: String): ShearCaptcha {
         val captcha: ShearCaptcha = CaptchaUtil.createShearCaptcha(300, 150, 4, 4)
-        SessionManage(request).createSession(request.requestedSessionId, captcha)
+        session.setAttribute(subject, captcha)
+        GlobalScope.launch(FakeNewsThreadPool.threadPool){
+            delay(1000*300)
+            session.invalidate()
+        }
         return captcha
     }
 
-    fun verifyCode(request: HttpServletRequest, captcha: String): Boolean {
-        val session: ShearCaptcha = (SessionManage(request)
-                .getSessionValue(request.requestedSessionId) ?: return false
-                ) as ShearCaptcha
-        return session.verify(captcha)
+    fun verifyCode(session:HttpSession, captcha: String,subject: String): Boolean {
+        val shearCaptcha: ShearCaptcha = (session.getAttribute(subject) ?: return false) as ShearCaptcha
+        return shearCaptcha.verify(captcha)
     }
 }
