@@ -12,6 +12,7 @@ import kotlinx.coroutines.ObsoleteCoroutinesApi
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
+import java.security.PrivateKey
 import java.util.*
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpSession
@@ -87,9 +88,9 @@ class LoginController {
                     msg = "验证码错误"
             )
         }
-//        val privateKey: PrivateKey = SessionController(request).getSessionValue(userAgent) as PrivateKey
-//        val passwordWithPrivateKey = RSA.decryptByPrivateKey(password, privateKey)
-        val passwordWithPrivateKey = password
+        val privateKey: PrivateKey = session.getAttribute(userAgent)  as PrivateKey
+        val passwordWithPrivateKey = RSA.decryptByPrivateKey(password, privateKey)
+//        val passwordWithPrivateKey = password
         var tempUser: User? = null
         if (Check.checkEmail(account)) {
             tempUser = userRepository.findByEmail(account)
@@ -102,7 +103,7 @@ class LoginController {
             }
         }
         val check = Check.checkAccount(tempUser, passwordWithPrivateKey)
-        if (check.success == true && tempUser != null) {
+        if (check.success && tempUser != null) {
             session.setAttribute(tempUser.id.toString(), check.code)
         }
         //TODO:如果第一次密码不正确就生成验证码
@@ -127,9 +128,9 @@ class LoginController {
                     msg = "验证码错误"
             )
         }
-//        val privateKey: PrivateKey = SessionController(request).getSessionValue(userAgent) as PrivateKey
-//        val passwordWithPrivateKey = RSA.decryptByPrivateKey(password, privateKey)
-        val passwordWithPrivateKey = password
+        val privateKey: PrivateKey = session.getAttribute(userAgent) as PrivateKey
+        val passwordWithPrivateKey = RSA.decryptByPrivateKey(password, privateKey)
+//        val passwordWithPrivateKey = password
         val tempUser: User?
         try {
             tempUser = userRepository.findByPhoneNumber(account.toLong())
