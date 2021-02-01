@@ -88,9 +88,9 @@ class LoginController {
                     msg = "验证码错误"
             )
         }
-        val privateKey: PrivateKey = session.getAttribute(userAgent)  as PrivateKey
-        val passwordWithPrivateKey = RSA.decryptByPrivateKey(password, privateKey)
-//        val passwordWithPrivateKey = password
+//        val privateKey: PrivateKey = session.getAttribute(userAgent)  as PrivateKey
+//        val passwordWithPrivateKey = RSA.decryptByPrivateKey(password, privateKey)
+        val passwordWithPrivateKey = password
         var tempUser: User? = null
         if (Check.checkEmail(account)) {
             tempUser = userRepository.findByEmail(account)
@@ -103,10 +103,9 @@ class LoginController {
             }
         }
         val check = Check.checkAccount(tempUser, passwordWithPrivateKey)
-        if (check.success && tempUser != null) {
-            session.setAttribute(tempUser.id.toString(), check.code)
+        if (check.success) {
+            session.setAttribute(session.id, check.code)
         }
-        //TODO:如果第一次密码不正确就生成验证码
         return check
     }
 
@@ -128,9 +127,9 @@ class LoginController {
                     msg = "验证码错误"
             )
         }
-        val privateKey: PrivateKey = session.getAttribute(userAgent) as PrivateKey
-        val passwordWithPrivateKey = RSA.decryptByPrivateKey(password, privateKey)
-//        val passwordWithPrivateKey = password
+//        val privateKey: PrivateKey = session.getAttribute(userAgent) as PrivateKey
+//        val passwordWithPrivateKey = RSA.decryptByPrivateKey(password, privateKey)
+        val passwordWithPrivateKey = password
         val tempUser: User?
         try {
             tempUser = userRepository.findByPhoneNumber(account.toLong())
@@ -143,7 +142,7 @@ class LoginController {
         }
         val check = Check.checkAccount(tempUser, passwordWithPrivateKey)
         if (check.success) {
-            session.setAttribute(tempUser?.id.toString(), check.code)
+            session.setAttribute(session.id, check.code)
         }
         return check
     }

@@ -38,8 +38,6 @@ dependencies {
     implementation("io.jsonwebtoken:jjwt-impl:0.11.2") // jjwt
     implementation("io.jsonwebtoken:jjwt-gson:0.11.2")
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.2") // or 'io.jsonwebtoken:jjwt-gson:0.11.2' for gson
-    implementation("org.springframework.session:spring-session-data-redis")//session
-    implementation("org.springframework.boot:spring-boot-starter-data-redis")//redis
     implementation("io.lettuce:lettuce-core:6.0.2.RELEASE") //lettuce
     implementation("com.google.code.gson:gson:2.8.6")//gson
     implementation("com.aliyun.oss:aliyun-sdk-oss:3.10.2")//oss
