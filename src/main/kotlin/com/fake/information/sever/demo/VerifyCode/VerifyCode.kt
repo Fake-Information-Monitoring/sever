@@ -18,7 +18,11 @@ class VerifyCode {
         session.setAttribute(subject, captcha)
         GlobalScope.launch(FakeNewsThreadPool.threadPool){
             delay(1000*300)
-            session.invalidate()
+            try {
+                session.invalidate()
+            }catch (e:IllegalStateException){
+
+            }
         }
         return captcha
     }
