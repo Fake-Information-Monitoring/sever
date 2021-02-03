@@ -105,6 +105,7 @@ class LoginController {
         val check = Check.checkAccount(tempUser, passwordWithPrivateKey)
         if (check.success) {
             session.setAttribute(session.id, check.code)
+            session.setAttribute(tempUser?.id.toString(),check.code)
         }
         return check
     }
@@ -143,6 +144,7 @@ class LoginController {
         val check = Check.checkAccount(tempUser, passwordWithPrivateKey)
         if (check.success) {
             session.setAttribute(session.id, check.code)
+            session.setAttribute(tempUser?.id.toString(),check.code)
         }
         return check
     }

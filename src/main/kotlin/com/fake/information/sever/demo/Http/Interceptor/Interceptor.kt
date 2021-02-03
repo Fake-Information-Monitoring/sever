@@ -34,7 +34,6 @@ class Interceptor : WebMvcConfigurer {
     class SecurityInterceptor : HandlerInterceptor {
         override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
             val session = request.session
-
             if (session.getAttribute(session.id) == StatusCode.Status_200.statusCode) {//TODO: session状态码拦截
                 return true
             }

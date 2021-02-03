@@ -7,6 +7,7 @@ import com.fake.information.sever.demo.Model.User
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 import com.fake.information.sever.demo.Http.Response.Result
+import javax.servlet.http.HttpSession
 
 @RestController
 @RequestMapping("/v1/getInfo", method = [RequestMethod.GET])
@@ -19,14 +20,22 @@ class GetUserInfo {
 
     @ExperimentalStdlibApi
     @GetMapping("/{user}")
-    fun getUserInfo(@PathVariable user: Int): Any {
+    fun getUserInfo(
+            @PathVariable user: Int,
+            session: HttpSession
+    ): Any {
+
         return try {
+            if (session.getAttribute(user.toString()) != StatusCode.Status_200.statusCode) {
+                throw IllegalAccessException("您没有权限")
+            }
             Result<User>(
                     success = true,
                     code = StatusCode.Status_200.statusCode,
                     msg = "success",
                     data = userRepository.findById(user).get()
             )
+
         } catch (e: NoSuchElementException) {
             Result<String>(
                     success = false,
@@ -37,8 +46,14 @@ class GetUserInfo {
     }
 
     @GetMapping("/{user}/avatar")
-    fun getUserAvatar(@PathVariable user: Int): Any {
+    fun getUserAvatar(
+            @PathVariable user: Int,
+            session: HttpSession
+    ): Any {
         return try {
+            if (session.getAttribute(user.toString()) != StatusCode.Status_200.statusCode) {
+                throw IllegalAccessException("您没有权限")
+            }
             Result<String>(
                     success = true,
                     code = StatusCode.Status_200.statusCode,
@@ -56,8 +71,14 @@ class GetUserInfo {
 
     @ExperimentalStdlibApi
     @GetMapping("/{user}/{commit}")
-    fun getCommit(@PathVariable user: Int, @PathVariable commit: Int): Any {
+    fun getCommit(@PathVariable user: Int,
+                  @PathVariable commit: Int,
+                  session: HttpSession
+    ): Any {
         return try {
+            if (session.getAttribute(user.toString()) != StatusCode.Status_200.statusCode) {
+                throw IllegalAccessException("您没有权限")
+            }
             commitRepository.getOne(commit).indexOSSUrl!!
         } catch (e: NoSuchElementException) {
             Result<String>(
