@@ -24,9 +24,11 @@ class Interceptor : WebMvcConfigurer {
                         "/v1/signUp/email",
                         "/v1/login/getPublicKey",
                         "/v1/cdKey/verify",
-                        "/v1/login/verifyCode"
+                        "/v1/login/verifyCode",
+                        "/ImageEdge",
+                        "/ImageEdgeByte"
                 ))
-                //拦截路径
+        //拦截路径
 
     }
 
