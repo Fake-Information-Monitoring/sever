@@ -24,7 +24,10 @@ class Interceptor : WebMvcConfigurer {
                         "/v1/signUp/email",
                         "/v1/login/getPublicKey",
                         "/v1/cdKey/verify",
-                        "/v1/login/verifyCode",
+                        "/v1/login/verifyCode/{date}",
+                        "/v1/forward/",
+                        "/v1/forward/change",
+                        "/v1/forward/sendEmail",
                         "/ImageEdge",
                         "/ImageEdgeByte"
                 ))

@@ -12,7 +12,6 @@ import kotlinx.coroutines.ObsoleteCoroutinesApi
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
-import java.security.PrivateKey
 import java.util.*
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpSession
@@ -88,9 +87,6 @@ class LoginController {
                     msg = "验证码错误"
             )
         }
-//        val privateKey: PrivateKey = session.getAttribute(userAgent)  as PrivateKey
-//        val passwordWithPrivateKey = RSA.decryptByPrivateKey(password, privateKey)
-        val passwordWithPrivateKey = password
         var tempUser: User? = null
         if (Check.checkEmail(account)) {
             tempUser = userRepository.findByEmail(account)
@@ -102,7 +98,7 @@ class LoginController {
                 )
             }
         }
-        val check = Check.checkAccount(tempUser, passwordWithPrivateKey)
+        val check = Check.checkAccount(tempUser, password)
         if (check.success) {
             session.setAttribute(session.id, check.code)
             session.setAttribute(tempUser?.id.toString(),check.code)
@@ -130,7 +126,6 @@ class LoginController {
         }
 //        val privateKey: PrivateKey = session.getAttribute(userAgent) as PrivateKey
 //        val passwordWithPrivateKey = RSA.decryptByPrivateKey(password, privateKey)
-        val passwordWithPrivateKey = password
         val tempUser: User?
         try {
             tempUser = userRepository.findByPhoneNumber(account.toLong())
@@ -141,7 +136,7 @@ class LoginController {
                     msg = "输入格式非法"
             )
         }
-        val check = Check.checkAccount(tempUser, passwordWithPrivateKey)
+        val check = Check.checkAccount(tempUser, password)
         if (check.success) {
             session.setAttribute(session.id, check.code)
             session.setAttribute(tempUser?.id.toString(),check.code)
@@ -150,8 +145,8 @@ class LoginController {
     }
 
     @ObsoleteCoroutinesApi
-    @GetMapping("/verifyCode", produces = [MediaType.IMAGE_PNG_VALUE, "image/png"])
-    fun getVerifyCode(session:HttpSession): ByteArray? {
+    @GetMapping("/verifyCode/{date}", produces = [MediaType.IMAGE_PNG_VALUE, "image/png"])
+    fun getVerifyCode(session:HttpSession, @PathVariable date: String): ByteArray? {
         return Base64.decode(VerifyCode().createCode(session,"verifyCode").imageBase64)
     }
 }
