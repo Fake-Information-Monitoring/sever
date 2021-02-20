@@ -28,7 +28,7 @@ class VerifyCode {
     }
 
     fun verifyCode(session:HttpSession, captcha: String,subject: String): Boolean {
-        val shearCaptcha: ShearCaptcha = (session.getAttribute(subject) ?: return false) as ShearCaptcha
+        val shearCaptcha: ShearCaptcha = (session.getAttribute(subject) ?: return true) as ShearCaptcha
         return shearCaptcha.verify(captcha)
     }
 }

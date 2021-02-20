@@ -74,12 +74,12 @@ class LoginController {
     @PostMapping("/loginWithEmail")
     fun postLoginWithEmail(@RequestHeader("account") account: String,
                            @RequestHeader("password") password: String,
-                           @RequestHeader("CAPTCHA") captcha: String,
+                           @RequestHeader("verify") verify: String,
                            @RequestHeader("User-Agent") userAgent: String,
                            request: HttpServletRequest,
                            session:HttpSession
     ): Result<String> {
-        if (!VerifyCode().verifyCode(session, captcha,"verifyCode")){
+        if (!VerifyCode().verifyCode(session, verify,"verifyCode")){
             VerifyCode().createCode(session,"verifyCode")
             return Result<String>(
                     success = true,
@@ -111,12 +111,12 @@ class LoginController {
     @PostMapping("/loginWithPhone")
     fun postLoginWithPhone(@RequestHeader("account") account: String,
                            @RequestHeader("password") password: String,
-                           @RequestHeader("CAPTCHA") captcha: String,
+                           @RequestHeader("verify") verify: String,
                            @RequestHeader("User-Agent") userAgent: String,
                            request: HttpServletRequest,
                            session:HttpSession
     ): Result<String> {
-        if (!VerifyCode().verifyCode(session, captcha,"verifyCode")){
+        if (!VerifyCode().verifyCode(session, verify,"verifyCode")){
             VerifyCode().createCode(session,"verifyCode")
             return Result<String>(
                     success = true,
@@ -140,6 +140,8 @@ class LoginController {
         if (check.success) {
             session.setAttribute(session.id, check.code)
             session.setAttribute(tempUser?.id.toString(),check.code)
+        }else{
+            check.data = Base64.decode(VerifyCode().createCode(session,"verifyCode").imageBase64).toString()
         }
         return check
     }

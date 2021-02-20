@@ -1,6 +1,7 @@
 package com.fake.information.sever.demo.Http.Controller.Api.Until
 
 import java.awt.image.BufferedImage
+import java.lang.Math.min
 import java.lang.Math.sqrt
 
 class Sobel {
@@ -24,6 +25,32 @@ class Sobel {
                 this.rgb = rgb
             }
     }
+
+    private fun isEgePoint(img: BufferedImage, x: Int, y: Int, minK: Int): Boolean {
+        var K = 1
+        for (i in -1..1) {
+            for (j in -1..1) {
+                if (img.getRGB(x + j, y + i) > img.getRGB(x, y)) {
+                    K += 1
+                }
+            }
+        }
+        if (K < minK) {
+            return true
+        }
+        return false
+    }
+
+    fun limitRGB(sum: Int): Int {
+        return if (sum > 255) 255 else sum
+    }
+
+    fun sqrtXY(x: Int, y: Int): Int {
+        return sqrt((x * x + y * y + 1).toDouble()).toInt()
+    }
+
+    val fullColor = 24 or 0x00010000 * 255 or 0x00000100 * 255 or 255
+
     //Sobel 算子
     fun edgeExtract2(image: BufferedImage): BufferedImage {
         // 创建灰度图
@@ -67,20 +94,20 @@ class Sobel {
               1， 0， -1]*/
                 sum2 = p1.red + 2 * p4.red + p7.red - p3.red - 2 * p6.red - p9.red
                 // 求导
-                sum = sqrt((sum1 * sum1 + sum2 * sum2 + 1).toDouble()).toInt()
-                if (sum > 255) sum = 255
+                sum = sqrtXY(sum1, sum2)
+                sum = limitRGB(sum)
                 p.red = 255 - sum
                 // 计算green通道
                 sum1 = p1.green + 2 * p2.green + p3.green - p7.green - 2 * p8.green - p9.green
                 sum2 = p1.green + 2 * p4.green + p7.green - p3.green - 2 * p6.green - p9.green
-                sum = sqrt((sum1 * sum1 + sum2 * sum2 + 1).toDouble()).toInt()
-                if (sum > 255) sum = 255
+                sum = sqrtXY(sum1, sum2)
+                sum = limitRGB(sum)
                 p.green = 255 - sum
                 // 计算blue通道
                 sum1 = p1.blue + 2 * p2.blue + p3.blue - p7.blue - 2 * p8.blue - p9.blue
                 sum2 = p1.blue + 2 * p4.blue + p7.blue - p3.blue - 2 * p6.blue - p9.blue
-                sum = sqrt((sum1 * sum1 + sum2 * sum2 + 1).toDouble()).toInt()
-                if (sum > 255) sum = 255
+                sum = sqrtXY(sum1, sum2)
+                sum = limitRGB(sum)
                 p.blue = 255 - sum
                 bimg.setRGB(x, y, p.rGB)
             }
