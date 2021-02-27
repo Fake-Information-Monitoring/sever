@@ -24,7 +24,7 @@ object Check {
     }
 
     @ExperimentalStdlibApi
-    fun checkAccount(user: User?, password: String): Result<String> {
+    fun checkAccount(user: User?, password: String): Result<Any> {
         var success = false
         val error = when {
             user == null -> {
@@ -39,7 +39,7 @@ object Check {
                 "login success"
             }
         }
-        return Result<String>(
+        return Result<Any>(
                 success = success,
                 code = if (success) StatusCode.Status_200.statusCode else StatusCode.Status_401.statusCode,
                 msg = error

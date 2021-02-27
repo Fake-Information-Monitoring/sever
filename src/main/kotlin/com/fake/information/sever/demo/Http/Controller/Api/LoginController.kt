@@ -78,10 +78,10 @@ class LoginController {
                            @RequestHeader("User-Agent") userAgent: String,
                            request: HttpServletRequest,
                            session:HttpSession
-    ): Result<String> {
+    ): Result<Any> {
         if (!VerifyCode().verifyCode(session, verify,"verifyCode")){
             VerifyCode().createCode(session,"verifyCode")
-            return Result<String>(
+            return Result<Any>(
                     success = true,
                     code = StatusCode.Status_401.statusCode,
                     msg = "验证码错误"
@@ -91,7 +91,7 @@ class LoginController {
         if (Check.checkEmail(account)) {
             tempUser = userRepository.findByEmail(account)
             if (tempUser == null) {
-                return Result<String>(
+                return Result<Any>(
                         success = false,
                         code = StatusCode.Status_401.statusCode,
                         msg = "该用户不存在"
@@ -112,13 +112,12 @@ class LoginController {
     fun postLoginWithPhone(@RequestHeader("account") account: String,
                            @RequestHeader("password") password: String,
                            @RequestHeader("verify") verify: String,
-                           @RequestHeader("User-Agent") userAgent: String,
                            request: HttpServletRequest,
                            session:HttpSession
-    ): Result<String> {
+    ): Result<Any> {
         if (!VerifyCode().verifyCode(session, verify,"verifyCode")){
             VerifyCode().createCode(session,"verifyCode")
-            return Result<String>(
+            return Result<Any>(
                     success = true,
                     code = StatusCode.Status_401.statusCode,
                     msg = "验证码错误"
@@ -130,7 +129,7 @@ class LoginController {
         try {
             tempUser = userRepository.findByPhoneNumber(account.toLong())
         } catch (e: NumberFormatException) {
-            return Result<String>(
+            return Result<Any>(
                     success = false,
                     code = StatusCode.Status_401.statusCode,
                     msg = "输入格式非法"
@@ -141,7 +140,7 @@ class LoginController {
             session.setAttribute(session.id, check.code)
             session.setAttribute(tempUser?.id.toString(),check.code)
         }else{
-            check.data = Base64.decode(VerifyCode().createCode(session,"verifyCode").imageBase64).toString()
+            check.data = Base64.decode(VerifyCode().createCode(session,"verifyCode").imageBase64)
         }
         return check
     }
