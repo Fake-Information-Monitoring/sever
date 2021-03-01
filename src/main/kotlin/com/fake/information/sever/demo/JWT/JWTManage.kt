@@ -8,6 +8,7 @@ import com.google.gson.GsonBuilder
 import io.jsonwebtoken.*
 import io.jsonwebtoken.gson.io.GsonDeserializer
 import io.jsonwebtoken.gson.io.GsonSerializer
+import java.security.SignatureException
 import java.util.*
 import javax.crypto.spec.SecretKeySpec
 
@@ -52,6 +53,8 @@ object JWTManage {
         } catch (e: IllegalArgumentException) {
             e.printStackTrace()
             TokenVerifyCode.IllegalArgument.verifyCode
+        } catch (e:SignatureException) {
+            TokenVerifyCode.UnKnow.verifyCode
         }
     }
 

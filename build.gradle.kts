@@ -24,6 +24,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
 //    implementation("org.springframework.boot:spring-boot-starter-security")//spring security
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation ("com.squareup.okhttp3:logging-interceptor:4.8.0")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("com.auth0:java-jwt:3.3.0")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
