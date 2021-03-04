@@ -5,7 +5,6 @@ import com.fake.information.sever.demo.DAO.UserRepository
 import com.fake.information.sever.demo.Http.Controller.StatusCode
 import com.fake.information.sever.demo.JWT.JWTManage
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.web.bind.annotation.*
 import java.util.*
 import com.fake.information.sever.demo.Http.Response.Result

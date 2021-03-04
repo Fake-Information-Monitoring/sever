@@ -5,7 +5,7 @@ import com.google.gson.Gson
 open class Result<T>(//是否成功
         var success: Boolean,//状态码
         var code: Int,//提示信息
-        var msg: String,//数据
+        var msg: Any,//数据
         var data: T? = null
         ) {
 

@@ -77,10 +77,10 @@ class LoginController {
                            @RequestHeader("verify") verify: String,
                            @RequestHeader("User-Agent") userAgent: String,
                            request: HttpServletRequest,
-                           session:HttpSession
+                           session: HttpSession
     ): Result<Any> {
-        if (!VerifyCode().verifyCode(session, verify,"verifyCode")){
-            VerifyCode().createCode(session,"verifyCode")
+        if (!VerifyCode().verifyCode(session, verify, "verifyCode")) {
+            VerifyCode().createCode(session, "verifyCode")
             return Result<Any>(
                     success = true,
                     code = StatusCode.Status_401.statusCode,
@@ -99,11 +99,29 @@ class LoginController {
             }
         }
         val check = Check.checkAccount(tempUser, password)
-        if (check.success) {
-            session.setAttribute(session.id, check.code)
-            session.setAttribute(tempUser?.id.toString(),check.code)
+        var code = StatusCode.Status_200.statusCode
+        val msg = if (check == "login success") {
+            session.setAttribute(session.id, StatusCode.Status_200.statusCode)
+            check
+        } else {
+            code = StatusCode.Status_401.statusCode
+            Base64.decode(VerifyCode().createCode(session, "verifyCode").imageBase64)
         }
-        return check
+
+        return if (code == 200) {
+            Result<Any>(
+                    success = true,
+                    code = code,
+                    msg = check,
+                    data = tempUser
+            )
+        }else{
+            Result<Any>(
+                    success = false,
+                    code = code,
+                    msg = msg
+            )
+        }
     }
 
     @ObsoleteCoroutinesApi
@@ -113,10 +131,10 @@ class LoginController {
                            @RequestHeader("password") password: String,
                            @RequestHeader("verify") verify: String,
                            request: HttpServletRequest,
-                           session:HttpSession
+                           session: HttpSession
     ): Result<Any> {
-        if (!VerifyCode().verifyCode(session, verify,"verifyCode")){
-            VerifyCode().createCode(session,"verifyCode")
+        if (!VerifyCode().verifyCode(session, verify, "verifyCode")) {
+            VerifyCode().createCode(session, "verifyCode")
             return Result<Any>(
                     success = true,
                     code = StatusCode.Status_401.statusCode,
@@ -136,18 +154,34 @@ class LoginController {
             )
         }
         val check = Check.checkAccount(tempUser, password)
-        if (check.success) {
-            session.setAttribute(session.id, check.code)
-            session.setAttribute(tempUser?.id.toString(),check.code)
-        }else{
-            check.data = Base64.decode(VerifyCode().createCode(session,"verifyCode").imageBase64)
+        var code = StatusCode.Status_200.statusCode
+        val msg = if (check == "login success") {
+            session.setAttribute(session.id, StatusCode.Status_200.statusCode)
+            check
+        } else {
+            code = StatusCode.Status_401.statusCode
+            Base64.decode(VerifyCode().createCode(session, "verifyCode").imageBase64)
         }
-        return check
+
+        return if (code == 200) {
+            Result<Any>(
+                    success = true,
+                    code = code,
+                    msg = check,
+                    data = tempUser
+            )
+        }else{
+            Result<Any>(
+                    success = false,
+                    code = code,
+                    msg = msg
+            )
+        }
     }
 
     @ObsoleteCoroutinesApi
     @GetMapping("/verifyCode/{date}", produces = [MediaType.IMAGE_PNG_VALUE, "image/png"])
-    fun getVerifyCode(session:HttpSession, @PathVariable date: String): ByteArray? {
-        return Base64.decode(VerifyCode().createCode(session,"verifyCode").imageBase64)
+    fun getVerifyCode(session: HttpSession, @PathVariable date: String): ByteArray? {
+        return Base64.decode(VerifyCode().createCode(session, "verifyCode").imageBase64)
     }
 }
