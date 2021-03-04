@@ -108,20 +108,12 @@ class LoginController {
             Base64.decode(VerifyCode().createCode(session, "verifyCode").imageBase64)
         }
 
-        return if (code == 200) {
-            Result<Any>(
-                    success = true,
-                    code = code,
-                    msg = check,
-                    data = tempUser
-            )
-        }else{
-            Result<Any>(
-                    success = false,
-                    code = code,
-                    msg = msg
-            )
-        }
+        return Result<Any>(
+                success = code == 200,
+                code = code,
+                msg = msg
+        )
+
     }
 
     @ObsoleteCoroutinesApi
@@ -162,21 +154,11 @@ class LoginController {
             code = StatusCode.Status_401.statusCode
             Base64.decode(VerifyCode().createCode(session, "verifyCode").imageBase64)
         }
-
-        return if (code == 200) {
-            Result<Any>(
-                    success = true,
-                    code = code,
-                    msg = check,
-                    data = tempUser
-            )
-        }else{
-            Result<Any>(
-                    success = false,
+        return Result<Any>(
+                    success = code == 200,
                     code = code,
                     msg = msg
             )
-        }
     }
 
     @ObsoleteCoroutinesApi
