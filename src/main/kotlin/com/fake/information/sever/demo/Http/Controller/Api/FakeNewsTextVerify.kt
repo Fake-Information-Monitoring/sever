@@ -3,6 +3,7 @@ package com.fake.information.sever.demo.Http.Controller.Api
 import com.fake.information.sever.demo.Http.Controller.StatusCode
 import com.fake.information.sever.demo.Http.Response.Result
 import com.fake.information.sever.demo.JWT.JWTManage
+import com.fake.information.sever.demo.Model.VerifyTextResult
 import com.fake.information.sever.demo.Until.DemoOkhttp
 import org.springframework.web.bind.annotation.*
 
@@ -22,8 +23,7 @@ class FakeNewsTextVerify {
                     msg = "Token无效"
             )
         }
-        val data = DemoOkhttp.Builder()
-                .post(text = text,url = "http://127.0.0.1:4336/VerifyFakeNews")
+        val data = DemoOkhttp.post<VerifyTextResult>(text = text,url = "http://127.0.0.1:4336/VerifyFakeNews")
         return Result<Any>(
                 success = true,
                 code = StatusCode.Status_200.statusCode,
