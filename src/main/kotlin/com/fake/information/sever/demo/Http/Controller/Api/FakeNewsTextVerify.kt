@@ -19,14 +19,14 @@ class FakeNewsTextVerify {
         if (JWTManage.verifyToken(token) != JWTManage.TokenVerifyCode.Success.verifyCode) {
             return Result<Any>(
                     success = false,
-                    code = StatusCode.Status_401.statusCode,
+                    code = StatusCode.Status401.statusCode,
                     msg = "Token无效"
             )
         }
         val data = DemoOkhttp.post<VerifyTextResult>(text = text,url = "http://127.0.0.1:4336/VerifyFakeNews")
         return Result<Any>(
                 success = true,
-                code = StatusCode.Status_200.statusCode,
+                code = StatusCode.Status200.statusCode,
                 msg = "success",
                 data = data
         )

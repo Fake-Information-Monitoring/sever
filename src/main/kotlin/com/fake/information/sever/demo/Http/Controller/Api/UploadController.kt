@@ -41,7 +41,7 @@ class UploadController {
         if (JWTManage.verifyToken(token) != JWTManage.TokenVerifyCode.Success.verifyCode) {
             return Result<String>(
                     success = false,
-                    code = StatusCode.Status_401.statusCode,
+                    code = StatusCode.Status401.statusCode,
                     msg = "Token无效"
             )
         }
@@ -59,7 +59,7 @@ class UploadController {
             userRepository.save(user)
             return Result<String>(
                     success = true,
-                    code = StatusCode.Status_200.statusCode,
+                    code = StatusCode.Status200.statusCode,
                     msg = "success",
                     data = uploadUrl
             )
@@ -77,7 +77,7 @@ class UploadController {
         userRepository.save(user)
         return Result<String>(
                 success = true,
-                code = StatusCode.Status_200.statusCode,
+                code = StatusCode.Status200.statusCode,
                 msg = "OK",
                 data = user.avatar
         )

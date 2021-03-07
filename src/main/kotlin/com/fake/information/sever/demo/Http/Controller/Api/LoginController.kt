@@ -38,7 +38,7 @@ class LoginController {
         session.setAttribute(userAgent, key?.private!!)
         return Result<ByteArray?>(
                 success = true,
-                code = StatusCode.Status_200.statusCode,
+                code = StatusCode.Status200.statusCode,
                 data = key.public.encoded,
                 msg = "success"
         )
@@ -57,13 +57,13 @@ class LoginController {
             userRepository.save(tempUser)
             return Result<String>(
                     success = true,
-                    code = StatusCode.Status_200.statusCode,
+                    code = StatusCode.Status200.statusCode,
                     msg = "success"
             )
         } catch (e: Exception) {
             return Result<String>(
                     success = false,
-                    code = StatusCode.Status_502.statusCode,
+                    code = StatusCode.Status502.statusCode,
                     msg = e.toString()
             )
         }
@@ -83,7 +83,7 @@ class LoginController {
             VerifyCode().createCode(session, "verifyCode")
             return Result<Any>(
                     success = true,
-                    code = StatusCode.Status_401.statusCode,
+                    code = StatusCode.Status401.statusCode,
                     msg = "验证码错误"
             )
         }
@@ -93,18 +93,18 @@ class LoginController {
             if (tempUser == null) {
                 return Result<Any>(
                         success = false,
-                        code = StatusCode.Status_401.statusCode,
+                        code = StatusCode.Status401.statusCode,
                         msg = "该用户不存在"
                 )
             }
         }
         val check = Check.checkAccount(tempUser, password)
-        var code = StatusCode.Status_200.statusCode
+        var code = StatusCode.Status200.statusCode
         val msg = if (check == "login success") {
-            session.setAttribute(session.id, StatusCode.Status_200.statusCode)
+            session.setAttribute(session.id, StatusCode.Status200.statusCode)
             check
         } else {
-            code = StatusCode.Status_401.statusCode
+            code = StatusCode.Status401.statusCode
             Base64.decode(VerifyCode().createCode(session, "verifyCode").imageBase64)
         }
 
@@ -129,7 +129,7 @@ class LoginController {
             VerifyCode().createCode(session, "verifyCode")
             return Result<Any>(
                     success = true,
-                    code = StatusCode.Status_401.statusCode,
+                    code = StatusCode.Status401.statusCode,
                     msg = "验证码错误"
             )
         }
@@ -141,17 +141,17 @@ class LoginController {
         } catch (e: NumberFormatException) {
             return Result<Any>(
                     success = false,
-                    code = StatusCode.Status_401.statusCode,
+                    code = StatusCode.Status401.statusCode,
                     msg = "输入格式非法"
             )
         }
         val check = Check.checkAccount(tempUser, password)
-        var code = StatusCode.Status_200.statusCode
+        var code = StatusCode.Status200.statusCode
         val msg = if (check == "login success") {
-            session.setAttribute(session.id, StatusCode.Status_200.statusCode)
+            session.setAttribute(session.id, StatusCode.Status200.statusCode)
             check
         } else {
-            code = StatusCode.Status_401.statusCode
+            code = StatusCode.Status401.statusCode
             Base64.decode(VerifyCode().createCode(session, "verifyCode").imageBase64)
         }
         return Result<Any>(

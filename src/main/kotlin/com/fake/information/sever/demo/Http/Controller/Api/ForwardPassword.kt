@@ -23,14 +23,14 @@ class ForwardPassword {
             val info = "验证码错误"
             return Result<String>(
                     success = false,
-                    code = StatusCode.Status_401.statusCode,
+                    code = StatusCode.Status401.statusCode,
                     msg = info as String
             )
         }
         session.setAttribute("forward",true)
         return Result<String>(
                 success = true,
-                code = StatusCode.Status_200.statusCode,
+                code = StatusCode.Status200.statusCode,
                 msg = "success"
         )
     }
@@ -39,14 +39,14 @@ class ForwardPassword {
         if (session.getAttribute("forward")!=true){
             return Result<String>(
                     success = false,
-                    code = StatusCode.Status_401.statusCode,
+                    code = StatusCode.Status401.statusCode,
                     msg = "未通过验证！"
             )
         }
         if (!Check.checkPassword(password)){
             return Result<String>(
                     success = false,
-                    code = StatusCode.Status_401.statusCode,
+                    code = StatusCode.Status401.statusCode,
                     msg = "密码不合法！"
             )
         }
@@ -55,7 +55,7 @@ class ForwardPassword {
         userRepository.save(user)
         return Result<String>(
                 success = true,
-                code = StatusCode.Status_200.statusCode,
+                code = StatusCode.Status200.statusCode,
                 msg = "success"
         )
     }
@@ -65,7 +65,7 @@ class ForwardPassword {
         mailService.sendSimpleMail(email,"验证码,五分钟内有效",verifyCode.code)
         return Result<String>(
                 success = true,
-                code = StatusCode.Status_200.statusCode,
+                code = StatusCode.Status200.statusCode,
                 msg = "success"
         )
     }

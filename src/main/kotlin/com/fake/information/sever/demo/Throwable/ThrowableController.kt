@@ -19,7 +19,7 @@ class ThrowableController {
         return ex.message?.let {
             Result<Any>(
                     success = false,
-                    code = StatusCode.Status_502.statusCode,
+                    code = StatusCode.Status502.statusCode,
                     msg = it
             )
         }

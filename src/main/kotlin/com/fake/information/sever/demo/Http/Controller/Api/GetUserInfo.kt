@@ -26,12 +26,12 @@ class GetUserInfo {
     ): Any {
 
         return try {
-            if (session.getAttribute(user.toString()) != StatusCode.Status_200.statusCode) {
+            if (session.getAttribute(user.toString()) != StatusCode.Status200.statusCode) {
                 throw IllegalAccessException("您没有权限")
             }
             Result<User>(
                     success = true,
-                    code = StatusCode.Status_200.statusCode,
+                    code = StatusCode.Status200.statusCode,
                     msg = "success",
                     data = userRepository.findById(user).get()
             )
@@ -39,7 +39,7 @@ class GetUserInfo {
         } catch (e: NoSuchElementException) {
             Result<String>(
                     success = false,
-                    code = StatusCode.Status_502.statusCode,
+                    code = StatusCode.Status502.statusCode,
                     msg = e.toString()
             )
         }
@@ -51,19 +51,19 @@ class GetUserInfo {
             session: HttpSession
     ): Any {
         return try {
-            if (session.getAttribute(user.toString()) != StatusCode.Status_200.statusCode) {
+            if (session.getAttribute(user.toString()) != StatusCode.Status200.statusCode) {
                 throw IllegalAccessException("您没有权限")
             }
             Result<String>(
                     success = true,
-                    code = StatusCode.Status_200.statusCode,
+                    code = StatusCode.Status200.statusCode,
                     msg = "success",
                     data = userRepository.getOne(user).avatar!!
             )
         } catch (e: NoSuchElementException) {
             Result<String>(
                     success = false,
-                    code = StatusCode.Status_502.statusCode,
+                    code = StatusCode.Status502.statusCode,
                     msg = e.toString()
             )
         }
@@ -76,14 +76,14 @@ class GetUserInfo {
                   session: HttpSession
     ): Any {
         return try {
-            if (session.getAttribute(user.toString()) != StatusCode.Status_200.statusCode) {
+            if (session.getAttribute(user.toString()) != StatusCode.Status200.statusCode) {
                 throw IllegalAccessException("您没有权限")
             }
             commitRepository.getOne(commit).indexOSSUrl!!
         } catch (e: NoSuchElementException) {
             Result<String>(
                     success = false,
-                    code = StatusCode.Status_502.statusCode,
+                    code = StatusCode.Status502.statusCode,
                     msg = e.toString()
             )
         }

@@ -20,7 +20,7 @@ class UpdateController {
         if (user.name == null) {
             return Result<String>(
                     success = false,
-                    code = StatusCode.Status_401.statusCode,
+                    code = StatusCode.Status401.statusCode,
                     msg = "用户不存在"
             )
         }
@@ -28,7 +28,7 @@ class UpdateController {
         userRepository.save(user)
         return Result<String>(
                 success = true,
-                code = StatusCode.Status_200.statusCode,
+                code = StatusCode.Status200.statusCode,
                 msg = "OK"
         )
     }

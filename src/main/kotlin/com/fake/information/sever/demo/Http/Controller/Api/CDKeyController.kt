@@ -25,14 +25,14 @@ class CDKeyController {
         if (JWTManage.verifyToken(token) != JWTManage.TokenVerifyCode.Success.verifyCode) {
             return Result<String>(
                     success = false,
-                    code = StatusCode.Status_401.statusCode,
+                    code = StatusCode.Status401.statusCode,
                     msg = "Token无效"
             )
         }
         //TODO:验证txt是否属于FakeNews,再发起一个向AI服务器的请求即可
         return Result<String>(
                 success = true,
-                code = StatusCode.Status_200.statusCode,
+                code = StatusCode.Status200.statusCode,
                 msg = "success",
                 data = ""
         )
@@ -52,7 +52,7 @@ class CDKeyController {
         userRepository.save(user)
         return Result<String>(
                 success = true,
-                code = StatusCode.Status_200.statusCode,
+                code = StatusCode.Status200.statusCode,
                 msg = "success",
                 data = cdkey.key
         )
