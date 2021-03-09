@@ -2,10 +2,12 @@ package com.fake.information.sever.demo.Http.Controller.Api
 
 import com.fake.information.sever.demo.Controller.tools.Check
 import com.fake.information.sever.demo.DAO.UserRepository
+import com.fake.information.sever.demo.DAO.redis.FakeNewsRedisTemplate
 import com.fake.information.sever.demo.EmailUntil.MailService
 import com.fake.information.sever.demo.Http.Controller.StatusCode
 import com.fake.information.sever.demo.Http.Response.Result
 import com.fake.information.sever.demo.VerifyCode.VerifyCode
+import kotlinx.coroutines.ObsoleteCoroutinesApi
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpSession
@@ -15,35 +17,46 @@ import javax.servlet.http.HttpSession
 class ForwardPassword {
     @Autowired
     private lateinit var userRepository: UserRepository
+
     @Autowired
     private lateinit var mailService: MailService
-    @RequestMapping("/",method = [RequestMethod.GET])
-    fun forwardPassword(session:HttpSession,@RequestHeader("verifyCode") verifyCode: String): Result<String> {
-        if (!VerifyCode().verifyCode(session, verifyCode,"emailCode")){
-            val info = "验证码错误"
+
+    @Autowired
+    private lateinit var redisTemplate: FakeNewsRedisTemplate
+
+    private lateinit var verifyCode: VerifyCode
+
+
+    @RequestMapping("/", method = [RequestMethod.GET])
+    fun forwardPassword(session: HttpSession, @RequestHeader("verifyCode") verify: String): Result<String> {
+        if (verifyCode == null) {
+            verifyCode = VerifyCode(redisTemplate)
+        }
+        if (!verifyCode.verifyCode(session, verify, "emailCode")) {
             return Result<String>(
                     success = false,
                     code = StatusCode.Status401.statusCode,
-                    msg = info as String
+                    msg = "验证码错误"
             )
         }
-        session.setAttribute("forward",true)
+        redisTemplate.setRedis(session.id + "forward", true)
         return Result<String>(
                 success = true,
                 code = StatusCode.Status200.statusCode,
                 msg = "success"
         )
     }
-    @RequestMapping("/change",method = [RequestMethod.PUT])
-    fun changePassword(session:HttpSession,@RequestHeader("email")email: String,@RequestHeader("changePassword") password: String): Result<String> {
-        if (session.getAttribute("forward")!=true){
+
+    @RequestMapping("/change", method = [RequestMethod.PUT])
+    fun changePassword(session: HttpSession, @RequestHeader("email") email: String, @RequestHeader("changePassword") password: String): Result<String> {
+        if (redisTemplate.getRedis(session.id + "forward") != true) {
             return Result<String>(
                     success = false,
                     code = StatusCode.Status401.statusCode,
                     msg = "未通过验证！"
             )
         }
-        if (!Check.checkPassword(password)){
+        if (!Check.checkPassword(password)) {
             return Result<String>(
                     success = false,
                     code = StatusCode.Status401.statusCode,
@@ -59,10 +72,15 @@ class ForwardPassword {
                 msg = "success"
         )
     }
+
+    @ObsoleteCoroutinesApi
     @GetMapping("/sendEmail")
-    fun forwardPasswordCheck(@RequestHeader("email") email:String, session:HttpSession): Result<String> {
-        val verifyCode = VerifyCode().createCode(session,"emailCode")
-        mailService.sendSimpleMail(email,"验证码,五分钟内有效",verifyCode.code)
+    fun forwardPasswordCheck(@RequestHeader("email") email: String, session: HttpSession): Result<String> {
+        if (verifyCode == null) {
+            verifyCode = VerifyCode(redisTemplate)
+        }
+        val verifyCodes = verifyCode.createCode(session, "emailCode")
+        mailService.sendSimpleMail(email, "验证码,五分钟内有效", verifyCodes.code)
         return Result<String>(
                 success = true,
                 code = StatusCode.Status200.statusCode,

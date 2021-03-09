@@ -2,6 +2,7 @@ package com.fake.information.sever.demo.Controller
 
 import com.fake.information.sever.demo.DAO.CommitRepository
 import com.fake.information.sever.demo.DAO.UserRepository
+import com.fake.information.sever.demo.DAO.redis.FakeNewsRedisTemplate
 import com.fake.information.sever.demo.Http.Controller.StatusCode
 import com.fake.information.sever.demo.Model.User
 import org.springframework.beans.factory.annotation.Autowired
@@ -18,6 +19,9 @@ class GetUserInfo {
     @Autowired
     private lateinit var commitRepository: CommitRepository
 
+    @Autowired
+    private lateinit var redisTemplate: FakeNewsRedisTemplate
+
     @ExperimentalStdlibApi
     @GetMapping("/{user}")
     fun getUserInfo(
@@ -26,7 +30,7 @@ class GetUserInfo {
     ): Any {
 
         return try {
-            if (session.getAttribute(user.toString()) != StatusCode.Status200.statusCode) {
+            if (redisTemplate.getRedis(user.toString()) != StatusCode.Status200.statusCode) {
                 throw IllegalAccessException("您没有权限")
             }
             Result<User>(
@@ -51,9 +55,10 @@ class GetUserInfo {
             session: HttpSession
     ): Any {
         return try {
-            if (session.getAttribute(user.toString()) != StatusCode.Status200.statusCode) {
+            if (redisTemplate.getRedis(session.id) != StatusCode.Status200.statusCode) {
                 throw IllegalAccessException("您没有权限")
             }
+            val avatar = userRepository.getOne(user).avatar
             Result<String>(
                     success = true,
                     code = StatusCode.Status200.statusCode,
@@ -76,10 +81,14 @@ class GetUserInfo {
                   session: HttpSession
     ): Any {
         return try {
-            if (session.getAttribute(user.toString()) != StatusCode.Status200.statusCode) {
+            if (redisTemplate.getRedis(session.id) != StatusCode.Status200.statusCode) {
                 throw IllegalAccessException("您没有权限")
             }
-            commitRepository.getOne(commit).indexOSSUrl!!
+            val commit = commitRepository.getOne(commit)
+            if (commit.user?.id == user)
+                commit.indexOSSUrl!!
+            else
+                throw IllegalAccessException("您没有权限")
         } catch (e: NoSuchElementException) {
             Result<String>(
                     success = false,

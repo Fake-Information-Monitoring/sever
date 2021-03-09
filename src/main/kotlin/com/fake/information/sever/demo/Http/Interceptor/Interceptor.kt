@@ -1,8 +1,11 @@
 package com.fake.information.sever.demo.Http.Interceptor
 
+import com.fake.information.sever.demo.DAO.redis.FakeNewsRedisTemplate
 import com.fake.information.sever.demo.Http.Controller.StatusCode
 import com.fake.information.sever.demo.Http.Response.Result
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Configuration
+import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.web.servlet.HandlerInterceptor
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
@@ -36,11 +39,16 @@ class Interceptor : WebMvcConfigurer {
 
     }
 
+
     @Configuration
     class SecurityInterceptor : HandlerInterceptor {
+        @Autowired
+        private lateinit var redisTemplate: RedisTemplate<String, Any>
+
         override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
             val session = request.session
-            if (session.getAttribute(session.id) == StatusCode.Status200.statusCode) {//TODO: session状态码拦截
+            if (redisTemplate.opsForValue().get(session.id)
+                    == StatusCode.Status200.statusCode) {//TODO: session状态码拦截
                 return true
             }
             val result: Result<String> = Result(
