@@ -81,10 +81,12 @@ class LoginController {
             checkVerifyCode(session, verify)
             val tempUser = userRepository.findByPhoneNumber(account.toLong())
             Check.checkAccount(VerifyCode(redisTemplate), session, tempUser, password)
+            redisTemplate.setRedis(tempUser?.id.toString(),StatusCode.Status200.statusCode)
+            redisTemplate.setRedis(session.id, StatusCode.Status200.statusCode)
         } catch (e: NumberFormatException) {
             throw NumberFormatException("输入格式非法")
         }
-        redisTemplate.setRedis(session.id, StatusCode.Status200.statusCode)
+
         return Result<Any>(
                 success = true,
                 code = StatusCode.Status200.statusCode,
@@ -118,6 +120,8 @@ class LoginController {
             checkVerifyCode(session, verify)
             val tempUser = userRepository.findByPhoneNumber(account.toLong())
             Check.checkAccount(VerifyCode(redisTemplate), session, tempUser, password)
+            redisTemplate.setRedis(tempUser?.id.toString(),StatusCode.Status200.statusCode)
+            redisTemplate.setRedis(session.id, StatusCode.Status200.statusCode)
         } catch (e: NumberFormatException) {
             return Result<Any>(
                     success = false,
@@ -125,7 +129,7 @@ class LoginController {
                     msg = "输入格式非法"
             )
         }
-        redisTemplate.setRedis(session.id, StatusCode.Status200.statusCode)
+
         return Result<Any>(
                 success = true,
                 code = StatusCode.Status200.statusCode,
