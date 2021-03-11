@@ -2,7 +2,7 @@ package com.fake.information.sever.demo.Controller
 
 import com.fake.information.sever.demo.DAO.CommitRepository
 import com.fake.information.sever.demo.DAO.UserRepository
-import com.fake.information.sever.demo.DAO.redis.FakeNewsRedisTemplate
+import com.fake.information.sever.demo.DAO.Redis.FakeNewsRedisTemplate
 import com.fake.information.sever.demo.Http.Controller.StatusCode
 import com.fake.information.sever.demo.Model.User
 import org.springframework.beans.factory.annotation.Autowired
@@ -28,7 +28,6 @@ class GetUserInfo {
             @PathVariable user: Int,
             session: HttpSession
     ): Any {
-
         return try {
             if (redisTemplate.getRedis(user.toString()) != StatusCode.Status200.statusCode) {
                 throw IllegalAccessException("您没有权限")
@@ -58,15 +57,14 @@ class GetUserInfo {
             if (redisTemplate.getRedis(session.id) != StatusCode.Status200.statusCode) {
                 throw IllegalAccessException("您没有权限")
             }
-            val avatar = userRepository.getOne(user).avatar
-            Result<String>(
+            Result(
                     success = true,
                     code = StatusCode.Status200.statusCode,
                     msg = "success",
                     data = userRepository.getOne(user).avatar!!
             )
         } catch (e: NoSuchElementException) {
-            Result<String>(
+            Result(
                     success = false,
                     code = StatusCode.Status502.statusCode,
                     msg = e.toString()

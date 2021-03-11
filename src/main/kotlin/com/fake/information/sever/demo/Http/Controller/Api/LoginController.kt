@@ -3,11 +3,10 @@ package com.fake.information.sever.demo.Controller
 import cn.hutool.core.codec.Base64
 import com.fake.information.sever.demo.Controller.tools.Check
 import com.fake.information.sever.demo.DAO.UserRepository
-import com.fake.information.sever.demo.DAO.redis.FakeNewsRedisTemplate
+import com.fake.information.sever.demo.DAO.Redis.FakeNewsRedisTemplate
 import com.fake.information.sever.demo.Http.Controller.Api.Until.RSA
 import com.fake.information.sever.demo.Http.Controller.StatusCode
 import com.fake.information.sever.demo.Http.Response.Result
-import com.fake.information.sever.demo.Model.User
 import com.fake.information.sever.demo.VerifyCode.VerifyCode
 import kotlinx.coroutines.ObsoleteCoroutinesApi
 import org.springframework.beans.factory.annotation.Autowired
@@ -15,7 +14,6 @@ import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
 import java.lang.IllegalArgumentException
 import java.util.*
-import javax.security.auth.Subject
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpSession
 
@@ -57,24 +55,16 @@ class LoginController {
             request: HttpServletRequest,
             session: HttpSession
     ): Result<String> {
-        try {
-            redisTemplate.remove(session.id)
-            session.invalidate()
-            val tempUser = userRepository.getOne(Id)
-            tempUser.lastActive = Date()
-            userRepository.save(tempUser)
-            return Result<String>(
-                    success = true,
-                    code = StatusCode.Status200.statusCode,
-                    msg = "success"
-            )
-        } catch (e: Exception) {
-            return Result<String>(
-                    success = false,
-                    code = StatusCode.Status502.statusCode,
-                    msg = e.toString()
-            )
-        }
+        redisTemplate.remove(session.id)
+        session.invalidate()
+        val tempUser = userRepository.getOne(Id)
+        tempUser.lastActive = Date()
+        userRepository.save(tempUser)
+        return Result<String>(
+                success = true,
+                code = StatusCode.Status200.statusCode,
+                msg = "success"
+        )
     }
 
     @ObsoleteCoroutinesApi
@@ -86,17 +76,13 @@ class LoginController {
     ): Result<Any> {
         val password = params["password"].toString()
         val verify = params["verifyCode"].toString()
-        val account:String = params["account"].toString()
+        val account: String = params["account"].toString()
         try {
             checkVerifyCode(session, verify)
             val tempUser = userRepository.findByPhoneNumber(account.toLong())
             Check.checkAccount(VerifyCode(redisTemplate), session, tempUser, password)
         } catch (e: NumberFormatException) {
-            return Result<Any>(
-                    success = false,
-                    code = StatusCode.Status401.statusCode,
-                    msg = "输入格式非法"
-            )
+            throw NumberFormatException("输入格式非法")
         }
         redisTemplate.setRedis(session.id, StatusCode.Status200.statusCode)
         return Result<Any>(
@@ -104,7 +90,6 @@ class LoginController {
                 code = StatusCode.Status200.statusCode,
                 msg = "login success"
         )
-
     }
 
     @ObsoleteCoroutinesApi
@@ -126,7 +111,7 @@ class LoginController {
     ): Result<Any> {
         val password = params["password"].toString()
         val verify = params["verifyCode"].toString()
-        val account:String = params["account"].toString()
+        val account: String = params["account"].toString()
 //        val privateKey: PrivateKey = session.getAttribute(userAgent) as PrivateKey
 //        val passwordWithPrivateKey = RSA.decryptByPrivateKey(password, privateKey)
         try {
@@ -140,7 +125,6 @@ class LoginController {
                     msg = "输入格式非法"
             )
         }
-
         redisTemplate.setRedis(session.id, StatusCode.Status200.statusCode)
         return Result<Any>(
                 success = true,

@@ -1,9 +1,7 @@
-package com.fake.information.sever.demo.DAO.redis
+package com.fake.information.sever.demo.DAO.Redis
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.redis.core.RedisTemplate
-import org.springframework.data.redis.core.StringRedisTemplate
-import org.springframework.stereotype.Component
 import org.springframework.stereotype.Service
 import java.util.concurrent.TimeUnit
 

@@ -2,14 +2,10 @@ package com.fake.information.sever.demo.VerifyCode
 
 import cn.hutool.captcha.CaptchaUtil
 import cn.hutool.captcha.ShearCaptcha
-import com.fake.information.sever.demo.DAO.redis.FakeNewsRedisTemplate
-import com.fake.information.sever.demo.ThreadPool.FakeNewsThreadPool
-import javax.servlet.http.HttpServletRequest
+import com.fake.information.sever.demo.DAO.Redis.FakeNewsRedisTemplate
 import kotlinx.coroutines.*
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.RestController
 import java.util.concurrent.TimeUnit
-import javax.security.auth.Subject
 import javax.servlet.http.HttpSession
 
 /*

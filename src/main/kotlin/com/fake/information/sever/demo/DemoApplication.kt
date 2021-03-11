@@ -8,7 +8,7 @@ import org.springframework.scheduling.annotation.EnableAsync
 
 @SpringBootApplication
 @EnableAsync
-class DemoApplication: ApplicationRunner {
+class DemoApplication : ApplicationRunner {
     override fun run(args: ApplicationArguments?) {
         println("""
   ______      _          _   _                       _____     _               _    _   __
@@ -23,6 +23,7 @@ class DemoApplication: ApplicationRunner {
 
     }
 }
+
 fun main(args: Array<String>) {
     runApplication<DemoApplication>(*args)
 }
