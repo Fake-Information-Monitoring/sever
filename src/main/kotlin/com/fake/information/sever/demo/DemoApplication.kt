@@ -8,6 +8,7 @@ import org.springframework.scheduling.annotation.EnableAsync
 
 @SpringBootApplication
 @EnableAsync
+@EnableCaching
 class DemoApplication : ApplicationRunner {
     override fun run(args: ApplicationArguments?) {
         println("""
