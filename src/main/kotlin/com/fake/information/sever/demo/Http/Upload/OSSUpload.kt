@@ -6,6 +6,7 @@ import com.aliyun.oss.OSSException
 import com.aliyun.oss.model.CannedAccessControlList
 import com.aliyun.oss.model.CreateBucketRequest
 import com.aliyun.oss.model.PutObjectRequest
+import com.aliyuncs.regions.Endpoint
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*

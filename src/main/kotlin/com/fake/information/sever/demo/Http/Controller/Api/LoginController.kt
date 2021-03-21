@@ -9,6 +9,7 @@ import com.fake.information.sever.demo.Http.Controller.StatusCode
 import com.fake.information.sever.demo.Http.Response.Result
 import com.fake.information.sever.demo.VerifyCode.VerifyCode
 import kotlinx.coroutines.ObsoleteCoroutinesApi
+import org.hibernate.annotations.Cache
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
