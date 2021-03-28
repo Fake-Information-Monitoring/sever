@@ -1,4 +1,4 @@
-package com.fake.information.sever.demo.Http.Upload
+package com.fake.information.sever.demo.Until.OSS
 
 import com.aliyun.oss.OSSClient
 import com.aliyun.oss.OSSException
@@ -6,7 +6,6 @@ import com.aliyun.oss.OSSException
 import com.aliyun.oss.model.CannedAccessControlList
 import com.aliyun.oss.model.CreateBucketRequest
 import com.aliyun.oss.model.PutObjectRequest
-import com.aliyuncs.regions.Endpoint
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*

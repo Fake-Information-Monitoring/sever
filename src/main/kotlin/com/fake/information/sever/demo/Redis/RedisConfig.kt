@@ -1,4 +1,4 @@
-package com.fake.information.sever.demo.DAO.Redis
+package com.fake.information.sever.demo.Redis
 
 import org.springframework.cache.annotation.CachingConfigurerSupport
 import org.springframework.cache.annotation.EnableCaching

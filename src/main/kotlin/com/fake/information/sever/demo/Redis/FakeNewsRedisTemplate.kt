@@ -1,4 +1,4 @@
-package com.fake.information.sever.demo.DAO.Redis
+package com.fake.information.sever.demo.Redis
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.redis.core.RedisTemplate

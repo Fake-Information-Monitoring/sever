@@ -1,4 +1,4 @@
-package com.fake.information.sever.demo.Http.Upload
+package com.fake.information.sever.demo.Until.OSS
 
 import org.springframework.beans.factory.InitializingBean
 import org.springframework.beans.factory.annotation.Value

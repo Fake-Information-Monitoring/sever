@@ -3,7 +3,7 @@ package com.fake.information.sever.demo.Http.Controller.Api
 import com.fake.information.sever.demo.DAO.CDKeyRepository
 import com.fake.information.sever.demo.DAO.UserRepository
 import com.fake.information.sever.demo.Http.Controller.StatusCode
-import com.fake.information.sever.demo.JWT.JWTManage
+import com.fake.information.sever.demo.Until.JWT.JWTManage
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 import java.util.*

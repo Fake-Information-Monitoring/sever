@@ -1,8 +1,8 @@
-package com.fake.information.sever.demo.VerifyCode
+package com.fake.information.sever.demo.Until.VerifyCode
 
 import cn.hutool.captcha.CaptchaUtil
 import cn.hutool.captcha.ShearCaptcha
-import com.fake.information.sever.demo.DAO.Redis.FakeNewsRedisTemplate
+import com.fake.information.sever.demo.Redis.FakeNewsRedisTemplate
 import kotlinx.coroutines.*
 import org.springframework.web.bind.annotation.RestController
 import java.util.concurrent.TimeUnit

@@ -2,15 +2,15 @@ package com.fake.information.sever.demo.Controller
 
 import com.fake.information.sever.demo.Controller.tools.Check
 import com.fake.information.sever.demo.DAO.UserRepository
-import com.fake.information.sever.demo.DAO.Redis.FakeNewsRedisTemplate
-import com.fake.information.sever.demo.EmailUntil.MailService
+import com.fake.information.sever.demo.Redis.FakeNewsRedisTemplate
+import com.fake.information.sever.demo.Until.EmailUntil.MailService
 import com.fake.information.sever.demo.Http.Controller.StatusCode
 import com.fake.information.sever.demo.Model.User
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 import java.util.*
 import com.fake.information.sever.demo.Http.Response.Result
-import com.fake.information.sever.demo.VerifyCode.VerifyCode
+import com.fake.information.sever.demo.Until.VerifyCode.VerifyCode
 import kotlinx.coroutines.ObsoleteCoroutinesApi
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpSession

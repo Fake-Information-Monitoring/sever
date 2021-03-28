@@ -1,4 +1,4 @@
-package com.fake.information.sever.demo.EmailUntil
+package com.fake.information.sever.demo.Until.EmailUntil
 
 interface IMailService {
     /**

@@ -2,7 +2,7 @@ package com.fake.information.sever.demo.Http.Controller.Api
 
 import com.fake.information.sever.demo.Http.Controller.StatusCode
 import com.fake.information.sever.demo.Http.Response.Result
-import com.fake.information.sever.demo.JWT.JWTManage
+import com.fake.information.sever.demo.Until.JWT.JWTManage
 import com.fake.information.sever.demo.Model.VerifyTextResult
 import com.fake.information.sever.demo.Until.DemoOkhttp
 import org.springframework.web.bind.annotation.*

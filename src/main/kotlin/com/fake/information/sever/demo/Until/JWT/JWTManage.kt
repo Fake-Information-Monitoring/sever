@@ -1,4 +1,4 @@
-package com.fake.information.sever.demo.JWT
+package com.fake.information.sever.demo.Until.JWT
 
 
 import com.fake.information.sever.demo.Http.Controller.Api.Until.RSA

@@ -1,6 +1,6 @@
 package com.fake.information.sever.demo.Http.Interceptor
 
-import com.fake.information.sever.demo.DAO.Redis.FakeNewsRedisTemplate
+import com.fake.information.sever.demo.Redis.FakeNewsRedisTemplate
 import com.fake.information.sever.demo.Http.Controller.StatusCode
 import com.fake.information.sever.demo.Http.Response.Result
 import org.springframework.beans.factory.annotation.Autowired

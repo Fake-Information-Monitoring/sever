@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 import com.fake.information.sever.demo.Http.Response.Result
-import com.fake.information.sever.demo.Http.Upload.OSSUpload
-import com.fake.information.sever.demo.JWT.JWTManage
+import com.fake.information.sever.demo.Until.OSS.OSSUpload
+import com.fake.information.sever.demo.Until.JWT.JWTManage
 import com.fake.information.sever.demo.Model.Commit
 import java.io.File
 import java.io.FileOutputStream

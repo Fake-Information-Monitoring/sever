@@ -3,13 +3,12 @@ package com.fake.information.sever.demo.Controller
 import cn.hutool.core.codec.Base64
 import com.fake.information.sever.demo.Controller.tools.Check
 import com.fake.information.sever.demo.DAO.UserRepository
-import com.fake.information.sever.demo.DAO.Redis.FakeNewsRedisTemplate
+import com.fake.information.sever.demo.Redis.FakeNewsRedisTemplate
 import com.fake.information.sever.demo.Http.Controller.Api.Until.RSA
 import com.fake.information.sever.demo.Http.Controller.StatusCode
 import com.fake.information.sever.demo.Http.Response.Result
-import com.fake.information.sever.demo.VerifyCode.VerifyCode
+import com.fake.information.sever.demo.Until.VerifyCode.VerifyCode
 import kotlinx.coroutines.ObsoleteCoroutinesApi
-import org.hibernate.annotations.Cache
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
@@ -103,39 +102,6 @@ class LoginController {
             throw IllegalArgumentException("验证码错误")
         }
         return true
-    }
-
-    @ObsoleteCoroutinesApi
-    @ExperimentalStdlibApi
-    @PostMapping("/loginWithPhone")
-    fun postLoginWithPhone(@RequestBody params: Map<String, Any>,
-                           request: HttpServletRequest,
-                           session: HttpSession
-    ): Result<Any> {
-        val password = params["password"].toString()
-        val verify = params["verifyCode"].toString()
-        val account: String = params["account"].toString()
-//        val privateKey: PrivateKey = session.getAttribute(userAgent) as PrivateKey
-//        val passwordWithPrivateKey = RSA.decryptByPrivateKey(password, privateKey)
-        try {
-            checkVerifyCode(session, verify)
-            val tempUser = userRepository.findByPhoneNumber(account.toLong())
-            Check.checkAccount(VerifyCode(redisTemplate), session, tempUser, password)
-            redisTemplate.setRedis(tempUser?.id.toString(),StatusCode.Status200.statusCode)
-            redisTemplate.setRedis(session.id, StatusCode.Status200.statusCode)
-        } catch (e: NumberFormatException) {
-            return Result<Any>(
-                    success = false,
-                    code = StatusCode.Status401.statusCode,
-                    msg = "输入格式非法"
-            )
-        }
-
-        return Result<Any>(
-                success = true,
-                code = StatusCode.Status200.statusCode,
-                msg = "login success"
-        )
     }
 
     @ObsoleteCoroutinesApi
