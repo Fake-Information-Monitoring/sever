@@ -1,6 +1,6 @@
 package com.fake.information.sever.demo.Controller.tools
 
-import com.fake.information.sever.demo.DAO.UserRepository
+import com.fake.information.sever.demo.DTO.UserRepository
 import com.fake.information.sever.demo.Model.User
 import com.fake.information.sever.demo.Until.VerifyCode.VerifyCode
 import kotlinx.coroutines.ObsoleteCoroutinesApi

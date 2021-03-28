@@ -1,14 +1,13 @@
-package com.fake.information.sever.demo.Http.Controller.Api
+package com.fake.information.sever.demo.Http.Controller
 
-import com.fake.information.sever.demo.DAO.CommitRepository
-import com.fake.information.sever.demo.DAO.UserRepository
-import com.fake.information.sever.demo.Http.Controller.StatusCode
+import com.fake.information.sever.demo.DTO.CommitRepository
+import com.fake.information.sever.demo.DTO.UserRepository
+import com.fake.information.sever.demo.Http.Response.StatusCode
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 import com.fake.information.sever.demo.Http.Response.Result
 import com.fake.information.sever.demo.Until.OSS.OSSUpload
-import com.fake.information.sever.demo.Until.JWT.JWTManage
 import com.fake.information.sever.demo.Model.Commit
 import java.io.File
 import java.io.FileOutputStream
@@ -38,13 +37,13 @@ class UploadController {
             @RequestHeader("id") id: Int,
             @RequestHeader("token") token:String
     ): Result<String> {
-        if (JWTManage.verifyToken(token) != JWTManage.TokenVerifyCode.Success.verifyCode) {
-            return Result<String>(
-                    success = false,
-                    code = StatusCode.Status401.statusCode,
-                    msg = "Token无效"
-            )
-        }
+//        if (JWTManage.verifyToken(token) != JWTManage.TokenVerifyCode.Success.verifyCode) {
+//            return Result<String>(
+//                    success = false,
+//                    code = StatusCode.Status401.statusCode,
+//                    msg = "Token无效"
+//            )
+//        }
         val user = userRepository.getOne(id)
         val commit = Commit()
         commit.user = user

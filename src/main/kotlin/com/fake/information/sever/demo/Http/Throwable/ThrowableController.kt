@@ -1,6 +1,6 @@
-package com.fake.information.sever.demo.Throwable
+package com.fake.information.sever.demo.Http.Throwable
 
-import com.fake.information.sever.demo.Http.Controller.StatusCode
+import com.fake.information.sever.demo.Http.Response.StatusCode
 import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseBody

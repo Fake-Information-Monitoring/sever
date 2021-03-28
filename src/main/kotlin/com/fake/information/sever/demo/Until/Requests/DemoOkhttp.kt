@@ -1,4 +1,4 @@
-package com.fake.information.sever.demo.Until
+package com.fake.information.sever.demo.Until.Requests
 
 import com.google.gson.GsonBuilder
 import okhttp3.*

@@ -1,4 +1,4 @@
-package com.fake.information.sever.demo.Http.Controller.Api.Until
+package com.fake.information.sever.demo.Http.Until
 
 import org.apache.commons.codec.binary.Base64
 import java.security.KeyPair

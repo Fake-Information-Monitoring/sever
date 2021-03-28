@@ -2,10 +2,10 @@ package com.fake.information.sever.demo.Controller
 
 import cn.hutool.core.codec.Base64
 import com.fake.information.sever.demo.Controller.tools.Check
-import com.fake.information.sever.demo.DAO.UserRepository
+import com.fake.information.sever.demo.DTO.UserRepository
 import com.fake.information.sever.demo.Redis.FakeNewsRedisTemplate
-import com.fake.information.sever.demo.Http.Controller.Api.Until.RSA
-import com.fake.information.sever.demo.Http.Controller.StatusCode
+import com.fake.information.sever.demo.Http.Until.RSA
+import com.fake.information.sever.demo.Http.Response.StatusCode
 import com.fake.information.sever.demo.Http.Response.Result
 import com.fake.information.sever.demo.Until.VerifyCode.VerifyCode
 import kotlinx.coroutines.ObsoleteCoroutinesApi
@@ -81,7 +81,7 @@ class LoginController {
             checkVerifyCode(session, verify)
             val tempUser = userRepository.findByPhoneNumber(account.toLong())
             Check.checkAccount(VerifyCode(redisTemplate), session, tempUser, password)
-            redisTemplate.setRedis(tempUser?.id.toString(),StatusCode.Status200.statusCode)
+            redisTemplate.setRedis(tempUser?.id.toString(), StatusCode.Status200.statusCode)
             redisTemplate.setRedis(session.id, StatusCode.Status200.statusCode)
         } catch (e: NumberFormatException) {
             throw NumberFormatException("输入格式非法")

@@ -1,9 +1,9 @@
 package com.fake.information.sever.demo.Controller
 
-import com.fake.information.sever.demo.DAO.CommitRepository
-import com.fake.information.sever.demo.DAO.UserRepository
+import com.fake.information.sever.demo.DTO.CommitRepository
+import com.fake.information.sever.demo.DTO.UserRepository
 import com.fake.information.sever.demo.Redis.FakeNewsRedisTemplate
-import com.fake.information.sever.demo.Http.Controller.StatusCode
+import com.fake.information.sever.demo.Http.Response.StatusCode
 import com.fake.information.sever.demo.Model.User
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
