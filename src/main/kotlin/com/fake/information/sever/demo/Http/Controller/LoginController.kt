@@ -7,6 +7,7 @@ import com.fake.information.sever.demo.Redis.FakeNewsRedisTemplate
 import com.fake.information.sever.demo.Http.Until.RSA
 import com.fake.information.sever.demo.Http.Response.StatusCode
 import com.fake.information.sever.demo.Http.Response.Result
+import com.fake.information.sever.demo.Until.AsyncTask.FakeNewsAsyncService
 import com.fake.information.sever.demo.Until.VerifyCode.VerifyCode
 import kotlinx.coroutines.ObsoleteCoroutinesApi
 import org.springframework.beans.factory.annotation.Autowired
@@ -55,11 +56,13 @@ class LoginController {
             request: HttpServletRequest,
             session: HttpSession
     ): Result<String> {
-        redisTemplate.remove(session.id)
-        session.invalidate()
-        val tempUser = userRepository.getOne(Id)
-        tempUser.lastActive = Date()
-        userRepository.save(tempUser)
+        FakeNewsAsyncService().asyncTask {
+            redisTemplate.remove(session.id)
+            session.invalidate()
+            val tempUser = userRepository.getOne(Id)
+            tempUser.lastActive = Date()
+            userRepository.save(tempUser)
+        }
         return Result<String>(
                 success = true,
                 code = StatusCode.Status200.statusCode,
@@ -79,10 +82,12 @@ class LoginController {
         val account: String = params["account"].toString()
         try {
             checkVerifyCode(session, verify)
-            val tempUser = userRepository.findByPhoneNumber(account.toLong())
+            val tempUser = userRepository.findByEmail(account)
             Check.checkAccount(VerifyCode(redisTemplate), session, tempUser, password)
-            redisTemplate.setRedis(tempUser?.id.toString(), StatusCode.Status200.statusCode)
-            redisTemplate.setRedis(session.id, StatusCode.Status200.statusCode)
+            FakeNewsAsyncService().asyncTask {
+                redisTemplate.setRedis(tempUser?.id.toString(), StatusCode.Status200.statusCode)
+                redisTemplate.setRedis(session.id, StatusCode.Status200.statusCode)
+            }
         } catch (e: NumberFormatException) {
             throw NumberFormatException("输入格式非法")
         }

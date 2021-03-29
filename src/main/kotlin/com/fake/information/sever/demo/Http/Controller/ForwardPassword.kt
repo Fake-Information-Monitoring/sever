@@ -6,6 +6,7 @@ import com.fake.information.sever.demo.Redis.FakeNewsRedisTemplate
 import com.fake.information.sever.demo.Until.EmailUntil.MailService
 import com.fake.information.sever.demo.Http.Response.StatusCode
 import com.fake.information.sever.demo.Http.Response.Result
+import com.fake.information.sever.demo.Until.AsyncTask.FakeNewsAsyncService
 import com.fake.information.sever.demo.Until.VerifyCode.VerifyCode
 import kotlinx.coroutines.ObsoleteCoroutinesApi
 import org.springframework.beans.factory.annotation.Autowired
@@ -63,9 +64,11 @@ class ForwardPassword {
                     msg = "密码不合法！"
             )
         }
-        val user = userRepository.findByEmail(email)
-        user!!.setPassword(password)
-        userRepository.save(user)
+        FakeNewsAsyncService().asyncTask {
+            val user = userRepository.findByEmail(email)
+            user!!.setPassword(password)
+            userRepository.save(user)
+        }
         return Result<String>(
                 success = true,
                 code = StatusCode.Status200.statusCode,
@@ -75,12 +78,17 @@ class ForwardPassword {
 
     @ObsoleteCoroutinesApi
     @GetMapping("/sendEmail")
-    fun forwardPasswordCheck(@RequestHeader("email") email: String, session: HttpSession): Result<String> {
+    fun forwardPasswordCheck(
+        @RequestHeader("email") email: String,
+        session: HttpSession
+    ): Result<String> {
         if (verifyCode == null) {
             verifyCode = VerifyCode(redisTemplate)
         }
         val verifyCodes = verifyCode.createCode(session, "emailCode")
-        mailService.sendSimpleMail(email, "验证码,五分钟内有效", verifyCodes.code)
+        FakeNewsAsyncService().asyncTask {
+            mailService.sendSimpleMail(email, "验证码,五分钟内有效", verifyCodes.code)
+        }
         return Result<String>(
                 success = true,
                 code = StatusCode.Status200.statusCode,

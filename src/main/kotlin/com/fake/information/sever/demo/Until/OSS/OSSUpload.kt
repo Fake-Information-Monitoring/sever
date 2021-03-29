@@ -14,7 +14,6 @@ class OSSUpload {
 
     companion object {
 
-
         fun upload(file: File?): String? {
             val endpoint = OSSConfiguration.OSS_END_POINT
             val accessKeyId = OSSConfiguration.OSS_ACCESS_KEY_ID

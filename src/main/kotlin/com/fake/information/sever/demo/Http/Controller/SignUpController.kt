@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 import java.util.*
 import com.fake.information.sever.demo.Http.Response.Result
+import com.fake.information.sever.demo.Until.AsyncTask.FakeNewsAsyncService
 import com.fake.information.sever.demo.Until.VerifyCode.VerifyCode
 import kotlinx.coroutines.ObsoleteCoroutinesApi
 import javax.servlet.http.HttpServletRequest
@@ -36,7 +37,9 @@ class SignUpController {
     ): Result<String> {
         val verifyCode = VerifyCode(redisTemplate)
                 .createCode(session, "emailCode")
-        mailService.sendSimpleMail(email, "验证码,五分钟内有效", verifyCode.code)
+        FakeNewsAsyncService().asyncTask {
+            mailService.sendSimpleMail(email, "验证码,五分钟内有效", verifyCode.code)
+        }
         return Result<String>(
                 success = true,
                 code = StatusCode.Status200.statusCode,
@@ -49,14 +52,14 @@ class SignUpController {
     fun postCreate(
             session: HttpSession,
             request: HttpServletRequest,
-            @RequestBody params:Map<String,Any>
+            @RequestParam params:Map<String,Any>
     ): Result<String> {
         val email = params["email"].toString()
         val password = params["password"].toString()
         val phoneNumber = params["phoneNumber"].toString()
         val sex = params["sex"].toString()
         val name = params["name"].toString()
-        val verifyCode = params["verifyCode"].toString()
+        val verifyCode = params["emailCode"].toString()
         val thisName = Check.encode(name)
         val thisSex = Check.encode(sex)
         Check.checking(email, password, thisSex, thisName, userRepository)
@@ -65,14 +68,16 @@ class SignUpController {
         ) {
             throw IllegalArgumentException("验证码错误")
         }
-        val user = User()
-        user.email = email
-        user.phoneNumber = phoneNumber.toLong()
-        user.setPassword(password)
-        user.gender = thisSex
-        user.name = thisName
-        user.update = Date()
-        userRepository.save(user)
+        FakeNewsAsyncService().asyncTask {
+            val user = User()
+            user.email = email
+            user.phoneNumber = phoneNumber.toLong()
+            user.setPassword(password)
+            user.gender = thisSex
+            user.name = thisName
+            user.update = Date()
+            userRepository.save(user)
+        }
         return Result<String>(
                 success = true,
                 code = StatusCode.Status200.statusCode,

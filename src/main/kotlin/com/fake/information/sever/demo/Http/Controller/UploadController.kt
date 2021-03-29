@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile
 import com.fake.information.sever.demo.Http.Response.Result
 import com.fake.information.sever.demo.Until.OSS.OSSUpload
 import com.fake.information.sever.demo.Model.Commit
+import com.fake.information.sever.demo.Until.AsyncTask.FakeNewsAsyncService
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
@@ -23,7 +24,7 @@ class UploadController {
     private lateinit var commitRepository: CommitRepository
 
 
-    fun multipartFileToFile(multipartFile: MultipartFile,fileName:String):File{
+    fun multipartFileToFile(multipartFile: MultipartFile, fileName: String): File {
         val newFile = File(fileName)
         val os = FileOutputStream(newFile)
         os.write(multipartFile.bytes)
@@ -31,11 +32,12 @@ class UploadController {
         multipartFile.transferTo(newFile)
         return newFile
     }
+
     @PostMapping("/uploadFile")
     fun postCommitFile(
-            @RequestBody file: MultipartFile,
-            @RequestHeader("id") id: Int,
-            @RequestHeader("token") token:String
+        @RequestBody file: MultipartFile,
+        @RequestHeader("id") id: Int,
+        @RequestHeader("token") token: String
     ): Result<String> {
 //        if (JWTManage.verifyToken(token) != JWTManage.TokenVerifyCode.Success.verifyCode) {
 //            return Result<String>(
@@ -49,7 +51,7 @@ class UploadController {
         commit.user = user
         val filename = file.originalFilename
         if ("" != filename?.trim { it <= ' ' }) {
-            val newFile = multipartFileToFile(file,filename!!)
+            val newFile = multipartFileToFile(file, filename!!)
             //上传到OSS
             val uploadUrl: String? = OSSUpload.upload(newFile)
             commit.indexOSSUrl = uploadUrl
@@ -57,10 +59,10 @@ class UploadController {
             user.commitList.add(commit)
             userRepository.save(user)
             return Result<String>(
-                    success = true,
-                    code = StatusCode.Status200.statusCode,
-                    msg = "success",
-                    data = uploadUrl
+                success = true,
+                code = StatusCode.Status200.statusCode,
+                msg = "success",
+                data = uploadUrl
             )
         }
         throw IllegalAccessError("文件名不合法！")
@@ -68,17 +70,20 @@ class UploadController {
 
     @PostMapping("/uploadImage")
     fun postHeadImg(
-            @RequestBody img: MultipartFile,
-            @RequestHeader("id") id: Int
+        @RequestBody img: MultipartFile,
+        @RequestHeader("id") id: Int
     ): Result<String> {
         val user = userRepository.getOne(id)
-        user.avatar =  OSSUpload.upload(multipartFileToFile(img,img.originalFilename!!))
+        user.avatar = OSSUpload.upload(
+            multipartFileToFile(img, img.originalFilename!!)
+        )
+
         userRepository.save(user)
         return Result<String>(
-                success = true,
-                code = StatusCode.Status200.statusCode,
-                msg = "OK",
-                data = user.avatar
+            success = true,
+            code = StatusCode.Status200.statusCode,
+            msg = "OK",
+            data = user.avatar
         )
     }
 }

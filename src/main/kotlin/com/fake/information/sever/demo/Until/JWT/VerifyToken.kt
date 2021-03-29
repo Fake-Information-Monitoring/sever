@@ -32,7 +32,6 @@ class VerifyToken : FakeNewsWebToken {
         return key
     }
 
-    @Throws(JwtExpiredException::class)
     override fun verifyJwt(jwt: String): Jws<Claims>?{
         try {
             return decodeJwt(jwt)

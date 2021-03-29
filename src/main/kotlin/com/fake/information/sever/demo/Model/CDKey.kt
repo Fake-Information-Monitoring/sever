@@ -11,10 +11,6 @@ class CDKey {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id",nullable = false)
     val id: Int = 0
-    @Column(name = "use_count",nullable = true)
-    var useCount: Int = 0
-    @Column(name = "all_count",nullable = true)
-    var allCount: Int = 10000
     @Column(name = "key_str",nullable = false)
     var key:String? = null
     @ManyToOne(targetEntity = User::class,cascade = [CascadeType.ALL],optional = false)
