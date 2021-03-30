@@ -77,7 +77,6 @@ class UploadController {
         user.avatar = OSSUpload.upload(
             multipartFileToFile(img, img.originalFilename!!)
         )
-
         userRepository.save(user)
         return Result<String>(
             success = true,
