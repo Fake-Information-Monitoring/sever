@@ -29,39 +29,47 @@ class ForwardPassword {
 
 
     @RequestMapping("/", method = [RequestMethod.GET])
-    fun forwardPassword(session: HttpSession, @RequestHeader("verifyCode") verify: String): Result<String> {
+    fun forwardPassword(
+        session: HttpSession,
+        @RequestHeader("verifyCode") verify: String
+    ): Result<String> {
         if (verifyCode == null) {
             verifyCode = VerifyCode(redisTemplate)
         }
         if (!verifyCode.verifyCode(session, verify, "emailCode")) {
             return Result<String>(
-                    success = false,
-                    code = StatusCode.Status401.statusCode,
-                    msg = "验证码错误"
+                success = false,
+                code = StatusCode.Status401.statusCode,
+                msg = "验证码错误"
             )
         }
         redisTemplate.setRedis(session.id + "forward", true)
         return Result<String>(
-                success = true,
-                code = StatusCode.Status200.statusCode,
-                msg = "success"
+            success = true,
+            code = StatusCode.Status200.statusCode,
+            msg = "success"
         )
     }
 
     @RequestMapping("/change", method = [RequestMethod.PUT])
-    fun changePassword(session: HttpSession, @RequestHeader("email") email: String, @RequestHeader("changePassword") password: String): Result<String> {
+    fun changePassword(
+        session: HttpSession,
+        @RequestParam params: Map<String, Any>
+    ): Result<String> {
+        val email = params["email"].toString()
+        val password = params["changePassword"].toString()
         if (redisTemplate.getRedis(session.id + "forward") != true) {
             return Result<String>(
-                    success = false,
-                    code = StatusCode.Status401.statusCode,
-                    msg = "未通过验证！"
+                success = false,
+                code = StatusCode.Status401.statusCode,
+                msg = "未通过验证！"
             )
         }
         if (!Check.checkPassword(password)) {
             return Result<String>(
-                    success = false,
-                    code = StatusCode.Status401.statusCode,
-                    msg = "密码不合法！"
+                success = false,
+                code = StatusCode.Status401.statusCode,
+                msg = "密码不合法！"
             )
         }
         FakeNewsAsyncService().asyncTask {
@@ -70,9 +78,9 @@ class ForwardPassword {
             userRepository.save(user)
         }
         return Result<String>(
-                success = true,
-                code = StatusCode.Status200.statusCode,
-                msg = "success"
+            success = true,
+            code = StatusCode.Status200.statusCode,
+            msg = "success"
         )
     }
 
@@ -90,9 +98,9 @@ class ForwardPassword {
             mailService.sendSimpleMail(email, "验证码,五分钟内有效", verifyCodes.code)
         }
         return Result<String>(
-                success = true,
-                code = StatusCode.Status200.statusCode,
-                msg = "success"
+            success = true,
+            code = StatusCode.Status200.statusCode,
+            msg = "success"
         )
     }
 
