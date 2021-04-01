@@ -4,7 +4,6 @@ import com.google.gson.GsonBuilder
 import okhttp3.*
 
 object DemoOkhttp {
-
     inline fun <reified T> post(text:String, url:String):T{
         val client= OkHttpClient()
         val formBody = FormBody.Builder()
@@ -14,8 +13,10 @@ object DemoOkhttp {
                 .url(url)
                 .post(formBody)
                 .build()
-        val responseBody = client.newCall(requestBody).execute().body()?.string()
-        return GsonBuilder().create().fromJson(responseBody, T::class.java)
+        val responseBody = client.newCall(requestBody)
+            .execute().body()?.string()
+        return GsonBuilder().create()
+            .fromJson(responseBody, T::class.java)
     }
 }
 
