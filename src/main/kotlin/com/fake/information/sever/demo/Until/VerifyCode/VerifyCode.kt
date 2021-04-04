@@ -18,7 +18,7 @@ class VerifyCode(private var redisTemplate: FakeNewsRedisTemplate) {
     @ObsoleteCoroutinesApi
     fun createCode(session: HttpSession, subject: String): ShearCaptcha {
         val captcha: ShearCaptcha = CaptchaUtil
-                .createShearCaptcha(300, 150, 4, 4)
+                .createShearCaptcha(200, 100, 4, 10)
         FakeNewsAsyncService().asyncTask {
             redisTemplate.setRedis(session.id + subject, captcha)
             redisTemplate.setTime(

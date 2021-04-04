@@ -15,9 +15,10 @@ class UpdateController {
 
     @ExperimentalStdlibApi
     @PutMapping("/update")
-    fun putUpdate(@RequestHeader("sex") sex: String,
+    fun putUpdate(
                @RequestHeader("name") name: String,
-               @RequestHeader("id") id:Int): Result<String> {
+               @RequestHeader("id") id:Int
+    ): Result<String> {
         val user = userRepository.findById(id).get()
         if (user.name == null) {
             return Result<String>(
@@ -27,7 +28,7 @@ class UpdateController {
             )
         }
         FakeNewsAsyncService().asyncTask {
-            user.updateInfo(name, sex)
+            user.updateInfo(name)
             userRepository.save(user)
         }
         return Result<String>(

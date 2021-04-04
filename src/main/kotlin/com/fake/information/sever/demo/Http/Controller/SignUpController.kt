@@ -73,7 +73,6 @@ class SignUpController {
             user.email = email
             user.phoneNumber = phoneNumber.toLong()
             user.setPassword(password)
-            user.gender = thisSex
             user.name = thisName
             user.update = Date()
             userRepository.save(user)
