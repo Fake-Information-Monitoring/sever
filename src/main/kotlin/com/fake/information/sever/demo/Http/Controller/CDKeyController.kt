@@ -5,7 +5,7 @@ import com.fake.information.sever.demo.DTO.UserRepository
 import com.fake.information.sever.demo.Http.Response.Result
 import com.fake.information.sever.demo.Http.Response.StatusCode
 import com.fake.information.sever.demo.Redis.FakeNewsRedisTemplate
-import com.fake.information.sever.demo.Until.AsyncTask.FakeNewsAsyncService
+import com.fake.information.sever.demo.Until.AsyncTask.AsyncService
 import com.fake.information.sever.demo.Until.JWT.TokenConfig
 import com.fake.information.sever.demo.Until.JWT.VerifyToken
 import org.springframework.beans.factory.annotation.Autowired
@@ -20,13 +20,15 @@ class CDKeyController {
     @Autowired
     private lateinit var userRepository: UserRepository
 
+    @Autowired
+    private lateinit var asyncService: AsyncService
     @PostMapping("/getToken")
     fun createKey(
             @RequestHeader("id") userId:Int
     ): Result<String> {
         val user = userRepository.getOne(userId)
         val token = VerifyToken().getJwt(user = user)
-        FakeNewsAsyncService().asyncTask {
+        asyncService.asyncTask {
             userRepository.save(user)
         }
         return Result<String>(

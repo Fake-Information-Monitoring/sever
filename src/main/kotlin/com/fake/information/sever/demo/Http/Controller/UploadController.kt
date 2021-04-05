@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile
 import com.fake.information.sever.demo.Http.Response.Result
 import com.fake.information.sever.demo.Until.OSS.OSSUpload
 import com.fake.information.sever.demo.Model.Commit
-import com.fake.information.sever.demo.Until.AsyncTask.FakeNewsAsyncService
+import com.fake.information.sever.demo.Until.AsyncTask.AsyncService
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
@@ -22,7 +22,8 @@ class UploadController {
 
     @Autowired
     private lateinit var commitRepository: CommitRepository
-
+    @Autowired
+    private lateinit var asyncService: AsyncService
 
     fun multipartFileToFile(multipartFile: MultipartFile, fileName: String): File {
         val newFile = File(fileName)

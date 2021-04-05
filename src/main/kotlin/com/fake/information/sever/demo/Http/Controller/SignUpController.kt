@@ -10,9 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 import java.util.*
 import com.fake.information.sever.demo.Http.Response.Result
-import com.fake.information.sever.demo.Until.AsyncTask.FakeNewsAsyncService
+import com.fake.information.sever.demo.Until.AsyncTask.AsyncService
 import com.fake.information.sever.demo.Until.VerifyCode.VerifyCode
 import kotlinx.coroutines.ObsoleteCoroutinesApi
+import org.springframework.scheduling.annotation.Async
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpSession
 
@@ -27,6 +28,9 @@ class SignUpController {
 
     @Autowired
     private lateinit var redisTemplate: FakeNewsRedisTemplate
+    
+    @Autowired
+    private lateinit var asyncService: AsyncService
 
     @ObsoleteCoroutinesApi
     @PostMapping("/email")
@@ -37,7 +41,7 @@ class SignUpController {
     ): Result<String> {
         val verifyCode = VerifyCode(redisTemplate)
                 .createCode(session, "emailCode")
-        FakeNewsAsyncService().asyncTask {
+        asyncService.asyncTask {
             mailService.sendSimpleMail(email, "验证码,五分钟内有效", verifyCode.code)
         }
         return Result<String>(
@@ -68,7 +72,7 @@ class SignUpController {
         ) {
             throw IllegalArgumentException("验证码错误")
         }
-        FakeNewsAsyncService().asyncTask {
+        asyncService.asyncTask {
             val user = User()
             user.email = email
             user.phoneNumber = phoneNumber.toLong()

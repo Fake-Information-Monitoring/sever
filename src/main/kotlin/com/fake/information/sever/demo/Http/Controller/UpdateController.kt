@@ -5,14 +5,15 @@ import com.fake.information.sever.demo.Http.Response.StatusCode
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 import com.fake.information.sever.demo.Http.Response.Result
-import com.fake.information.sever.demo.Until.AsyncTask.FakeNewsAsyncService
+import com.fake.information.sever.demo.Until.AsyncTask.AsyncService
 
 @RestController
 @RequestMapping("/v1/update", method = [RequestMethod.PUT])
 class UpdateController {
     @Autowired
     private lateinit var userRepository: UserRepository
-
+    @Autowired
+    private lateinit var asyncService: AsyncService
     @ExperimentalStdlibApi
     @PutMapping("/update")
     fun putUpdate(
@@ -27,7 +28,7 @@ class UpdateController {
                     msg = "用户不存在"
             )
         }
-        FakeNewsAsyncService().asyncTask {
+        asyncService.asyncTask {
             user.updateInfo(name)
             userRepository.save(user)
         }

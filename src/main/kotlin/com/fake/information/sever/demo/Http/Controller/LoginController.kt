@@ -7,7 +7,7 @@ import com.fake.information.sever.demo.Redis.FakeNewsRedisTemplate
 import com.fake.information.sever.demo.Http.Until.RSA
 import com.fake.information.sever.demo.Http.Response.StatusCode
 import com.fake.information.sever.demo.Http.Response.Result
-import com.fake.information.sever.demo.Until.AsyncTask.FakeNewsAsyncService
+import com.fake.information.sever.demo.Until.AsyncTask.AsyncService
 import com.fake.information.sever.demo.Until.VerifyCode.VerifyCode
 import kotlinx.coroutines.ObsoleteCoroutinesApi
 import org.springframework.beans.factory.annotation.Autowired
@@ -27,7 +27,8 @@ class LoginController {
 
     @Autowired
     private lateinit var redisTemplate: FakeNewsRedisTemplate
-
+    @Autowired
+    private lateinit var asyncService: AsyncService
 
     @GetMapping("/")
     fun getLogin(): String {
@@ -56,7 +57,7 @@ class LoginController {
             request: HttpServletRequest,
             session: HttpSession
     ): Result<String> {
-        FakeNewsAsyncService().asyncTask {
+        asyncService.asyncTask {
             redisTemplate.remove(session.id)
             session.invalidate()
             val tempUser = userRepository.getOne(Id)
@@ -84,7 +85,7 @@ class LoginController {
             checkVerifyCode(session, verify)
             val tempUser = userRepository.findByEmail(account)
             Check.checkAccount(VerifyCode(redisTemplate), session, tempUser, password)
-            FakeNewsAsyncService().asyncTask {
+            asyncService.asyncTask {
                 redisTemplate.setRedis(tempUser?.id.toString(), StatusCode.Status200.statusCode)
                 redisTemplate.setRedis(session.id, StatusCode.Status200.statusCode)
             }
