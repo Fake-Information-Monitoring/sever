@@ -42,6 +42,7 @@ class SignUpController {
         val email = params["email"].toString()
         val verifyCode = VerifyCode(redisTemplate)
                 .createCode(session, "emailCode")
+        Check.checkEmail(email)
         asyncService.asyncTask {
             mailService.sendSimpleMail(email, "验证码,五分钟内有效", verifyCode.code)
         }
