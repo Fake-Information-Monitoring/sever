@@ -10,19 +10,13 @@ import java.util.concurrent.Future
 class FakeNewsAsyncServiceImpl : AsyncService {
 
     @Async
-    override fun asyncTask(T: () -> Unit) {
-        T()
+    override fun asyncTask(func: () -> Unit) {
+        func()
     }
 
     @Async("asyncTaskExecutor")
-    override fun <T> asyncTaskReturn(R: () -> Unit): Future<T> {
-        val a = R()
+    override fun <T> asyncTaskReturn(func: () -> Unit): Future<T> {
+        val a = func()
         return AsyncResult.forValue<T>(a as T)
-    }
-
-
-    @Async("asyncTaskExecutor")
-    override fun asyncTaskForTransaction(exFlag: Boolean?) {
-        TODO("Not yet implemented")
     }
 }

@@ -14,8 +14,6 @@ import com.fake.information.sever.demo.Until.AsyncTask.AsyncService
 */
 @RestController
 class VerifyCode(private var redisTemplate: FakeNewsRedisTemplate) {
-    @Autowired
-    private lateinit var asyncService: AsyncService
 
 
     @ObsoleteCoroutinesApi
@@ -23,14 +21,12 @@ class VerifyCode(private var redisTemplate: FakeNewsRedisTemplate) {
 
         val captcha: ShearCaptcha = CaptchaUtil
                 .createShearCaptcha(200, 100, 4, 10)
-        asyncService.asyncTask {
             redisTemplate.setRedis(session.id + subject, captcha)
             redisTemplate.setTime(
                 session.id + subject,
                 1000 * 300,
                 TimeUnit.SECONDS
             )
-        }
         return captcha
     }
 

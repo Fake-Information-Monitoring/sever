@@ -6,15 +6,10 @@ interface AsyncService {
     /**
      * 异步调用，无返回值
      */
-    fun asyncTask(T:()->Unit)
+    fun asyncTask(func:()->Unit)
 
     /**
      * 异步调用，有返回值
      */
-    fun <T>asyncTaskReturn(R:()->Unit): Future<T>?
-
-    /**
-     * 异步调用，无返回值，事务测试
-     */
-    fun asyncTaskForTransaction(exFlag: Boolean?)
+    fun <T>asyncTaskReturn(func:()->Unit): Future<T>?
 }

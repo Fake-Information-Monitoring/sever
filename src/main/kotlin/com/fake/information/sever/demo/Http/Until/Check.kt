@@ -59,7 +59,6 @@ object Check {
 
     fun checking(email: String = "",
                          password: String = "",
-                         sex: String = "",
                          name: String = "",
                          userRepository: UserRepository
     ): Boolean {
@@ -68,8 +67,6 @@ object Check {
                 throw IllegalArgumentException("邮箱格式有误！")
             (!Check.checkPassword(password) && password.isNotEmpty()) ->
                 throw IllegalArgumentException("密码安全性过低")
-            (!Check.checkSex(sex) && sex.isNotEmpty()) ->
-                throw IllegalArgumentException("性别有误！")
             (!checkUserByName(userRepository,name) && name.isNotEmpty()) ->
                 throw IllegalArgumentException("该昵称已存在")
             (!checkUserByEmail(userRepository,email) && email.isNotEmpty()) ->

@@ -23,7 +23,7 @@ class Interceptor : WebMvcConfigurer {
                         "/v1/login/",
                         "/v1/login/loginWithPhone",
                         "/v1/login/loginWithEmail",
-                        "/v1/signUp/create",
+                        "/v1/signUp/*",
                         "/v1/signUp/email",
                         "/v1/login/getPublicKey",
                         "/v1/cdKey/verify",

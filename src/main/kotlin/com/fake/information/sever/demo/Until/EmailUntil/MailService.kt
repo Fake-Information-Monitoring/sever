@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.mail.javamail.MimeMessageHelper
 import org.springframework.stereotype.Service
+import java.util.logging.Logger
 
 
 @Service
@@ -25,6 +26,7 @@ class MailService : IMailService {
         email.setSubject(subject!!)
         email.setText(content!!)
         mailSender.send(message)
+        println("send by $to $message")
     }
 
     override fun sendHtmlMail(to: String?, subject: String?, content: String?) {

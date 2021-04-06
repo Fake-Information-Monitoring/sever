@@ -19,7 +19,7 @@ class User :Serializable {
     @Column(name = "name",nullable = false)
     var name: String? = null
     @Column(name = "phone_number",nullable = false)
-    var phoneNumber: Long = 0
+    var phoneNumber: String? = null
     @Column(name = "password",nullable = false)
     private var password: String? = null
     @Column(name = "email",nullable = false)

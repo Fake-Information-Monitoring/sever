@@ -37,8 +37,9 @@ class SignUpController {
     fun getEmail(
             request: HttpServletRequest,
             session: HttpSession,
-            @RequestHeader("email") email: String
+            @RequestBody params: Map<String, Any>
     ): Result<String> {
+        val email = params["email"].toString()
         val verifyCode = VerifyCode(redisTemplate)
                 .createCode(session, "emailCode")
         asyncService.asyncTask {
@@ -56,29 +57,27 @@ class SignUpController {
     fun postCreate(
             session: HttpSession,
             request: HttpServletRequest,
-            @RequestParam params:Map<String,Any>
+            @RequestBody params:Map<String,Any>
     ): Result<String> {
         val email = params["email"].toString()
         val password = params["password"].toString()
         val phoneNumber = params["phoneNumber"].toString()
-        val sex = params["sex"].toString()
         val name = params["name"].toString()
         val verifyCode = params["emailCode"].toString()
-        val thisName = Check.encode(name)
-        val thisSex = Check.encode(sex)
-        Check.checking(email, password, thisSex, thisName, userRepository)
+        val thisName = name
+        Check.checking(email, password, thisName, userRepository)
         if (!VerifyCode(redisTemplate)
                         .verifyCode(session, verifyCode, "emailCode")
         ) {
             throw IllegalArgumentException("验证码错误")
         }
+        val user = User()
+        user.email = email
+        user.phoneNumber = phoneNumber
+        user.setPassword(password)
+        user.name = thisName
+        user.update = Date()
         asyncService.asyncTask {
-            val user = User()
-            user.email = email
-            user.phoneNumber = phoneNumber.toLong()
-            user.setPassword(password)
-            user.name = thisName
-            user.update = Date()
             userRepository.save(user)
         }
         return Result<String>(
