@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.context.request.WebRequest
 import com.fake.information.sever.demo.Http.Response.Result
+import org.springframework.http.HttpStatus
+import org.springframework.web.bind.annotation.ResponseStatus
+import javax.servlet.http.HttpServletResponse
 
 @RestControllerAdvice
 class ThrowableController {
@@ -14,8 +17,9 @@ class ThrowableController {
 
     @ExceptionHandler(Exception::class)
     @ResponseBody
-    fun throwException(ex: Exception, request: WebRequest): Result<Any>? {
+    fun throwException(ex: Exception, request: WebRequest,response: HttpServletResponse): Result<Any>? {
         logger.error(ex.message)
+        response.status = StatusCode.Status502.statusCode
         return ex.message?.let {
             Result<Any>(
                     success = false,

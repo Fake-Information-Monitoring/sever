@@ -20,10 +20,8 @@ class Interceptor : WebMvcConfigurer {
                 .addPathPatterns("/**")
                 //排除拦截
                 .excludePathPatterns(arrayListOf(
-                        "/v1/login/",
-                        "/v1/login/loginWithPhone",
-                        "/v1/login/loginWithEmail",
-                        "/v1/signUp/*",
+                        "/v1/login/**",
+                        "/v1/signUp/**",
                         "/v1/signUp/email",
                         "/v1/login/getPublicKey",
                         "/v1/cdKey/verify",
@@ -56,6 +54,7 @@ class Interceptor : WebMvcConfigurer {
                     msg = "Bad Request",
                     data = "Please Login"
             )
+            response.status=StatusCode.Status401.statusCode
             response.writer.print(result.toJson())
             return false
         }

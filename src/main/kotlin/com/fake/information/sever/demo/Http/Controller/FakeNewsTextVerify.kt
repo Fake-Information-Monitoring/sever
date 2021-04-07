@@ -19,6 +19,8 @@ class FakeNewsTextVerify {
 
     @Autowired
     private lateinit var cdKeyRepository: CDKeyRepository
+
+
     fun verifyToken(token: String): Boolean {
         val key = VerifyToken().verifyJwt(token)?.body
         val keyModel = cdKeyRepository.findById(key?.get("keyId").toString().toInt()).get()
@@ -45,7 +47,8 @@ class FakeNewsTextVerify {
                 msg = "Token无效"
             )
         }
-        val data = DemoOkhttp.post<VerifyTextResult>(text = text, url = "http://127.0.0.1:4336/VerifyFakeNews")
+        val data = DemoOkhttp.post<VerifyTextResult>(text = text,
+            url = "http://127.0.0.1:4336/VerifyFakeNews")
         return Result<Any>(
             success = true,
             code = StatusCode.Status200.statusCode,

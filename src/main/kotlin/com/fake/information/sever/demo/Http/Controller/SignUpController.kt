@@ -42,7 +42,8 @@ class SignUpController {
         val email = params["email"].toString()
         val verifyCode = VerifyCode(redisTemplate)
                 .createCode(session, "emailCode")
-        Check.checkEmail(email)
+        if(!Check.checkEmail(email))
+            throw IllegalArgumentException("邮箱格式有误")
         asyncService.asyncTask {
             mailService.sendSimpleMail(email, "验证码,五分钟内有效", verifyCode.code)
         }

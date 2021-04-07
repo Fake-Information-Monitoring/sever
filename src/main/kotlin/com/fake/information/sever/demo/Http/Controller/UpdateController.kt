@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 import com.fake.information.sever.demo.Http.Response.Result
 import com.fake.information.sever.demo.Until.AsyncTask.AsyncService
+import javax.servlet.http.HttpServletResponse
 
 @RestController
 @RequestMapping("/v1/update", method = [RequestMethod.PUT])
@@ -18,10 +19,12 @@ class UpdateController {
     @PutMapping("/update")
     fun putUpdate(
                @RequestHeader("name") name: String,
-               @RequestHeader("id") id:Int
+               @RequestHeader("id") id:Int,
+               response: HttpServletResponse
     ): Result<String> {
         val user = userRepository.findById(id).get()
         if (user.name == null) {
+            response.status = StatusCode.Status401.statusCode
             return Result<String>(
                     success = false,
                     code = StatusCode.Status401.statusCode,
