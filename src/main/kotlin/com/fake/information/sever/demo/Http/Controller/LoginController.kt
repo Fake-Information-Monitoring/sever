@@ -15,6 +15,7 @@ import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
 import java.lang.IllegalArgumentException
 import java.util.*
+import java.util.concurrent.TimeUnit
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpSession
 
@@ -88,6 +89,8 @@ class LoginController {
             asyncService.asyncTask {
                 redisTemplate.setRedis(tempUser?.id.toString(), StatusCode.Status200.statusCode)
                 redisTemplate.setRedis(session.id, StatusCode.Status200.statusCode)
+                redisTemplate.setTime(session.id,1000 * 60 * 60 * 24 * 7,TimeUnit.SECONDS)
+                redisTemplate.setTime(tempUser?.id.toString(),1000 * 60 * 60 * 24 * 7,TimeUnit.SECONDS)
             }
         } catch (e: NumberFormatException) {
             throw NumberFormatException("输入格式非法")

@@ -50,11 +50,11 @@ class Interceptor : WebMvcConfigurer {
             }
             val result: Result<String> = Result(
                     success = false,
-                    code = StatusCode.Status401.statusCode,
+                    code = StatusCode.Status302.statusCode,
                     msg = "Bad Request",
                     data = "Please Login"
             )
-            response.status=StatusCode.Status401.statusCode
+            response.status=StatusCode.Status302.statusCode
             response.writer.print(result.toJson())
             return false
         }
