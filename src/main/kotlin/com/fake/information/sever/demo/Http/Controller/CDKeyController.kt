@@ -22,6 +22,7 @@ class CDKeyController {
 
     @Autowired
     private lateinit var asyncService: AsyncService
+
     @PostMapping("/getToken")
     fun createKey(
             @RequestHeader("id") userId:Int
@@ -39,4 +40,3 @@ class CDKeyController {
         )
     }
 }
-
