@@ -38,11 +38,12 @@ class LoginController {
     }
 
     @GetMapping("/isLogin")
-    fun isLogin(): Result<String?> {
+    fun isLogin(session:HttpSession): Result<String?> {
+
         return Result(
             success = true,
             code = StatusCode.Status200.statusCode,
-            msg = "is Login!"
+            msg = redisTemplate.getRedis(session.id) == StatusCode.Status200.statusCode
         )
     }
     @GetMapping("/getPublicKey")
