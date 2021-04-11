@@ -1,4 +1,4 @@
-package com.fake.information.sever.demo.Http.Response
+package com.fake.information.sever.demo.Http.Api.Response
 
 
 enum class StatusCode(var statusCode: Int) {

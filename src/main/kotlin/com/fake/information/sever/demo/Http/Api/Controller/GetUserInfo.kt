@@ -3,11 +3,11 @@ package com.fake.information.sever.demo.Controller
 import com.fake.information.sever.demo.DTO.CommitRepository
 import com.fake.information.sever.demo.DTO.UserRepository
 import com.fake.information.sever.demo.Redis.FakeNewsRedisTemplate
-import com.fake.information.sever.demo.Http.Response.StatusCode
+import com.fake.information.sever.demo.Http.Api.Response.StatusCode
 import com.fake.information.sever.demo.Model.User
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
-import com.fake.information.sever.demo.Http.Response.Result
+import com.fake.information.sever.demo.Http.Api.Response.Result
 import javax.servlet.http.HttpSession
 
 @RestController

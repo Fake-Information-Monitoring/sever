@@ -33,6 +33,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")//Spring Jpa
     implementation("org.springframework.boot:spring-boot-starter-mail")//Spring Email
     implementation("org.springframework.boot:spring-boot-devtools")
+    implementation("org.springframework.boot:spring-boot-starter-freemarker")
     implementation("org.springframework.boot:spring-boot-starter-test")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2")
     runtimeOnly("mysql:mysql-connector-java")//Mysql Driver

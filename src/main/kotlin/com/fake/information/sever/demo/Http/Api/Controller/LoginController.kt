@@ -5,8 +5,8 @@ import com.fake.information.sever.demo.Controller.tools.Check
 import com.fake.information.sever.demo.DTO.UserRepository
 import com.fake.information.sever.demo.Redis.FakeNewsRedisTemplate
 import com.fake.information.sever.demo.Http.Until.RSA
-import com.fake.information.sever.demo.Http.Response.StatusCode
-import com.fake.information.sever.demo.Http.Response.Result
+import com.fake.information.sever.demo.Http.Api.Response.StatusCode
+import com.fake.information.sever.demo.Http.Api.Response.Result
 import com.fake.information.sever.demo.Until.AsyncTask.AsyncService
 import com.fake.information.sever.demo.Until.VerifyCode.VerifyCode
 import kotlinx.coroutines.ObsoleteCoroutinesApi
@@ -37,6 +37,14 @@ class LoginController {
         return "Login!"
     }
 
+    @GetMapping("/isLogin")
+    fun isLogin(): Result<String?> {
+        return Result(
+            success = true,
+            code = StatusCode.Status200.statusCode,
+            msg = "is Login!"
+        )
+    }
     @GetMapping("/getPublicKey")
     fun getPublicKey(@RequestHeader("User-Agent") userAgent: String,
                      request: HttpServletRequest,

@@ -1,8 +1,8 @@
-package com.fake.information.sever.demo.Http.Controller
+package com.fake.information.sever.demo.Http.Api.Controller
 
 import com.fake.information.sever.demo.DTO.CDKeyRepository
-import com.fake.information.sever.demo.Http.Response.StatusCode
-import com.fake.information.sever.demo.Http.Response.Result
+import com.fake.information.sever.demo.Http.Api.Response.StatusCode
+import com.fake.information.sever.demo.Http.Api.Response.Result
 import com.fake.information.sever.demo.Model.VerifyTextResult
 import com.fake.information.sever.demo.Redis.FakeNewsRedisTemplate
 import com.fake.information.sever.demo.Until.JWT.TokenConfig

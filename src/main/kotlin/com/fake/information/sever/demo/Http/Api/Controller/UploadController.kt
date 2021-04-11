@@ -1,12 +1,12 @@
-package com.fake.information.sever.demo.Http.Controller
+package com.fake.information.sever.demo.Http.Api.Controller
 
 import com.fake.information.sever.demo.DTO.CommitRepository
 import com.fake.information.sever.demo.DTO.UserRepository
-import com.fake.information.sever.demo.Http.Response.StatusCode
+import com.fake.information.sever.demo.Http.Api.Response.StatusCode
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
-import com.fake.information.sever.demo.Http.Response.Result
+import com.fake.information.sever.demo.Http.Api.Response.Result
 import com.fake.information.sever.demo.Until.OSS.OSSUpload
 import com.fake.information.sever.demo.Model.Commit
 import com.fake.information.sever.demo.Until.AsyncTask.AsyncService

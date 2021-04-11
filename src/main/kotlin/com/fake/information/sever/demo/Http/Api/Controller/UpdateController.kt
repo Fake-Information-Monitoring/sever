@@ -1,10 +1,10 @@
 package com.fake.information.sever.demo.Controller
 
 import com.fake.information.sever.demo.DTO.UserRepository
-import com.fake.information.sever.demo.Http.Response.StatusCode
+import com.fake.information.sever.demo.Http.Api.Response.StatusCode
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
-import com.fake.information.sever.demo.Http.Response.Result
+import com.fake.information.sever.demo.Http.Api.Response.Result
 import com.fake.information.sever.demo.Until.AsyncTask.AsyncService
 import javax.servlet.http.HttpServletResponse
 

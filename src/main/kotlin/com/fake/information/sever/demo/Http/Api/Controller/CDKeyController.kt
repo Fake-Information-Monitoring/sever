@@ -1,15 +1,11 @@
-package com.fake.information.sever.demo.Http.Controller
+package com.fake.information.sever.demo.Http.Api.Controller
 
-import com.fake.information.sever.demo.DTO.CDKeyRepository
 import com.fake.information.sever.demo.DTO.UserRepository
-import com.fake.information.sever.demo.Http.Response.Result
-import com.fake.information.sever.demo.Http.Response.StatusCode
-import com.fake.information.sever.demo.Redis.FakeNewsRedisTemplate
+import com.fake.information.sever.demo.Http.Api.Response.Result
+import com.fake.information.sever.demo.Http.Api.Response.StatusCode
 import com.fake.information.sever.demo.Until.AsyncTask.AsyncService
-import com.fake.information.sever.demo.Until.JWT.TokenConfig
 import com.fake.information.sever.demo.Until.JWT.VerifyToken
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.scheduling.annotation.Async
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping

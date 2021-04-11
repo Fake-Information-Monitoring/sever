@@ -1,14 +1,12 @@
 package com.fake.information.sever.demo.Http.Throwable
 
-import com.fake.information.sever.demo.Http.Response.StatusCode
+import com.fake.information.sever.demo.Http.Api.Response.StatusCode
 import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.context.request.WebRequest
-import com.fake.information.sever.demo.Http.Response.Result
-import org.springframework.http.HttpStatus
-import org.springframework.web.bind.annotation.ResponseStatus
+import com.fake.information.sever.demo.Http.Api.Response.Result
 import javax.servlet.http.HttpServletResponse
 
 @RestControllerAdvice

@@ -1,4 +1,4 @@
-package com.fake.information.sever.demo.Http.Response
+package com.fake.information.sever.demo.Http.Api.Response
 
 import com.google.gson.Gson
 
@@ -15,8 +15,5 @@ open class Result<T>(//是否成功
     }
 
     companion object {
-
-        //TODO: 自定义异常返回的结果
-        //TODO:其他异常处理方法返回的结果
     }
 }
