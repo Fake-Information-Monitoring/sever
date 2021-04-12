@@ -23,15 +23,15 @@ class GetUserInfo {
     private lateinit var redisTemplate: FakeNewsRedisTemplate
 
     @ExperimentalStdlibApi
-    @GetMapping("/{user}")
+    @GetMapping("/")
     fun getUserInfo(
-            @PathVariable user: Int,
             session: HttpSession
     ): Any {
         return try {
-            if (redisTemplate.getRedis(user.toString()) != StatusCode.Status200.statusCode) {
+            if (redisTemplate.getRedis(session.id) != StatusCode.Status200.statusCode) {
                 throw IllegalAccessException("您没有权限")
             }
+            val user = redisTemplate.getRedis(session.id+"user").toString().toInt()
             Result<User>(
                     success = true,
                     code = StatusCode.Status200.statusCode,

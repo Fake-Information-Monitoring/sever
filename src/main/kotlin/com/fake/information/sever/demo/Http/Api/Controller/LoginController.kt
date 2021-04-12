@@ -37,15 +37,7 @@ class LoginController {
         return "Login!"
     }
 
-    @GetMapping("/isLogin")
-    fun isLogin(session:HttpSession): Result<String?> {
 
-        return Result(
-            success = true,
-            code = StatusCode.Status200.statusCode,
-            msg = redisTemplate.getRedis(session.id) == StatusCode.Status200.statusCode
-        )
-    }
     @GetMapping("/getPublicKey")
     fun getPublicKey(@RequestHeader("User-Agent") userAgent: String,
                      request: HttpServletRequest,
@@ -98,6 +90,7 @@ class LoginController {
             asyncService.asyncTask {
                 redisTemplate.setRedis(tempUser?.id.toString(), StatusCode.Status200.statusCode)
                 redisTemplate.setRedis(session.id, StatusCode.Status200.statusCode)
+                tempUser?.id?.let { redisTemplate.setRedis(session.id+"user", it) }
                 redisTemplate.setTime(session.id,1000 * 60 * 60 * 24 * 7,TimeUnit.SECONDS)
                 redisTemplate.setTime(tempUser?.id.toString(),1000 * 60 * 60 * 24 * 7,TimeUnit.SECONDS)
             }
