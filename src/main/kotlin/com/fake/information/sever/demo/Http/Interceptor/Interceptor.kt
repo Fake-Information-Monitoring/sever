@@ -6,6 +6,7 @@ import com.fake.information.sever.demo.Http.Api.Response.Result
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.servlet.HandlerInterceptor
+import org.springframework.web.servlet.config.annotation.CorsRegistry
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 import javax.servlet.http.HttpServletRequest
@@ -13,6 +14,16 @@ import javax.servlet.http.HttpServletResponse
 
 @Configuration
 class Interceptor : WebMvcConfigurer {
+    override fun addCorsMappings(registry: CorsRegistry) {
+        registry.addMapping("/**")
+            .exposedHeaders("access-control-allow-headers",
+                "access-control-allow-methods",
+                "access-control-allow-origin",
+                "access-control-max-age",
+                "Authorization",
+                "X-Frame-Options")
+            .allowCredentials(false).maxAge(3600);
+    }
 
     @Override
     override fun addInterceptors(registry: InterceptorRegistry) {
@@ -48,6 +59,7 @@ class Interceptor : WebMvcConfigurer {
             if (redisTemplate.getRedis(session.id) == StatusCode.Status200.statusCode) {//TODO: session状态码拦截
                 return true
             }
+            response.addHeader("Access-Control-Expose-Headers","set-cookie")
             val result: Result<String> = Result(
                     success = false,
                     code = StatusCode.Status302.statusCode,
