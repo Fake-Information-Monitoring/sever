@@ -55,11 +55,11 @@ class Interceptor : WebMvcConfigurer {
 
 
         override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
+            response.addHeader("Access-Control-Expose-Headers","set-cookie")
             val session = request.session
             if (redisTemplate.getRedis(session.id) == StatusCode.Status200.statusCode) {//TODO: session状态码拦截
                 return true
             }
-            response.addHeader("Access-Control-Expose-Headers","set-cookie")
             val result: Result<String> = Result(
                     success = false,
                     code = StatusCode.Status302.statusCode,
