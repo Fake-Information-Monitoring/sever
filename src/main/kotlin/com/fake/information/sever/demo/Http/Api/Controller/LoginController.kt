@@ -101,7 +101,8 @@ class LoginController {
         return Result<Any>(
                 success = true,
                 code = StatusCode.Status200.statusCode,
-                msg = "login success"
+                msg = "login success",
+                data = request.cookies
         )
     }
 
