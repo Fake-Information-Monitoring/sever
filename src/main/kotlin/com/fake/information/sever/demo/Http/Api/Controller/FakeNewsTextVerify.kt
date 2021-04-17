@@ -1,12 +1,10 @@
 package com.fake.information.sever.demo.Http.Api.Controller
 
-import com.fake.information.sever.demo.DTO.CDKeyRepository
-import com.fake.information.sever.demo.Http.Api.Response.StatusCode
 import com.fake.information.sever.demo.Http.Api.Response.Result
+import com.fake.information.sever.demo.Http.Api.Response.StatusCode
 import com.fake.information.sever.demo.Model.VerifyTextResult
 import com.fake.information.sever.demo.Redis.FakeNewsRedisTemplate
 import com.fake.information.sever.demo.Until.JWT.TokenConfig
-import com.fake.information.sever.demo.Until.JWT.VerifyToken
 import com.fake.information.sever.demo.Until.Requests.DemoOkhttp
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
@@ -17,17 +15,10 @@ class FakeNewsTextVerify {
     @Autowired
     private lateinit var redisTemplate: FakeNewsRedisTemplate
 
-    @Autowired
-    private lateinit var cdKeyRepository: CDKeyRepository
-
 
     fun verifyToken(token: String): Boolean {
-        val key = VerifyToken().verifyJwt(token)?.body
-        val keyModel = cdKeyRepository.findById(key?.get("keyId").toString().toInt()).get()
-        val count: Int = redisTemplate.getRedis(
-            keyModel.id.toString()
-        ).toString().toInt() ?: 1
-        redisTemplate.setRedis(keyModel.id.toString(), count)
+        val count = redisTemplate.getRedis(token).toString().toInt()
+        redisTemplate.setRedis(token, count + 1)
         if (count >= TokenConfig.TOKEN_GET_COUNT) {
             return false
         }
@@ -44,7 +35,7 @@ class FakeNewsTextVerify {
             return Result<Any>(
                 success = false,
                 code = StatusCode.Status401.statusCode,
-                msg = "Token无效"
+                msg = "已失效"
             )
         }
         val data = DemoOkhttp.post<VerifyTextResult>(text = text,

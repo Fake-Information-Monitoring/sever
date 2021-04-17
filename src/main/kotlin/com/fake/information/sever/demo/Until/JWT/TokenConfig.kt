@@ -12,7 +12,7 @@ object TokenConfig {
     )
     const val TOKEN_EXPIRE_MOUTH = 1000 * 60 * 60 * 24 * 30 // 1个月
     const val TOKEN_EXPIRE_YEAR = TOKEN_EXPIRE_MOUTH * 12 // 一年
-    const val TOKEN_GET_COUNT = 500
+    const val TOKEN_GET_COUNT = 50000
     enum class TokenVerifyCode(var verifyCode: Int) {
         Success(0),
         Expired(1),
