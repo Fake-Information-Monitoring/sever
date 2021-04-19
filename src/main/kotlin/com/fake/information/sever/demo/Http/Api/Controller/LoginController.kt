@@ -128,6 +128,7 @@ class LoginController {
     fun getVerifyCode(session: HttpSession, @PathVariable date: String, response: HttpServletResponse) {
         val captcha = VerifyCode(redisTemplate).createCode(session, "verifyCode")
         captcha.write(response.outputStream)
+        response.outputStream.close()
 //        return Base64.decode(captcha.imageBase64)
     }
 }
