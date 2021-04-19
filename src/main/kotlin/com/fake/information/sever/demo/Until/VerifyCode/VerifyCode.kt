@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RestController
 import java.util.concurrent.TimeUnit
 import javax.servlet.http.HttpSession
 import com.fake.information.sever.demo.Until.AsyncTask.AsyncService
+import java.awt.Font
+
 /*
 * @TODO:验证码生成以及验证
 */
@@ -21,7 +23,7 @@ class VerifyCode(private var redisTemplate: FakeNewsRedisTemplate) {
     fun createCode(session: HttpSession, subject: String): LineCaptcha {
 
         val captcha: LineCaptcha? = CaptchaUtil
-                .createLineCaptcha(200, 100)
+                .createLineCaptcha(200, 90)
             redisTemplate.setRedis(session.id + subject, captcha!!)
             redisTemplate.setTime(
                 session.id + subject,
