@@ -1,6 +1,7 @@
 package com.fake.information.sever.demo.Until.VerifyCode
 
 import cn.hutool.captcha.CaptchaUtil
+import cn.hutool.captcha.LineCaptcha
 import cn.hutool.captcha.ShearCaptcha
 import com.fake.information.sever.demo.Redis.FakeNewsRedisTemplate
 import kotlinx.coroutines.*
@@ -17,11 +18,11 @@ class VerifyCode(private var redisTemplate: FakeNewsRedisTemplate) {
 
 
     @ObsoleteCoroutinesApi
-    fun createCode(session: HttpSession, subject: String): ShearCaptcha {
+    fun createCode(session: HttpSession, subject: String): LineCaptcha {
 
-        val captcha: ShearCaptcha = CaptchaUtil
-                .createShearCaptcha(200, 100, 4, 10)
-            redisTemplate.setRedis(session.id + subject, captcha)
+        val captcha: LineCaptcha? = CaptchaUtil
+                .createLineCaptcha(200, 100)
+            redisTemplate.setRedis(session.id + subject, captcha!!)
             redisTemplate.setTime(
                 session.id + subject,
                 1000 * 300,

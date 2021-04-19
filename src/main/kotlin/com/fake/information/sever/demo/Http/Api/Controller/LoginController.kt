@@ -16,18 +16,23 @@ import org.springframework.web.bind.annotation.*
 import java.lang.IllegalArgumentException
 import java.util.*
 import java.util.concurrent.TimeUnit
+import javax.servlet.http.HttpServlet
 import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletResponse
 import javax.servlet.http.HttpSession
 
 @RestController
-@RequestMapping("/v1/login",
-        method = [RequestMethod.POST, RequestMethod.GET, RequestMethod.DELETE])
+@RequestMapping(
+    "/v1/login",
+    method = [RequestMethod.POST, RequestMethod.GET, RequestMethod.DELETE]
+)
 class LoginController {
     @Autowired
     private lateinit var userRepository: UserRepository
 
     @Autowired
     private lateinit var redisTemplate: FakeNewsRedisTemplate
+
     @Autowired
     private lateinit var asyncService: AsyncService
 
@@ -39,25 +44,26 @@ class LoginController {
 
 
     @GetMapping("/getPublicKey")
-    fun getPublicKey(@RequestHeader("User-Agent") userAgent: String,
-                     request: HttpServletRequest,
-                     session: HttpSession
+    fun getPublicKey(
+        @RequestHeader("User-Agent") userAgent: String,
+        request: HttpServletRequest,
+        session: HttpSession
     ): Result<ByteArray?> {
         val key = RSA.getKeyPair()
         session.setAttribute(userAgent, key?.private!!)
         return Result<ByteArray?>(
-                success = true,
-                code = StatusCode.Status200.statusCode,
-                data = key.public.encoded,
-                msg = "success"
+            success = true,
+            code = StatusCode.Status200.statusCode,
+            data = key.public.encoded,
+            msg = "success"
         )
     }
 
     @DeleteMapping("/logout")
     fun deleteLogout(
-            @RequestHeader("id") Id: Int,
-            request: HttpServletRequest,
-            session: HttpSession
+        @RequestHeader("id") Id: Int,
+        request: HttpServletRequest,
+        session: HttpSession
     ): Result<String> {
         asyncService.asyncTask {
             redisTemplate.remove(session.id)
@@ -67,18 +73,19 @@ class LoginController {
             userRepository.save(tempUser)
         }
         return Result<String>(
-                success = true,
-                code = StatusCode.Status200.statusCode,
-                msg = "success"
+            success = true,
+            code = StatusCode.Status200.statusCode,
+            msg = "success"
         )
     }
 
     @ObsoleteCoroutinesApi
     @ExperimentalStdlibApi
     @PostMapping("/loginWithEmail")
-    fun postLoginWithEmail(@RequestBody params: Map<String, Any>,
-                           request: HttpServletRequest,
-                           session: HttpSession
+    fun postLoginWithEmail(
+        @RequestBody params: Map<String, Any>,
+        request: HttpServletRequest,
+        session: HttpSession
     ): Result<Any> {
         val password = params["password"].toString()
         val verify = params["verifyCode"].toString()
@@ -90,19 +97,19 @@ class LoginController {
             asyncService.asyncTask {
                 redisTemplate.setRedis(tempUser?.id.toString(), StatusCode.Status200.statusCode)
                 redisTemplate.setRedis(session.id, StatusCode.Status200.statusCode)
-                tempUser?.id?.let { redisTemplate.setRedis(session.id+"user", it) }
-                redisTemplate.setTime(session.id,1000 * 60 * 60 * 24 * 7,TimeUnit.SECONDS)
-                redisTemplate.setTime(tempUser?.id.toString(),1000 * 60 * 60 * 24 * 7,TimeUnit.SECONDS)
+                tempUser?.id?.let { redisTemplate.setRedis(session.id + "user", it) }
+                redisTemplate.setTime(session.id, 1000 * 60 * 60 * 24 * 7, TimeUnit.SECONDS)
+                redisTemplate.setTime(tempUser?.id.toString(), 1000 * 60 * 60 * 24 * 7, TimeUnit.SECONDS)
             }
         } catch (e: NumberFormatException) {
             throw NumberFormatException("输入格式非法")
         }
 
         return Result<Any>(
-                success = true,
-                code = StatusCode.Status200.statusCode,
-                msg = "login success",
-                data = request.cookies
+            success = true,
+            code = StatusCode.Status200.statusCode,
+            msg = "login success",
+            data = request.cookies
         )
     }
 
@@ -118,7 +125,9 @@ class LoginController {
 
     @ObsoleteCoroutinesApi
     @GetMapping("/verifyCode/{date}", produces = [MediaType.IMAGE_PNG_VALUE, "image/png"])
-    fun getVerifyCode(session: HttpSession, @PathVariable date: String): ByteArray? {
-        return Base64.decode(VerifyCode(redisTemplate).createCode(session, "verifyCode").imageBase64)
+    fun getVerifyCode(session: HttpSession, @PathVariable date: String, response: HttpServletResponse) {
+        val captcha = VerifyCode(redisTemplate).createCode(session, "verifyCode")
+        captcha.write(response.outputStream)
+//        return Base64.decode(captcha.imageBase64)
     }
 }
