@@ -93,6 +93,7 @@ class LoginController {
             val tempUser = userRepository.findByEmail(account)
             Check.checkAccount(VerifyCode(redisTemplate), session, tempUser, password)
             asyncService.asyncTask {
+                request.cookies[0].maxAge = 2592000
                 redisTemplate.setRedis(tempUser?.id.toString(), StatusCode.Status200.statusCode)
                 redisTemplate.setRedis(session.id, StatusCode.Status200.statusCode)
                 tempUser?.id?.let { redisTemplate.setRedis(session.id + "user", it) }
@@ -102,10 +103,10 @@ class LoginController {
         } catch (e: NumberFormatException) {
             throw NumberFormatException("输入格式非法")
         }
-        val cookie = Cookie("JSESSIONID", session.id)
-        cookie.maxAge = 2592000
-        response.addCookie(cookie)
-        response.addCookie(cookie)
+//        val cookie = Cookie("JSESSIONID", session.id)
+//        cookie.maxAge =
+//        response.addCookie(cookie)
+//        response.addCookie(cookie)
         return Result(
             success = true,
             code = StatusCode.Status200.statusCode,
