@@ -34,9 +34,9 @@ class VerifyCode(private var redisTemplate: FakeNewsRedisTemplate) {
     }
 
     fun verifyCode(session: HttpSession, captcha: String, subject: String): Boolean {
-        val shearCaptcha: ShearCaptcha = (
+        val shearCaptcha: LineCaptcha = (
                 redisTemplate.getRedis(session.id + subject) ?: return false
-                ) as ShearCaptcha
+                ) as LineCaptcha
         return shearCaptcha.verify(captcha)
     }
 }
