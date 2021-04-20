@@ -9,6 +9,7 @@ import com.fake.information.sever.demo.Until.AsyncTask.AsyncService
 import com.fake.information.sever.demo.Until.UUID
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
+import javax.servlet.http.HttpSession
 
 @RestController
 @RequestMapping("/v1/cdKey")
@@ -24,8 +25,12 @@ class CDKeyController {
 
     @PostMapping("/createToken")
     fun createKey(
-            @RequestParam(name = "id") userId:String
+        session: HttpSession
     ): Result<String> {
+        if (redisTemplate.getRedis(session.id) != StatusCode.Status200.statusCode) {
+            throw IllegalAccessException("您没有权限")
+        }
+        val userId = redisTemplate.getRedis(session.id+"user").toString().toInt()
         val user = userRepository.getOne(userId.toInt())
         val key = CDKey()
         key.key = UUID.getUuid();
