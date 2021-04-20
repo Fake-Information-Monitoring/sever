@@ -27,8 +27,7 @@ class FakeNewsTextVerify {
 
     @PostMapping("/")
     fun postCommitFile(
-        @RequestBody text: String,
-        @RequestHeader("id") id: Int,
+        @RequestBody params: Map<String,Any>,
         @RequestHeader("token") token: String
     ): Result<Any> {
         if (!verifyToken(token)) {
@@ -38,6 +37,7 @@ class FakeNewsTextVerify {
                 msg = "已失效"
             )
         }
+        val text = params["text"].toString()
         val data = DemoOkhttp.post<VerifyTextResult>(text = text,
             url = "http://127.0.0.1:4336/VerifyFakeNews")
         return Result<Any>(
