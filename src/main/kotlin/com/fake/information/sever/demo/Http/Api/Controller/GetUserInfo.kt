@@ -28,11 +28,8 @@ class GetUserInfo {
             session: HttpSession
     ): Any {
         return try {
-            if (redisTemplate.getRedis(session.id) != StatusCode.Status200.statusCode) {
-                throw IllegalAccessException("您没有权限")
-            }
-            val user = redisTemplate.getRedis(session.id+"user").toString().toInt()
-            Result<User>(
+            val user = redisTemplate.getUserId(session)
+            Result(
                     success = true,
                     code = StatusCode.Status200.statusCode,
                     msg = "success",
@@ -48,15 +45,12 @@ class GetUserInfo {
         }
     }
 
-    @GetMapping("/{user}/avatar")
+    @GetMapping("/avatar")
     fun getUserAvatar(
-            @PathVariable user: Int,
             session: HttpSession
     ): Any {
         return try {
-            if (redisTemplate.getRedis(session.id) != StatusCode.Status200.statusCode) {
-                throw IllegalAccessException("您没有权限")
-            }
+            val user = redisTemplate.getUserId(session)
             Result(
                     success = true,
                     code = StatusCode.Status200.statusCode,
@@ -73,15 +67,13 @@ class GetUserInfo {
     }
 
     @ExperimentalStdlibApi
-    @GetMapping("/{user}/{commit}")
-    fun getCommit(@PathVariable user: Int,
+    @GetMapping("/{commit}")
+    fun getCommit(
                   @PathVariable commit: Int,
                   session: HttpSession
     ): Any {
         return try {
-            if (redisTemplate.getRedis(session.id) != StatusCode.Status200.statusCode) {
-                throw IllegalAccessException("您没有权限")
-            }
+            val user = redisTemplate.getUserId(session)
             val commit = commitRepository.getOne(commit)
             if (commit.user?.id == user)
                 commit.indexOSSUrl!!

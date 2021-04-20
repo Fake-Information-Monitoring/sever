@@ -9,10 +9,13 @@ import org.springframework.web.multipart.MultipartFile
 import com.fake.information.sever.demo.Http.Api.Response.Result
 import com.fake.information.sever.demo.Until.OSS.OSSUpload
 import com.fake.information.sever.demo.Model.Commit
+import com.fake.information.sever.demo.Redis.FakeNewsRedisTemplate
 import com.fake.information.sever.demo.Until.AsyncTask.AsyncService
+import com.fake.information.sever.demo.Until.JWT.TokenConfig
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
+import javax.servlet.http.HttpSession
 
 @RestController
 @RequestMapping("/v1/upload", method = [RequestMethod.POST, RequestMethod.GET])
@@ -24,6 +27,8 @@ class UploadController {
     private lateinit var commitRepository: CommitRepository
     @Autowired
     private lateinit var asyncService: AsyncService
+    @Autowired
+    private lateinit var redisTemplate: FakeNewsRedisTemplate
 
     fun multipartFileToFile(multipartFile: MultipartFile, fileName: String): File {
         val newFile = File(fileName)
@@ -33,20 +38,28 @@ class UploadController {
         multipartFile.transferTo(newFile)
         return newFile
     }
-
+    fun verifyToken(token: String): Boolean {
+        val count = redisTemplate.getRedis(token).toString().toInt()
+        redisTemplate.setRedis(token, count + 1)
+        if (count >= TokenConfig.TOKEN_GET_COUNT) {
+            return false
+        }
+        return true
+    }
     @PostMapping("/uploadFile")
     fun postCommitFile(
         @RequestBody file: MultipartFile,
-        @RequestHeader("id") id: Int,
-        @RequestHeader("token") token: String
+        @RequestHeader("token") token: String,
+        session: HttpSession
     ): Result<String> {
-//        if (JWTManage.verifyToken(token) != JWTManage.TokenVerifyCode.Success.verifyCode) {
-//            return Result<String>(
-//                    success = false,
-//                    code = StatusCode.Status401.statusCode,
-//                    msg = "Token无效"
-//            )
-//        }
+        if (!verifyToken(token)) {
+            return Result(
+                success = false,
+                code = StatusCode.Status401.statusCode,
+                msg = "已失效"
+            )
+        }
+        val id = redisTemplate.getUserId(session)
         val user = userRepository.getOne(id)
         val commit = Commit()
         commit.user = user
@@ -59,7 +72,7 @@ class UploadController {
             commit.commitTime = Date()
             user.commitList.add(commit)
             userRepository.save(user)
-            return Result<String>(
+            return Result(
                 success = true,
                 code = StatusCode.Status200.statusCode,
                 msg = "success",
@@ -72,8 +85,9 @@ class UploadController {
     @PostMapping("/uploadImage")
     fun postHeadImg(
         @RequestBody img: MultipartFile,
-        @RequestHeader("id") id: Int
+        session: HttpSession
     ): Result<String> {
+        val id = redisTemplate.getUserId(session)
         val user = userRepository.getOne(id)
         user.avatar = OSSUpload.upload(
             multipartFileToFile(img, img.originalFilename!!)

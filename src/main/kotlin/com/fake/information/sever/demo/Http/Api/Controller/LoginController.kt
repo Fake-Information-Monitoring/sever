@@ -48,7 +48,7 @@ class LoginController {
     ): Result<ByteArray?> {
         val key = RSA.getKeyPair()
         session.setAttribute(userAgent, key?.private!!)
-        return Result<ByteArray?>(
+        return Result(
             success = true,
             code = StatusCode.Status200.statusCode,
             data = key.public.encoded,
@@ -58,10 +58,10 @@ class LoginController {
 
     @DeleteMapping("/logout")
     fun deleteLogout(
-        @RequestHeader("id") Id: Int,
         request: HttpServletRequest,
         session: HttpSession
     ): Result<String> {
+        val Id = redisTemplate.getUserId(session)
         asyncService.asyncTask {
             redisTemplate.remove(session.id)
             session.invalidate()
@@ -69,7 +69,7 @@ class LoginController {
             tempUser.lastActive = Date()
             userRepository.save(tempUser)
         }
-        return Result<String>(
+        return Result(
             success = true,
             code = StatusCode.Status200.statusCode,
             msg = "success"
@@ -103,10 +103,6 @@ class LoginController {
         } catch (e: NumberFormatException) {
             throw NumberFormatException("输入格式非法")
         }
-//        val cookie = Cookie("JSESSIONID", session.id)
-//        cookie.maxAge =
-//        response.addCookie(cookie)
-//        response.addCookie(cookie)
         return Result(
             success = true,
             code = StatusCode.Status200.statusCode,

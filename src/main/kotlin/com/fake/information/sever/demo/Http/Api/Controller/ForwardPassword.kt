@@ -50,7 +50,7 @@ class ForwardPassword {
             )
         }
         redisTemplate.setRedis(session.id + "forward", true)
-        return Result<String>(
+        return Result(
             success = true,
             code = StatusCode.Status200.statusCode,
             msg = "success"
@@ -75,7 +75,7 @@ class ForwardPassword {
         }
         if (!Check.checkPassword(password)) {
             response.status = StatusCode.Status401.statusCode
-            return Result<String>(
+            return Result(
                 success = false,
                 code = StatusCode.Status401.statusCode,
                 msg = "密码不合法！"
@@ -86,7 +86,7 @@ class ForwardPassword {
         asyncService.asyncTask {
             userRepository.save(user)
         }
-        return Result<String>(
+        return Result(
             success = true,
             code = StatusCode.Status200.statusCode,
             msg = "success"
@@ -105,9 +105,9 @@ class ForwardPassword {
         if (!Check.checkEmail(email)) throw Exception("邮箱格式有错")
         val verifyCodes = verifyCode.createCode(session, "emailCode")
         asyncService.asyncTask {
-            mailService.sendSimpleMail(email, "验证码,五分钟内有效", verifyCodes.code)
+            mailService.sendSimpleMail(email, "您正在修改密码，验证码,五分钟内有效", verifyCodes.code)
         }
-        return Result<String>(
+        return Result(
             success = true,
             code = StatusCode.Status200.statusCode,
             msg = "success"
