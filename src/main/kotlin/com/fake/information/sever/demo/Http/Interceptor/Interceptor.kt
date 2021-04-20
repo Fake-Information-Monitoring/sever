@@ -4,13 +4,17 @@ import com.fake.information.sever.demo.Redis.FakeNewsRedisTemplate
 import com.fake.information.sever.demo.Http.Api.Response.StatusCode
 import com.fake.information.sever.demo.Http.Api.Response.Result
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.web.servlet.server.Session
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.servlet.HandlerInterceptor
 import org.springframework.web.servlet.config.annotation.CorsRegistry
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
+import javax.servlet.http.Cookie
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
+import kotlin.time.Duration
+import kotlin.time.ExperimentalTime
 
 @Configuration
 class Interceptor : WebMvcConfigurer {
@@ -59,12 +63,16 @@ class Interceptor : WebMvcConfigurer {
     class SecurityInterceptor(val redisTemplate: FakeNewsRedisTemplate) : HandlerInterceptor {
 
 
+        @ExperimentalTime
         override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
             response.addHeader("Access-Control-Allow-Credentials", "true")
             val session = request.session
             if (redisTemplate.getRedis(session.id) == StatusCode.Status200.statusCode) {
                 return true
             }
+            val cookie = Cookie("JSESSIONID",session.id)
+            cookie.maxAge = 5
+            response.addCookie(cookie)
             val result: Result<String> = Result(
                 success = false,
                 code = StatusCode.Status302.statusCode,
