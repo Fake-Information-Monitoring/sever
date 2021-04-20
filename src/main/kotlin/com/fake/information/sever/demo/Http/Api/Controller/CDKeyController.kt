@@ -8,10 +8,7 @@ import com.fake.information.sever.demo.Redis.FakeNewsRedisTemplate
 import com.fake.information.sever.demo.Until.AsyncTask.AsyncService
 import com.fake.information.sever.demo.Until.UUID
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestHeader
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/v1/cdKey")
@@ -27,9 +24,9 @@ class CDKeyController {
 
     @PostMapping("/createToken")
     fun createKey(
-            @RequestHeader("id") userId:Int
+            @RequestParam(name = "id") userId:String
     ): Result<String> {
-        val user = userRepository.getOne(userId)
+        val user = userRepository.getOne(userId.toInt())
         val key = CDKey()
         key.key = UUID.getUuid();
         user.keyList.add(key);
