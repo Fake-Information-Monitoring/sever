@@ -25,7 +25,7 @@ class CDKeyController {
     @Autowired
     private lateinit var redisTemplate: FakeNewsRedisTemplate
 
-    @PostMapping("/getToken")
+    @PostMapping("/createToken")
     fun createKey(
             @RequestHeader("id") userId:Int
     ): Result<String> {
