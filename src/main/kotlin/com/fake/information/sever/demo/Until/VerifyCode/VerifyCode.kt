@@ -27,7 +27,7 @@ class VerifyCode(private var redisTemplate: FakeNewsRedisTemplate) {
             redisTemplate.setRedis(session.id + subject, captcha!!)
             redisTemplate.setTime(
                 session.id + subject,
-                1000 * 300,
+                1000 * 60,
                 TimeUnit.SECONDS
             )
         return captcha

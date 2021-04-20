@@ -16,10 +16,7 @@ import org.springframework.web.bind.annotation.*
 import java.lang.IllegalArgumentException
 import java.util.*
 import java.util.concurrent.TimeUnit
-import javax.servlet.http.HttpServlet
-import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
-import javax.servlet.http.HttpSession
+import javax.servlet.http.*
 
 @RestController
 @RequestMapping(
@@ -85,7 +82,8 @@ class LoginController {
     fun postLoginWithEmail(
         @RequestBody params: Map<String, Any>,
         request: HttpServletRequest,
-        session: HttpSession
+        session: HttpSession,
+        response: HttpServletResponse
     ): Result<Any> {
         val password = params["password"].toString()
         val verify = params["verifyCode"].toString()
@@ -98,14 +96,17 @@ class LoginController {
                 redisTemplate.setRedis(tempUser?.id.toString(), StatusCode.Status200.statusCode)
                 redisTemplate.setRedis(session.id, StatusCode.Status200.statusCode)
                 tempUser?.id?.let { redisTemplate.setRedis(session.id + "user", it) }
-                redisTemplate.setTime(session.id, 1000 * 60 * 60 * 24 * 7, TimeUnit.SECONDS)
-                redisTemplate.setTime(tempUser?.id.toString(), 1000 * 60 * 60 * 24 * 7, TimeUnit.SECONDS)
+                redisTemplate.setTime(session.id, 2592000, TimeUnit.SECONDS)
+                redisTemplate.setTime(tempUser?.id.toString(), 2592000, TimeUnit.SECONDS)
             }
         } catch (e: NumberFormatException) {
             throw NumberFormatException("输入格式非法")
         }
-
-        return Result<Any>(
+        val cookie = Cookie("JSESSIONID", session.id)
+        cookie.maxAge = 2592000
+        response.addCookie(cookie)
+        response.addCookie(cookie)
+        return Result(
             success = true,
             code = StatusCode.Status200.statusCode,
             msg = "login success",

@@ -70,9 +70,6 @@ class Interceptor : WebMvcConfigurer {
             if (redisTemplate.getRedis(session.id) == StatusCode.Status200.statusCode) {
                 return true
             }
-            val cookie = Cookie("JSESSIONID",session.id)
-            cookie.maxAge = 5
-            response.addCookie(cookie)
             val result: Result<String> = Result(
                 success = false,
                 code = StatusCode.Status302.statusCode,
