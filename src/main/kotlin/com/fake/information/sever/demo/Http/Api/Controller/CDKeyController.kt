@@ -3,6 +3,7 @@ package com.fake.information.sever.demo.Http.Api.Controller
 import com.fake.information.sever.demo.DTO.UserRepository
 import com.fake.information.sever.demo.Http.Api.Response.Result
 import com.fake.information.sever.demo.Http.Api.Response.StatusCode
+import com.fake.information.sever.demo.Http.Api.Response.TokenType
 import com.fake.information.sever.demo.Model.CDKey
 import com.fake.information.sever.demo.Redis.FakeNewsRedisTemplate
 import com.fake.information.sever.demo.Until.AsyncTask.AsyncService
@@ -31,23 +32,26 @@ class CDKeyController {
         if (redisTemplate.getRedis(session.id) != StatusCode.Status200.statusCode) {
             throw IllegalAccessException("您没有权限")
         }
-        val userId = redisTemplate.getRedis(session.id+"user").toString().toInt()
+        val userId = redisTemplate.getRedis(session.id + "user").toString().toInt()
         val user = userRepository.getOne(userId.toInt())
         val key = CDKey()
         key.key = UUID.getUuid();
         user.keyList.add(key);
         key.user = user
+        val type = params["type"].toString()
+        if (!TokenType.hasValue(type)) {
+            throw IllegalAccessException("不存在该类别")
+        }
         asyncService.asyncTask {
-            val type = params["type"].toString()
-            redisTemplate.setRedis(key.toString(),type)
-            redisTemplate.setRedis(key.toString()+"nums",0)
+            redisTemplate.setRedis(key.toString(), type)
+            redisTemplate.setRedis(key.toString() + "nums", 0)
             userRepository.save(user)
         }
         return Result(
-                success = true,
-                code = StatusCode.Status200.statusCode,
-                msg = "success",
-                data = key.toString()
+            success = true,
+            code = StatusCode.Status200.statusCode,
+            msg = "success",
+            data = key.toString()
         )
     }
 }

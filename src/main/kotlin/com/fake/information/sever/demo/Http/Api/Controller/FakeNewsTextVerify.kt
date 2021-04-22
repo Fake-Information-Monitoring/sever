@@ -2,7 +2,9 @@ package com.fake.information.sever.demo.Http.Api.Controller
 
 import com.fake.information.sever.demo.Http.Api.Response.Result
 import com.fake.information.sever.demo.Http.Api.Response.StatusCode
-import com.fake.information.sever.demo.Model.VerifyTextResult
+import com.fake.information.sever.demo.Http.Until.AISeverURL
+import com.fake.information.sever.demo.Http.Until.VerifyResultFactory
+import com.fake.information.sever.demo.Model.VerifyModel.VerifyBaseModel
 import com.fake.information.sever.demo.Redis.FakeNewsRedisTemplate
 import com.fake.information.sever.demo.Until.JWT.TokenConfig
 import com.fake.information.sever.demo.Until.Requests.DemoOkhttp
@@ -37,10 +39,12 @@ class FakeNewsTextVerify {
                 msg = "已失效"
             )
         }
+        val type = redisTemplate.getRedis(token).toString()?:throw IllegalArgumentException("无效的UUID")
         val text = params["text"].toString()
+//        val resultType = VerifyResultFactory.getResultClass(type)
+        val data = DemoOkhttp.post<VerifyBaseModel>(text = text,
+            url = AISeverURL.RUMOR_URL.toString())
 
-        val data = DemoOkhttp.post<VerifyTextResult>(text = text,
-            url = "http://127.0.0.1:4336/VerifyFakeNews")
         return Result<Any>(
             success = true,
             code = StatusCode.Status200.statusCode,
