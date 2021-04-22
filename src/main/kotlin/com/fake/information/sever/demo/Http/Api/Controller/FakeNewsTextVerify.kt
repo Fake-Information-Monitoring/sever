@@ -17,7 +17,7 @@ class FakeNewsTextVerify {
 
 
     fun verifyToken(token: String): Boolean {
-        val count = redisTemplate.getRedis(token).toString().toInt()
+        val count = redisTemplate.getRedis(token+"nums").toString().toInt()
         redisTemplate.setRedis(token, count + 1)
         if (count >= TokenConfig.TOKEN_GET_COUNT) {
             return false
@@ -38,6 +38,7 @@ class FakeNewsTextVerify {
             )
         }
         val text = params["text"].toString()
+
         val data = DemoOkhttp.post<VerifyTextResult>(text = text,
             url = "http://127.0.0.1:4336/VerifyFakeNews")
         return Result<Any>(

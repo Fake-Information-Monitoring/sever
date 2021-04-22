@@ -25,7 +25,8 @@ class CDKeyController {
 
     @PostMapping("/createToken")
     fun createKey(
-        session: HttpSession
+        session: HttpSession,
+        @RequestBody params: Map<String, Any>
     ): Result<String> {
         if (redisTemplate.getRedis(session.id) != StatusCode.Status200.statusCode) {
             throw IllegalAccessException("您没有权限")
@@ -37,7 +38,9 @@ class CDKeyController {
         user.keyList.add(key);
         key.user = user
         asyncService.asyncTask {
-            redisTemplate.setRedis(key.toString(),0)
+            val type = params["type"].toString()
+            redisTemplate.setRedis(key.toString(),type)
+            redisTemplate.setRedis(key.toString()+"nums",0)
             userRepository.save(user)
         }
         return Result(
