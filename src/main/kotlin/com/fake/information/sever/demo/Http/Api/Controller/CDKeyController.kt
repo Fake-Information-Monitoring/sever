@@ -9,6 +9,7 @@ import com.fake.information.sever.demo.Redis.FakeNewsRedisTemplate
 import com.fake.information.sever.demo.Until.AsyncTask.AsyncService
 import com.fake.information.sever.demo.Until.UUID.UUID
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.scheduling.annotation.Async
 import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpSession
 
@@ -23,21 +24,7 @@ class CDKeyController {
 
     @Autowired
     private lateinit var redisTemplate: FakeNewsRedisTemplate
-    @PostMapping("/testToken")
-    fun testToken(session: HttpSession): Result<String> {
-        val key = CDKey()
-        key.key = UUID.getUuid()
-        asyncService.asyncTask {
-            redisTemplate.setRedis(key.toString(), TokenType.TEST.toString())
-            redisTemplate.setRedis(key.toString() + "nums", 49995)
-        }
-        return Result(
-            success = true,
-            code = StatusCode.Status200.statusCode,
-            msg = "临时UUID，有五次调用次数，请适当使用",
-            data = key.toString()
-        )
-    }
+
     @PostMapping("/createToken")
     fun createKey(
         session: HttpSession,
