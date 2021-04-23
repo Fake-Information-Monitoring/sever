@@ -10,6 +10,7 @@ import com.fake.information.sever.demo.Until.JWT.TokenConfig
 import com.fake.information.sever.demo.Until.Requests.DemoOkhttp
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
+import kotlin.reflect.KClass
 
 @RestController
 @RequestMapping("/v1/FakeNewsVerify", method = [RequestMethod.POST, RequestMethod.GET])
@@ -41,11 +42,8 @@ class FakeNewsTextVerify {
         }
         val type = redisTemplate.getRedis(token).toString()?:throw IllegalArgumentException("无效的UUID")
         val text = params["text"].toString()
-//        val resultType = VerifyResultFactory.getResultClass(type)
-        val data = DemoOkhttp.post<VerifyBaseModel>(text = text,
-            url = AISeverURL.RUMOR_URL.toString())
-
-        return Result<Any>(
+        val data = VerifyResultFactory.getResult(type, text)
+        return Result(
             success = true,
             code = StatusCode.Status200.statusCode,
             msg = "success",

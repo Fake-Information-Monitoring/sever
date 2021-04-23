@@ -4,5 +4,5 @@ import com.google.gson.annotations.SerializedName
 
 data class SensitiveModel(
     @SerializedName("data")
-    val data: String = "",
-) : VerifyBaseModel()
+    override val data: Map<String,Any>,
+): VerifyBaseModel(data = data)
