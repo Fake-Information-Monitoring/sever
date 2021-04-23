@@ -1,13 +1,25 @@
 package com.fake.information.sever.demo.Http.Api.Response
 
 enum class TokenType(var type:String) {
-    RUMORS("谣言"),
-    ZOMBIES("僵尸用户"),
-    SENSITIVE_WORD("敏感词");
+    RUMORS("Rumor") {
+        override fun toString(): String {
+            return type
+        }
+    },
+    ZOMBIES("Zombies") {
+        override fun toString(): String {
+            return type
+        }
+    },
+    SENSITIVE_WORD("Sensitive") {
+        override fun toString(): String {
+            return type
+        }
+    };
     companion object{
         fun hasValue(value:String):Boolean{
             values().forEach {
-                if(it.name == value) return true
+                if(it.toString() == value) return true
             }
             return false
         }

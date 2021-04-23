@@ -1,4 +1,4 @@
-package com.fake.information.sever.demo.Until
+package com.fake.information.sever.demo.Until.UUID
 
 import cn.hutool.core.lang.UUID.randomUUID
 

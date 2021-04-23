@@ -28,6 +28,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("com.auth0:java-jwt:3.3.0")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    implementation("org.springframework.boot:spring-boot-starter-amqp")
     // implementation("org.springframework.boot:spring-boot-starter-activemq:1.5.0.RELEASE")//ActiveMQ
     implementation("org.springframework.boot:spring-boot-starter-data-jdbc")//Spring Jdbc
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")//Spring Jpa

@@ -7,7 +7,7 @@ import com.fake.information.sever.demo.Http.Api.Response.TokenType
 import com.fake.information.sever.demo.Model.CDKey
 import com.fake.information.sever.demo.Redis.FakeNewsRedisTemplate
 import com.fake.information.sever.demo.Until.AsyncTask.AsyncService
-import com.fake.information.sever.demo.Until.UUID
+import com.fake.information.sever.demo.Until.UUID.UUID
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpSession

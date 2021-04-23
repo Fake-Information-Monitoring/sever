@@ -17,11 +17,11 @@ class ThrowableController {
     @ResponseBody
     fun throwException(ex: Exception, request: WebRequest,response: HttpServletResponse): Result<Any>? {
         logger.error(ex.message)
-        response.status = StatusCode.Status502.statusCode
+        response.status = StatusCode.Status403.statusCode
         return ex.message?.let {
-            Result<Any>(
+            Result(
                     success = false,
-                    code = StatusCode.Status502.statusCode,
+                    code = StatusCode.Status403.statusCode,
                     msg = it
             )
         }

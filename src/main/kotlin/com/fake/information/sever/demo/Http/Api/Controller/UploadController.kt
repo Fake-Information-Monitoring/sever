@@ -39,8 +39,8 @@ class UploadController {
         return newFile
     }
     fun verifyToken(token: String): Boolean {
-        val count = redisTemplate.getRedis(token).toString().toInt()
-        redisTemplate.setRedis(token, count + 1)
+        val count = redisTemplate.getRedis(token+"nums").toString().toInt()
+        redisTemplate.setRedis(token+"nums", count + 1)
         if (count >= TokenConfig.TOKEN_GET_COUNT) {
             return false
         }
