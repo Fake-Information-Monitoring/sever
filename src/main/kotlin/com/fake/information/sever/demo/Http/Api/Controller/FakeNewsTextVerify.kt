@@ -1,12 +1,14 @@
 package com.fake.information.sever.demo.Http.Api.Controller
 
 import cn.hutool.extra.tokenizer.TokenizerException
+import com.fake.information.sever.demo.Http.Api.Response.TokenType
 import com.fake.information.sever.demo.Http.Until.VerifyResultFactory
 import com.fake.information.sever.demo.Model.VerifyBaseModel
 import com.fake.information.sever.demo.Redis.FakeNewsRedisTemplate
 import com.fake.information.sever.demo.Until.JWT.TokenConfig
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
+import javax.websocket.server.PathParam
 
 @RestController
 @RequestMapping("/v1/FakeNewsVerify", method = [RequestMethod.POST, RequestMethod.GET])
@@ -26,14 +28,18 @@ class FakeNewsTextVerify {
 
     @PostMapping("/")
     fun postCommitFile(
+        type:String,
         @RequestBody params: Map<String, Any>,
         @RequestHeader("token") token: String
     ): VerifyBaseModel<*> {
         if (!verifyToken(token)) {
-            throw TokenizerException("该UUID已失效")
+            throw TokenizerException("该UUID已失效,请申请新UUID")
         }
-        val type = redisTemplate.getRedis(token).toString() ?: throw IllegalArgumentException("无效的UUID")
+        var requestType = redisTemplate.getRedis(token).toString() ?: throw IllegalArgumentException("无效的UUID")
+        if (requestType == TokenType.TEST.toString()){
+            requestType = type
+        }
         val text = params["text"].toString()
-        return VerifyResultFactory.getResult(type, text)
+        return VerifyResultFactory.getResult(requestType, text)
     }
 }

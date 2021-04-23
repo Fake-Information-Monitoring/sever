@@ -23,7 +23,21 @@ class CDKeyController {
 
     @Autowired
     private lateinit var redisTemplate: FakeNewsRedisTemplate
-
+    @PostMapping("/testToken")
+    fun testToken(session: HttpSession): Result<String> {
+        val key = CDKey()
+        key.key = UUID.getUuid()
+        asyncService.asyncTask {
+            redisTemplate.setRedis(key.toString(), TokenType.TEST.toString())
+            redisTemplate.setRedis(key.toString() + "nums", 49995)
+        }
+        return Result(
+            success = true,
+            code = StatusCode.Status200.statusCode,
+            msg = "临时UUID，有五次调用次数，请适当使用",
+            data = key.toString()
+        )
+    }
     @PostMapping("/createToken")
     fun createKey(
         session: HttpSession,

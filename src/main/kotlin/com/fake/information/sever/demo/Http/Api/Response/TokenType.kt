@@ -15,6 +15,11 @@ enum class TokenType(var type:String) {
         override fun toString(): String {
             return type
         }
+    },
+    TEST("Test"){
+        override fun toString():String{
+            return type
+        }
     };
     companion object{
         fun hasValue(value:String):Boolean{
