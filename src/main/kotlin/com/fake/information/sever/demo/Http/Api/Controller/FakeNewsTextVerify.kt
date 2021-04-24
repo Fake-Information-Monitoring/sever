@@ -4,21 +4,21 @@ import cn.hutool.extra.tokenizer.TokenizerException
 import com.fake.information.sever.demo.Http.Api.Response.TokenType
 import com.fake.information.sever.demo.Http.Until.VerifyResultFactory
 import com.fake.information.sever.demo.Model.VerifyBaseModel
-import com.fake.information.sever.demo.Redis.FakeNewsRedisTemplate
+import com.fake.information.sever.demo.Config.Redis.FakeNewsRedisTemplate
 import com.fake.information.sever.demo.Until.AsyncTask.AsyncService
 import com.fake.information.sever.demo.Until.JWT.TokenConfig
+import io.swagger.annotations.Api
+import io.swagger.annotations.ApiOperation
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpSession
-import javax.websocket.server.PathParam
 
 @RestController
-@RequestMapping("/v1/FakeNewsVerify", method = [RequestMethod.POST, RequestMethod.GET])
+@RequestMapping("/v1/FakeNewsVerify")
+@Api("AI服务管理")
 class FakeNewsTextVerify {
     @Autowired
     private lateinit var redisTemplate: FakeNewsRedisTemplate
-    @Autowired
-    private lateinit var asyncService: AsyncService
 
     fun verifyToken(token: String): Boolean {
         val count = redisTemplate.getRedis(token + "nums").toString().toInt()
@@ -30,6 +30,7 @@ class FakeNewsTextVerify {
     }
 
     @PostMapping("/testVerify")
+    @ApiOperation("测试监测接口，用于向用户首次展示产品")
     fun testVerify(
         type: String,
         @RequestBody params: Map<String, Any>,
@@ -48,6 +49,7 @@ class FakeNewsTextVerify {
     }
 
     @PostMapping("/")
+    @ApiOperation("AI服务接口，根据UUID判别服务类型")
     fun postVerifyText(
         type: String,
         @RequestBody params: Map<String, Any>,

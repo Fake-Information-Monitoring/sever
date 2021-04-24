@@ -1,19 +1,16 @@
 package com.fake.information.sever.demo.Http.Interceptor
 
-import com.fake.information.sever.demo.Redis.FakeNewsRedisTemplate
+import com.fake.information.sever.demo.Config.Redis.FakeNewsRedisTemplate
 import com.fake.information.sever.demo.Http.Api.Response.StatusCode
 import com.fake.information.sever.demo.Http.Api.Response.Result
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.web.servlet.server.Session
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.servlet.HandlerInterceptor
 import org.springframework.web.servlet.config.annotation.CorsRegistry
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
-import javax.servlet.http.Cookie
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
-import kotlin.time.Duration
 import kotlin.time.ExperimentalTime
 
 @Configuration
@@ -49,7 +46,14 @@ class Interceptor : WebMvcConfigurer {
                     "/v1/forward/sendEmail",
                     "/ImageEdge",
                     "/v1/FakeNewsVerify/",
-                    "/ImageEdgeByte"
+                    "/ImageEdgeByte",
+                    "/swagger-ui.html",
+                    "/swagger-ui.html/**",
+                    "/webjars/**",
+                    "/error",
+                    "/swagger-resources",
+                    "/swagger-resources/**",
+                    "/csrf"
                 )
             )
         //拦截路径

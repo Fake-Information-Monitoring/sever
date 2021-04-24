@@ -5,14 +5,16 @@ import com.fake.information.sever.demo.Http.Api.Response.Result
 import com.fake.information.sever.demo.Http.Api.Response.StatusCode
 import com.fake.information.sever.demo.Http.Api.Response.TokenType
 import com.fake.information.sever.demo.Model.CDKey
-import com.fake.information.sever.demo.Redis.FakeNewsRedisTemplate
+import com.fake.information.sever.demo.Config.Redis.FakeNewsRedisTemplate
 import com.fake.information.sever.demo.Until.AsyncTask.AsyncService
 import com.fake.information.sever.demo.Until.UUID.UUID
+import io.swagger.annotations.Api
+import io.swagger.annotations.ApiOperation
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.scheduling.annotation.Async
 import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpSession
 
+@Api(value = "Token-UUID信息管理")
 @RestController
 @RequestMapping("/v1/cdKey")
 class CDKeyController {
@@ -26,6 +28,7 @@ class CDKeyController {
     private lateinit var redisTemplate: FakeNewsRedisTemplate
 
     @PostMapping("/createToken")
+    @ApiOperation(value = "当用户通过认证以后创建一个UUID")
     fun createKey(
         session: HttpSession,
         @RequestBody params: Map<String, Any>

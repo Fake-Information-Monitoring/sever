@@ -5,11 +5,14 @@ import org.springframework.boot.ApplicationRunner
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.cache.annotation.EnableCaching
+import org.springframework.context.annotation.ComponentScan
 import org.springframework.scheduling.annotation.EnableAsync
+import springfox.documentation.swagger2.annotations.EnableSwagger2
 
 @SpringBootApplication
 @EnableAsync
 @EnableCaching
+@EnableSwagger2
 class DemoApplication : ApplicationRunner {
     override fun run(args: ApplicationArguments?) {
         println("""

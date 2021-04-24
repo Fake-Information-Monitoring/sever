@@ -1,4 +1,4 @@
-package com.fake.information.sever.demo.Redis
+package com.fake.information.sever.demo.Config.Redis
 
 import com.fake.information.sever.demo.Http.Api.Response.StatusCode
 import org.springframework.beans.factory.annotation.Autowired

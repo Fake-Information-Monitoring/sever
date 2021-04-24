@@ -1,4 +1,4 @@
-package com.fake.information.sever.demo.MQ
+package com.fake.information.sever.demo.Config
 
 import org.springframework.amqp.core.Binding
 import org.springframework.amqp.core.Queue

@@ -2,12 +2,14 @@ package com.fake.information.sever.demo.Http.Api.Controller
 
 import com.fake.information.sever.demo.Controller.tools.Check
 import com.fake.information.sever.demo.DTO.UserRepository
-import com.fake.information.sever.demo.Redis.FakeNewsRedisTemplate
+import com.fake.information.sever.demo.Config.Redis.FakeNewsRedisTemplate
 import com.fake.information.sever.demo.Until.EmailUntil.MailService
 import com.fake.information.sever.demo.Http.Api.Response.StatusCode
 import com.fake.information.sever.demo.Http.Api.Response.Result
 import com.fake.information.sever.demo.Until.AsyncTask.AsyncService
 import com.fake.information.sever.demo.Until.VerifyCode.VerifyCode
+import io.swagger.annotations.Api
+import io.swagger.annotations.ApiOperation
 import kotlinx.coroutines.ObsoleteCoroutinesApi
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
@@ -15,7 +17,8 @@ import javax.servlet.http.HttpServletResponse
 import javax.servlet.http.HttpSession
 
 @RestController
-@RequestMapping("/v1/forward", method = [RequestMethod.GET, RequestMethod.PUT])
+@RequestMapping("/v1/forward")
+@Api("修改密码")
 class ForwardPassword {
     @Autowired
     private lateinit var userRepository: UserRepository
@@ -32,7 +35,8 @@ class ForwardPassword {
     private lateinit var verifyCode: VerifyCode
 
 
-    @RequestMapping("/", method = [RequestMethod.GET])
+    @GetMapping("/")
+    @ApiOperation("验证邮件验证码是否正确")
     fun forwardPassword(
         session: HttpSession,
         @RequestHeader("verifyCode") verify: String,
@@ -57,7 +61,8 @@ class ForwardPassword {
         )
     }
 
-    @RequestMapping("/change", method = [RequestMethod.PUT])
+    @PutMapping("/change")
+    @ApiOperation("修改密码")
     fun changePassword(
         session: HttpSession,
         @RequestParam params: Map<String, Any>,
@@ -95,6 +100,7 @@ class ForwardPassword {
 
     @ObsoleteCoroutinesApi
     @GetMapping("/sendEmail")
+    @ApiOperation("发送验证邮件")
     fun forwardPasswordCheck(
         @RequestHeader("email") email: String,
         session: HttpSession

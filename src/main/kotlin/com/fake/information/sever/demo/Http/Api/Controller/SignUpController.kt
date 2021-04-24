@@ -1,8 +1,8 @@
-package com.fake.information.sever.demo.Controller
+package com.fake.information.sever.demo.Http.Api.Controller
 
 import com.fake.information.sever.demo.Controller.tools.Check
 import com.fake.information.sever.demo.DTO.UserRepository
-import com.fake.information.sever.demo.Redis.FakeNewsRedisTemplate
+import com.fake.information.sever.demo.Config.Redis.FakeNewsRedisTemplate
 import com.fake.information.sever.demo.Until.EmailUntil.MailService
 import com.fake.information.sever.demo.Http.Api.Response.StatusCode
 import com.fake.information.sever.demo.Model.User
@@ -12,12 +12,15 @@ import java.util.*
 import com.fake.information.sever.demo.Http.Api.Response.Result
 import com.fake.information.sever.demo.Until.AsyncTask.AsyncService
 import com.fake.information.sever.demo.Until.VerifyCode.VerifyCode
+import io.swagger.annotations.Api
+import io.swagger.annotations.ApiOperation
 import kotlinx.coroutines.ObsoleteCoroutinesApi
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpSession
 
 @RestController
 @RequestMapping("v1/signUp", method = [RequestMethod.POST, RequestMethod.GET])
+@Api("注册管理")
 class SignUpController {
     @Autowired
     private lateinit var userRepository: UserRepository
@@ -33,6 +36,7 @@ class SignUpController {
 
     @ObsoleteCoroutinesApi
     @PostMapping("/email")
+    @ApiOperation("发送邮件")
     fun getEmail(
             request: HttpServletRequest,
             session: HttpSession,
@@ -55,6 +59,7 @@ class SignUpController {
 
     @ExperimentalStdlibApi
     @PostMapping("/create")
+    @ApiOperation("注册")
     fun postCreate(
             session: HttpSession,
             request: HttpServletRequest,

@@ -9,24 +9,23 @@ import org.springframework.web.multipart.MultipartFile
 import com.fake.information.sever.demo.Http.Api.Response.Result
 import com.fake.information.sever.demo.Until.OSS.OSSUpload
 import com.fake.information.sever.demo.Model.Commit
-import com.fake.information.sever.demo.Redis.FakeNewsRedisTemplate
+import com.fake.information.sever.demo.Config.Redis.FakeNewsRedisTemplate
 import com.fake.information.sever.demo.Until.AsyncTask.AsyncService
 import com.fake.information.sever.demo.Until.JWT.TokenConfig
+import io.swagger.annotations.Api
+import io.swagger.annotations.ApiOperation
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
 import javax.servlet.http.HttpSession
 
 @RestController
-@RequestMapping("/v1/upload", method = [RequestMethod.POST, RequestMethod.GET])
+@RequestMapping("/v1/upload")
+@Api("上传文件管理")
 class UploadController {
     @Autowired
     private lateinit var userRepository: UserRepository
 
-    @Autowired
-    private lateinit var commitRepository: CommitRepository
-    @Autowired
-    private lateinit var asyncService: AsyncService
     @Autowired
     private lateinit var redisTemplate: FakeNewsRedisTemplate
 
@@ -47,6 +46,7 @@ class UploadController {
         return true
     }
     @PostMapping("/uploadFile")
+    @ApiOperation("上传文件")
     fun postCommitFile(
         @RequestBody file: MultipartFile,
         @RequestHeader("token") token: String,
@@ -83,6 +83,7 @@ class UploadController {
     }
 
     @PostMapping("/uploadImage")
+    @ApiOperation("更新头像")
     fun postHeadImg(
         @RequestBody img: MultipartFile,
         session: HttpSession

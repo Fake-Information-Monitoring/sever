@@ -1,14 +1,15 @@
-package com.fake.information.sever.demo.Controller
+package com.fake.information.sever.demo.Http.Api.Controller
 
-import cn.hutool.core.codec.Base64
 import com.fake.information.sever.demo.Controller.tools.Check
 import com.fake.information.sever.demo.DTO.UserRepository
-import com.fake.information.sever.demo.Redis.FakeNewsRedisTemplate
+import com.fake.information.sever.demo.Config.Redis.FakeNewsRedisTemplate
 import com.fake.information.sever.demo.Http.Until.RSA
 import com.fake.information.sever.demo.Http.Api.Response.StatusCode
 import com.fake.information.sever.demo.Http.Api.Response.Result
 import com.fake.information.sever.demo.Until.AsyncTask.AsyncService
 import com.fake.information.sever.demo.Until.VerifyCode.VerifyCode
+import io.swagger.annotations.Api
+import io.swagger.annotations.ApiOperation
 import kotlinx.coroutines.ObsoleteCoroutinesApi
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
@@ -20,9 +21,9 @@ import javax.servlet.http.*
 
 @RestController
 @RequestMapping(
-    "/v1/login",
-    method = [RequestMethod.POST, RequestMethod.GET, RequestMethod.DELETE]
+    "/v1/login"
 )
+@Api("登录管理")
 class LoginController {
     @Autowired
     private lateinit var userRepository: UserRepository
@@ -34,6 +35,7 @@ class LoginController {
     private lateinit var asyncService: AsyncService
 
     @GetMapping("/")
+    @ApiOperation("没用，别管")
     fun getLogin(): String {
 
         return "Login!"
@@ -41,6 +43,7 @@ class LoginController {
 
 
     @GetMapping("/getPublicKey")
+    @ApiOperation("获取公钥（暂时搁置）")
     fun getPublicKey(
         @RequestHeader("User-Agent") userAgent: String,
         request: HttpServletRequest,
@@ -57,6 +60,7 @@ class LoginController {
     }
 
     @DeleteMapping("/logout")
+    @ApiOperation("注销登录")
     fun deleteLogout(
         request: HttpServletRequest,
         session: HttpSession
@@ -79,6 +83,7 @@ class LoginController {
     @ObsoleteCoroutinesApi
     @ExperimentalStdlibApi
     @PostMapping("/loginWithEmail")
+    @ApiOperation("登录接口")
     fun postLoginWithEmail(
         @RequestBody params: Map<String, Any>,
         request: HttpServletRequest,
@@ -123,6 +128,7 @@ class LoginController {
 
     @ObsoleteCoroutinesApi
     @GetMapping("/verifyCode/{date}", produces = [MediaType.IMAGE_PNG_VALUE, "image/png"])
+    @ApiOperation("获取验证码")
     fun getVerifyCode(session: HttpSession, @PathVariable date: String, response: HttpServletResponse) {
         val captcha = VerifyCode(redisTemplate).createCode(session, "verifyCode")
         captcha.write(response.outputStream)

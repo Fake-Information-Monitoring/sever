@@ -1,17 +1,19 @@
-package com.fake.information.sever.demo.Controller
+package com.fake.information.sever.demo.Http.Api.Controller
 
 import com.fake.information.sever.demo.DTO.CommitRepository
 import com.fake.information.sever.demo.DTO.UserRepository
-import com.fake.information.sever.demo.Redis.FakeNewsRedisTemplate
+import com.fake.information.sever.demo.Config.Redis.FakeNewsRedisTemplate
 import com.fake.information.sever.demo.Http.Api.Response.StatusCode
-import com.fake.information.sever.demo.Model.User
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 import com.fake.information.sever.demo.Http.Api.Response.Result
+import io.swagger.annotations.Api
+import io.swagger.annotations.ApiOperation
 import javax.servlet.http.HttpSession
 
+@Api(value = "用户信息管理接口")
 @RestController
-@RequestMapping("/v1/getInfo", method = [RequestMethod.GET])
+@RequestMapping("/v1/getInfo")
 class GetUserInfo {
     @Autowired
     private lateinit var userRepository: UserRepository
@@ -24,6 +26,7 @@ class GetUserInfo {
 
     @ExperimentalStdlibApi
     @GetMapping("/")
+    @ApiOperation("获取用户信息")
     fun getUserInfo(
             session: HttpSession
     ): Any {
@@ -46,6 +49,7 @@ class GetUserInfo {
     }
 
     @GetMapping("/avatar")
+    @ApiOperation("获取用户头像OSSURL")
     fun getUserAvatar(
             session: HttpSession
     ): Any {
@@ -68,6 +72,7 @@ class GetUserInfo {
 
     @ExperimentalStdlibApi
     @GetMapping("/{commit}")
+    @ApiOperation("获取某个特定的提交验证记录")
     fun getCommit(
                   @PathVariable commit: Int,
                   session: HttpSession
