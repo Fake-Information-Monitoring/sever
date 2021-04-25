@@ -53,7 +53,8 @@ class Interceptor : WebMvcConfigurer {
                     "/error",
                     "/swagger-resources",
                     "/swagger-resources/**",
-                    "/csrf"
+                    "/csrf",
+                    "/v1/FakeNewsVerify/testVerify"
                 )
             )
         //拦截路径
