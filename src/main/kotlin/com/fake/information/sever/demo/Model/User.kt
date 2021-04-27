@@ -9,41 +9,55 @@ import javax.persistence.*
 import kotlin.collections.ArrayList
 
 @Entity
-@Table(name="User",indexes =[ Index(columnList = "phone_number"),Index(columnList = "email") ] )
-@JsonIgnoreProperties(value = ["password","lastActive"])
-class User :Serializable {
+@Table(name = "User", indexes = [Index(columnList = "phone_number"), Index(columnList = "email")])
+@JsonIgnoreProperties(value = ["password", "lastActive"])
+class User : Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id",nullable = false)
+    @Column(name = "id", nullable = false)
     val id: Int = 0
-    @Column(name = "name",nullable = false)
-    var name: String? = null
-    @Column(name = "phone_number",nullable = false)
-    var phoneNumber: String? = null
-    @Column(name = "password",nullable = false)
-    private var password: String? = null
-    @Column(name = "email",nullable = false)
-    var email: String? = null
-    @Column(name = "updated_at",nullable = false)
-    var update: Date? = null
-    @Column(name = "last_actived_at",nullable = true)
-    var lastActive: Date? = null
-    @OneToMany(mappedBy = "user",cascade = [CascadeType.ALL],fetch = FetchType.EAGER)
-    val commitList:MutableList<Commit> = LinkedList()
-    @Fetch(FetchMode.SUBSELECT)
-    @OneToMany(mappedBy = "user",cascade = [CascadeType.ALL],fetch = FetchType.EAGER)
-    val keyList:MutableList<CDKey> = LinkedList()
 
-    @Column(name = "avatar_id",nullable = true)
+    @Column(name = "name", nullable = false)
+    var name: String? = null
+
+    @Column(name = "phone_number", nullable = false)
+    var phoneNumber: String? = null
+
+    @Column(name = "password", nullable = false)
+    private var password: String? = null
+
+    @Column(name = "email", nullable = false)
+    var email: String? = null
+
+    @Column(name = "updated_at", nullable = false)
+    var update: Date? = null
+
+    @Column(name = "last_actived_at", nullable = true)
+    var lastActive: Date? = null
+
+
+    @OneToOne(cascade = [CascadeType.ALL], mappedBy = "user")
+    var personCertified: PersonCertified? = null
+
+    @Fetch(FetchMode.SUBSELECT)
+    @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
+    val keyList: MutableList<CDKey> = LinkedList()
+
+    @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
+    val commitList: MutableList<Commit> = LinkedList()
+
+    @Column(name = "avatar_id", nullable = true)
     var avatar: String? = null
-    fun updateInfo(name:String){
+    fun updateInfo(name: String) {
         this.name = name
         update = Date()
     }
+
     fun getPassword(): String? {
         return password
     }
-    fun setPassword(password:String){
+
+    fun setPassword(password: String) {
         this.password = password
     }
 }

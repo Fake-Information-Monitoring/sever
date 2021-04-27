@@ -9,14 +9,26 @@ import javax.servlet.http.HttpSession
 
 object Check {
     fun checkEmail(email: String): Boolean {
-        return email.matches(Regex(
+        return email.matches(
+            Regex(
                 "^[a-z0-9A-Z]+[- |a-z0-9A-Z._]+@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-z]{2,}$"
-        ))
+            )
+        )
+    }
+
+    fun checkCardId(cardId: String): Boolean {
+        return cardId.matches(
+            Regex(
+                "^[1-9]\\d{5}(18|19|([23]\\d))\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{3}[0-9Xx]$"
+            )
+        )
     }
 
     fun checkPassword(password: String): Boolean {
-        return password.matches(Regex(
-                "^[a-zA-Z\\d_]{8,}")
+        return password.matches(
+            Regex(
+                "^[a-zA-Z\\d_]{8,}"
+            )
         )
     }
 
@@ -26,7 +38,7 @@ object Check {
 
     @ObsoleteCoroutinesApi
     @ExperimentalStdlibApi
-    fun checkAccount(verifyCode: VerifyCode,session: HttpSession,user: User?, password: String): Boolean {
+    fun checkAccount(verifyCode: VerifyCode, session: HttpSession, user: User?, password: String): Boolean {
         val info = when {
             user == null -> {
                 "用户不存在"
@@ -38,9 +50,9 @@ object Check {
                 null
             }
         }
-        if (info!=null){
+        if (info != null) {
             verifyCode.createCode(session, "verifyCode")
-            throw IllegalArgumentException(info+"请输入验证码")
+            throw IllegalArgumentException(info + "请输入验证码")
         }
         return true
     }
@@ -57,19 +69,20 @@ object Check {
         return URLDecoder.decode(str, "utf-8")
     }
 
-    fun checking(email: String = "",
-                         password: String = "",
-                         name: String = "",
-                         userRepository: UserRepository
+    fun checking(
+        email: String = "",
+        password: String = "",
+        name: String = "",
+        userRepository: UserRepository
     ): Boolean {
         when {
             (!Check.checkEmail(email) && email.isNotEmpty()) ->
                 throw IllegalArgumentException("邮箱格式有误！")
             (!Check.checkPassword(password) && password.isNotEmpty()) ->
                 throw IllegalArgumentException("密码安全性过低")
-            (!checkUserByName(userRepository,name) && name.isNotEmpty()) ->
+            (!checkUserByName(userRepository, name) && name.isNotEmpty()) ->
                 throw IllegalArgumentException("该昵称已存在")
-            (!checkUserByEmail(userRepository,email) && email.isNotEmpty()) ->
+            (!checkUserByEmail(userRepository, email) && email.isNotEmpty()) ->
                 throw IllegalArgumentException("该邮箱已被使用")
             else -> return true
         }

@@ -16,7 +16,7 @@ import javax.servlet.http.HttpSession
 @RestController
 @RequestMapping("/v1/FakeNewsVerify")
 @Api("AI服务管理")
-class FakeNewsTextVerify {
+class TextVerifyController {
     @Autowired
     private lateinit var redisTemplate: FakeNewsRedisTemplate
 

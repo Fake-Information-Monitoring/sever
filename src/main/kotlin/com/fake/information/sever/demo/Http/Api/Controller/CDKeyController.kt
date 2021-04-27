@@ -10,8 +10,10 @@ import com.fake.information.sever.demo.Until.AsyncTask.AsyncService
 import com.fake.information.sever.demo.Until.UUID.UUID
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
+import org.hamcrest.text.IsEmptyString
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
+import java.util.*
 import javax.servlet.http.HttpSession
 
 @Api(value = "Token-UUID信息管理")
@@ -38,11 +40,16 @@ class CDKeyController {
         }
         val userId = redisTemplate.getRedis(session.id + "user").toString().toInt()
         val user = userRepository.getOne(userId.toInt())
+        if (user.personCertified == null){
+            throw IllegalAccessException("请先进行认证")
+        }
         val key = CDKey()
         key.key = UUID.getUuid();
         user.keyList.add(key);
         key.user = user
+        val name = params["name"].toString()
         val type = params["type"].toString()
+        key.name = name
         if (!TokenType.hasValue(type)) {
             throw IllegalAccessException("不存在该类别")
         }

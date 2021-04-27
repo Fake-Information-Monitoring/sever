@@ -13,6 +13,8 @@ class CDKey {
     val id: Int = 0
     @Column(name = "key_str",nullable = false)
     var key:String? = null
+    @Column(name = "name",nullable = false)
+    var name:String? = null
     @ManyToOne(targetEntity = User::class,cascade = [CascadeType.ALL],optional = false)
     @JoinColumn(name = "user_id",referencedColumnName = "id")
     var user:User? = null

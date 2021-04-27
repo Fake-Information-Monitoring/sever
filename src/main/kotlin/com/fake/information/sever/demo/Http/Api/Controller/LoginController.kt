@@ -3,6 +3,7 @@ package com.fake.information.sever.demo.Http.Api.Controller
 import com.fake.information.sever.demo.Controller.tools.Check
 import com.fake.information.sever.demo.DTO.UserRepository
 import com.fake.information.sever.demo.Config.Redis.FakeNewsRedisTemplate
+import com.fake.information.sever.demo.DTO.PersonCertifiedRepository
 import com.fake.information.sever.demo.Http.Until.RSA
 import com.fake.information.sever.demo.Http.Api.Response.StatusCode
 import com.fake.information.sever.demo.Http.Api.Response.Result
@@ -20,9 +21,7 @@ import java.util.concurrent.TimeUnit
 import javax.servlet.http.*
 
 @RestController
-@RequestMapping(
-    "/v1/login"
-)
+@RequestMapping("/v1/login")
 @Api("登录管理")
 class LoginController {
     @Autowired
