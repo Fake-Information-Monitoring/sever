@@ -9,7 +9,8 @@ data class VerifyBaseModel<T>(
     val success: Boolean = false,
     @SerializedName("data")
     val data: T,
-) {
+
+    ) {
     data class RumorsModel(
         @SerializedName("谣言")
         val rumor: Double = 0.0,
@@ -17,22 +18,30 @@ data class VerifyBaseModel<T>(
         val nonRumor: Double = 0.0
     )
 
+
     data class SensitiveModel(
-        @SerializedName("反动信息")
-        val 反动信息: Double = 0.0,
-        @SerializedName("民生类违法信息")
-        val 民生类违法信息: Double = 0.0,
-        @SerializedName("广告类违法信息")
-        val 广告类违法信息: Double = 0.0,
-        @SerializedName("涉黄违法信息")
-        val 涉黄违法信息: Double = 0.0,
-        @SerializedName("暴恐类违法信息")
-        val 暴恐类违法信息: Double = 0.0,
-        @SerializedName("涉枪违法信息")
-        val 涉枪违法信息: Double = 0.0,
-        @SerializedName("政治敏感信息")
-        val 政治敏感信息: Double = 0.0
-    )
+        @SerializedName("result")
+        val result: Result,
+        @SerializedName("text")
+        val text: String = ""
+    ) {
+        data class Result(
+            @SerializedName("政治反动信息")
+            val 政治反动信息: List<String>?,
+            @SerializedName("广告信息")
+            val 广告信息: List<String>?,
+            @SerializedName("暴恐信息")
+            val 暴恐信息: List<String>?,
+            @SerializedName("淫秽色情信息")
+            val 淫秽色情信息: List<String>?,
+            @SerializedName("政治敏感信息")
+            val 政治敏感信息: List<String>?,
+            @SerializedName("枪械暴乱信息")
+            val 枪械暴乱信息: List<String>?,
+            @SerializedName("民生纠纷信息")
+            val 民生纠纷信息: List<String>?
+        )
+    }
 
     data class ZombiesModel(
 
