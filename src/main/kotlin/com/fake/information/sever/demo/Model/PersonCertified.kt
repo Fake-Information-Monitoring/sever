@@ -5,6 +5,7 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "person_certified")
+@JsonIgnoreProperties(value = ["user"])
 class PersonCertified {
 
     @Id

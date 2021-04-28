@@ -29,6 +29,8 @@ class UploadController {
     @Autowired
     private lateinit var redisTemplate: FakeNewsRedisTemplate
 
+    @Autowired
+    private lateinit var asyncService:AsyncService
     fun multipartFileToFile(multipartFile: MultipartFile, fileName: String): File {
         val newFile = File(fileName)
         val os = FileOutputStream(newFile)
@@ -68,10 +70,12 @@ class UploadController {
             val newFile = multipartFileToFile(file, filename!!)
             //上传到OSS
             val uploadUrl: String? = OSSUpload.upload(newFile)
-            commit.indexOSSUrl = uploadUrl
-            commit.commitTime = Date()
-            user.commitList.add(commit)
-            userRepository.save(user)
+            asyncService.asyncTask {
+                commit.indexOSSUrl = uploadUrl
+                commit.commitTime = Date()
+                user.commitList.add(commit)
+                userRepository.save(user)
+            }
             return Result(
                 success = true,
                 code = StatusCode.Status200.statusCode,
