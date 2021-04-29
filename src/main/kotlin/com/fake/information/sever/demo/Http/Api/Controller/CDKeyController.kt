@@ -39,7 +39,7 @@ class CDKeyController {
             throw IllegalAccessException("您没有权限")
         }
         val userId = redisTemplate.getRedis(session.id + "user").toString().toInt()
-        val user = userRepository.getOne(userId.toInt())
+        val user = userRepository.getOne(userId)
         if (user.personCertified == null){
             throw IllegalAccessException("请先进行认证")
         }
@@ -49,6 +49,7 @@ class CDKeyController {
         key.user = user
         val name = params["name"].toString()
         val type = params["type"].toString()
+        key.type = type
         key.name = name
         if (!TokenType.hasValue(type)) {
             throw IllegalAccessException("不存在该类别")

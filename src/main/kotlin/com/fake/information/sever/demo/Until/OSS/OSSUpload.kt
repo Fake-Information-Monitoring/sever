@@ -2,29 +2,31 @@ package com.fake.information.sever.demo.Until.OSS
 
 import com.aliyun.oss.OSSClient
 import com.aliyun.oss.OSSException
-
 import com.aliyun.oss.model.CannedAccessControlList
 import com.aliyun.oss.model.CreateBucketRequest
 import com.aliyun.oss.model.PutObjectRequest
-import java.io.File
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.stereotype.Component
+import org.springframework.web.multipart.MultipartFile
+import java.io.ByteArrayInputStream
+import java.io.InputStream
 import java.text.SimpleDateFormat
 import java.util.*
 
+
+@Component
 class OSSUpload {
 
     companion object {
+        val endpoint = OSSConfiguration.OSS_END_POINT
+        val accessKeyId = OSSConfiguration.OSS_ACCESS_KEY_ID
+        val accessKeySecret = OSSConfiguration.OSS_ACCESS_KEY_SECRET
+        val bucketName: String? = OSSConfiguration.OSS_BUCKET_NAME
+        val fileHost = OSSConfiguration.OSS_FILE_HOST
+        val format = SimpleDateFormat("yyyy-MM-dd")
+        val dateStr = format.format(Date())
 
-        fun upload(file: File?): String? {
-            val endpoint = OSSConfiguration.OSS_END_POINT
-            val accessKeyId = OSSConfiguration.OSS_ACCESS_KEY_ID
-            val accessKeySecret = OSSConfiguration.OSS_ACCESS_KEY_SECRET
-            val bucketName = OSSConfiguration.OSS_BUCKET_NAME
-            val fileHost = OSSConfiguration.OSS_FILE_HOST
-            val format = SimpleDateFormat("yyyy-MM-dd")
-            val dateStr = format.format(Date())
-            if (null == file) {
-                return null
-            }
+        fun upload(file: MultipartFile?): String? {
             val ossClient = OSSClient(endpoint, accessKeyId, accessKeySecret)
             try {
                 //容器不存在，就创建
@@ -35,11 +37,18 @@ class OSSUpload {
                     ossClient.createBucket(createBucketRequest)
                 }
                 //修改文件名字
-                val fileName = fileHost + "/" + (dateStr + "/" + UUID.randomUUID().toString().replace("-", "") + "-" + file.name)
+                val fileName = "$fileHost/${dateStr}/${file!!.name}"
                 //创建文件路径
                 val fileUrl = "https://$bucketName.$endpoint/$fileName"
                 //上传文件
-                val result = ossClient.putObject(PutObjectRequest(bucketName, fileName, file))
+                val input: InputStream = ByteArrayInputStream(file!!.bytes)
+                val result = ossClient.putObject(
+                    PutObjectRequest(
+                        bucketName!!,
+                        fileName,
+                        input
+                    )
+                )
                 //设置权限 这里是公开读
                 ossClient.setBucketAcl(bucketName, CannedAccessControlList.PublicRead)
                 if (null != result) {

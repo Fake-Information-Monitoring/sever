@@ -21,4 +21,9 @@ class CDKey {
     override fun toString(): String {
         return this.key!!
     }
+    @Column(name = "type",nullable = false)
+    var type: String? = null
+
+    @OneToOne(cascade = [CascadeType.ALL], mappedBy = "key")
+    var model: DIYModel? = null
 }

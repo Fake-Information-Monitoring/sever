@@ -3,6 +3,10 @@ package com.fake.information.sever.demo.Until.OSS
 import org.springframework.beans.factory.InitializingBean
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
+import com.aliyun.oss.OSSClient
+
+
+
 
 @Component
 
