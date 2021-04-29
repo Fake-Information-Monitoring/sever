@@ -4,11 +4,15 @@ import com.google.gson.GsonBuilder
 import okhttp3.*
 
 object DemoOkhttp {
-    inline fun <reified T> post(text:String, url:String):T{
+    inline fun <reified T> post(text:String, url:String,header:Map<String,String>?=null):T{
         val client= OkHttpClient()
-        val formBody = FormBody.Builder()
+        val formBodyBuilder = FormBody.Builder()
                 .add("text",text)
-                .build()
+        header?.forEach{
+            formBodyBuilder
+                .add(it.key,it.value)
+        }
+        val formBody = formBodyBuilder.build()
         val requestBody = Request.Builder()
                 .url(url)
                 .post(formBody)

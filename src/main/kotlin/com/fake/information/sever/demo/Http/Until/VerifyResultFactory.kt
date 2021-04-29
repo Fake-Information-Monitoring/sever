@@ -19,6 +19,10 @@ object VerifyResultFactory {
                 text = text,
                 url = AISeverURL.ZOMBIES_URL.toString()
             )
+            TokenType.DIY_MODEL.toString() -> DemoOkhttp.post<VerifyBaseModel<VerifyBaseModel.RumorsModel>>(
+                text = text,
+                url = AISeverURL.MODEL_URL.toString()
+            )
             else -> throw NullPointerException("不存在该类型")
         }
     }

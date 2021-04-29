@@ -2,6 +2,7 @@ package com.fake.information.sever.demo.Http.Until
 
 enum class AISeverURL(var url: String) {
     ROOT_URL("http://127.0.0.1:4336"),
+    TRAIN_URL(""),
     RUMOR_URL("$ROOT_URL/VerifyRumor") {
         override fun toString(): String {
             return this.url
@@ -16,6 +17,10 @@ enum class AISeverURL(var url: String) {
         override fun toString(): String {
             return this.url
         }
+    },
+    MODEL_URL("$TRAIN_URL/") {
+        override fun toString(): String {
+            return this.url
+        }
     };
-
 }
