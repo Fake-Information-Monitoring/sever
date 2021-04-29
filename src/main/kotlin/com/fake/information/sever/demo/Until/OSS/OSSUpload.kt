@@ -26,8 +26,10 @@ class OSSUpload {
         val format = SimpleDateFormat("yyyy-MM-dd")
         val dateStr = format.format(Date())
 
-        fun upload(file: MultipartFile?): String? {
-            val ossClient = OSSClient(endpoint, accessKeyId, accessKeySecret)
+
+        fun upload(input: InputStream?,name:String): String? {
+            val ossClient = OSSConfiguration().getOSSClient()
+            ossClient.clientConfiguration.socketTimeout = 100000
             try {
                 //容器不存在，就创建
                 if (!ossClient.doesBucketExist(bucketName)) {
@@ -37,11 +39,11 @@ class OSSUpload {
                     ossClient.createBucket(createBucketRequest)
                 }
                 //修改文件名字
-                val fileName = "$fileHost/${dateStr}/${file!!.name}"
+                val fileName = "$fileHost/${dateStr}/${name}"
                 //创建文件路径
                 val fileUrl = "https://$bucketName.$endpoint/$fileName"
                 //上传文件
-                val input: InputStream = ByteArrayInputStream(file!!.bytes)
+
                 val result = ossClient.putObject(
                     PutObjectRequest(
                         bucketName!!,

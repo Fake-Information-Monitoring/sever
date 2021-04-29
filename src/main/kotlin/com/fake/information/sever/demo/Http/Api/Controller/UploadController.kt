@@ -16,6 +16,7 @@ import io.swagger.annotations.ApiOperation
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
+import java.io.ByteArrayInputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
@@ -61,8 +62,9 @@ class UploadController {
         val key = CDKey()
         key.key = UUID.getUuid()
         val filename = "${key.key}.txt"
+        val input = ByteArrayInputStream(file.bytes)
         asyncService.asyncTask {
-            OSSUpload.upload(file)
+            OSSUpload.upload(input, filename)
             println("上传成功！")
             val commit = Commit()
             commit.user = user
@@ -94,9 +96,9 @@ class UploadController {
     ): Result<String> {
         val id = redisTemplate.getUserId(session)
         val user = userRepository.getOne(id)
-        user.avatar = OSSUpload.upload(img)
+        user.avatar = img.originalFilename?.let { OSSUpload.upload(img.inputStream, it) }
         userRepository.save(user)
-        return Result<String>(
+        return Result(
             success = true,
             code = StatusCode.Status200.statusCode,
             msg = "OK",
