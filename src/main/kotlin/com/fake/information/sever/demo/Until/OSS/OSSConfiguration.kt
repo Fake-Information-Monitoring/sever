@@ -27,18 +27,21 @@ class OSSConfiguration : InitializingBean {
     @Value("\${oss.file.bucketname}")
     private val oss_file_bucketname: String? = null
 
-    companion object{
+    companion object {
         public var OSS_END_POINT: String? = null
         public var OSS_ACCESS_KEY_ID: String? = null
         public var OSS_ACCESS_KEY_SECRET: String? = null
         public var OSS_BUCKET_NAME: String? = null
         public var OSS_FILE_HOST: String? = null
     }
+
     @Bean
     @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
     public fun getOSSClient(): OSSClient {
+
         return OSSClient(OSS_END_POINT, OSS_ACCESS_KEY_ID, OSS_ACCESS_KEY_SECRET)
     }
+
     @Throws(Exception::class)
     override fun afterPropertiesSet() {
         OSS_END_POINT = oss_file_endpoint
@@ -46,5 +49,12 @@ class OSSConfiguration : InitializingBean {
         OSS_ACCESS_KEY_SECRET = oss_file_keysecret
         OSS_BUCKET_NAME = oss_file_bucketname
         OSS_FILE_HOST = oss_file_filehost
+        println(
+            OSS_END_POINT +
+                    OSS_ACCESS_KEY_ID +
+                    OSS_ACCESS_KEY_SECRET +
+                    OSS_BUCKET_NAME +
+                    OSS_FILE_HOST
+        )
     }
 }
