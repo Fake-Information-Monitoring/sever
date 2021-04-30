@@ -56,12 +56,13 @@ class UploadController {
         @RequestHeader("uuid") uuid: String,
         @RequestHeader("type") type: String
     ) {
+        val b = file.bytes
         asyncService.asyncTask {
             val key = cdKeyRepository.findByKey(uuid)
             val model = DIYModel()
             model.key = key
             model.type = type
-            model.model = file.bytes
+            model.model = b
             model.status = 1
             key.model = model
             cdKeyRepository.save(key)
