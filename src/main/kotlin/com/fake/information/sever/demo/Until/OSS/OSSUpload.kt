@@ -26,7 +26,6 @@ class OSSUpload {
         val format = SimpleDateFormat("yyyy-MM-dd")
         val dateStr = format.format(Date())
 
-
         fun upload(input: InputStream?,name:String): String? {
             val ossClient = OSSConfiguration().getOSSClient()
             ossClient.clientConfiguration.socketTimeout = 100000
