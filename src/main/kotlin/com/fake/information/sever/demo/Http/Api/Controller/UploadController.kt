@@ -56,15 +56,16 @@ class UploadController {
         @RequestHeader("uuid") uuid: String,
         @RequestHeader("type") type: String
     ) {
-//        asyncService.asyncTask {
-        val key = cdKeyRepository.findByKey(uuid)
-        val model = DIYModel()
-        model.key = key
-        model.type = type
-        model.model = file.bytes
-        key.model = model
-        cdKeyRepository.save(key)
-//        }
+        asyncService.asyncTask {
+            val key = cdKeyRepository.findByKey(uuid)
+            val model = DIYModel()
+            model.key = key
+            model.type = type
+            model.model = file.bytes
+            model.status = 1
+            key.model = model
+            cdKeyRepository.save(key)
+        }
     }
 
     @PostMapping("/uploadFile")
@@ -97,9 +98,12 @@ class UploadController {
             val model = DIYModel()
             model.type = type
             model.key = key
+            model.status = -1
             commit.commitTime = Date()
             user.commitList.add(commit)
             userRepository.save(user)
+            redisTemplate.setRedis(key.key + "nums", 0)
+            redisTemplate.setRedis(key.key + "type", key.type.toString())
             post(
                 header = mapOf(
                     "url" to "https://${OSSUpload.bucketName}.${OSSUpload.endpoint}/" +
@@ -112,7 +116,7 @@ class UploadController {
         return Result(
             success = true,
             code = StatusCode.Status200.statusCode,
-            msg = "正在上传，请等待三秒左右,若长时间未成功请重新提交",
+            msg = key.key.toString(),
             data = "https://${OSSUpload.bucketName}.${OSSUpload.endpoint}/" +
                     "${OSSUpload.fileHost}/${OSSUpload.dateStr}/${filename}"
         )

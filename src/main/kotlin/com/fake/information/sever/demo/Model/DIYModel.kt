@@ -1,11 +1,13 @@
 package com.fake.information.sever.demo.Model
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import org.springframework.web.multipart.MultipartFile
 import java.io.File
 import javax.persistence.*
 
 @Entity
 @Table(name = "model")
+@JsonIgnoreProperties(value = ["model","key"])
 class DIYModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,4 +23,7 @@ class DIYModel {
 
     @Column(name = "type")
     var type: String? = null
+
+    @Column(name = "status")
+    var status: Int? = null
 }

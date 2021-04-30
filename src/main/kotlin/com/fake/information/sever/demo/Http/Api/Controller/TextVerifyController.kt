@@ -58,7 +58,7 @@ class TextVerifyController {
         if (!verifyToken(token)) {
             throw TokenizerException("该UUID已失效,请申请新UUID")
         }
-        var requestType = redisTemplate.getRedis(token).toString() ?: throw IllegalArgumentException("无效的UUID")
+        var requestType = redisTemplate.getRedis(token+"type").toString() ?: throw IllegalArgumentException("无效的UUID")
         if (requestType == TokenType.TEST.toString()) {
             requestType = type
         }

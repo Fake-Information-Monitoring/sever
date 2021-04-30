@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 import com.fake.information.sever.demo.Http.Api.Response.Result
 import com.fake.information.sever.demo.Model.PersonCertified
+import com.fake.information.sever.demo.Model.User
 import com.fake.information.sever.demo.Until.AsyncTask.AsyncService
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
@@ -54,7 +55,7 @@ class UserInfoController {
         if (!Check.checkCardId(cardId)) {
             throw IllegalArgumentException("身份证号格式有误")
         }
-//        asyncService.asyncTask{
+        asyncService.asyncTask{
         val work = param["work"].toString()
         val name = param["name"].toString()
         val personCertified = PersonCertified()
@@ -64,7 +65,7 @@ class UserInfoController {
         personCertified.work = work
         user.personCertified = personCertified
         personCertifiedRepository.save(personCertified)
-//        }
+        }
         return Result(
             success = true,
             code = StatusCode.Status200.statusCode,
@@ -117,7 +118,18 @@ class UserInfoController {
             )
         }
     }
-
+    @GetMapping("/getUserKey")
+    @ApiOperation("获取用户Key")
+    fun getKey(
+        session: HttpSession
+    ): Result<String> {
+        val user: User = userRepository.getOne(redisTemplate.getUserId(session))
+        return Result<String>(
+            success = true,
+            code = StatusCode.Status200.statusCode,
+            msg = user.keyList
+        )
+    }
     @ExperimentalStdlibApi
     @GetMapping("/commit")
     @ApiOperation("获取某个特定的提交验证记录")
