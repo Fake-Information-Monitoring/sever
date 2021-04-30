@@ -25,5 +25,5 @@ class DIYModel {
     var type: String? = null
 
     @Column(name = "status")
-    var status: Int? = null
+    var status: Int = -1
 }
