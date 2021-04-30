@@ -63,6 +63,6 @@ class TextVerifyController {
             requestType = type
         }
         val text = params["text"].toString()
-        return VerifyResultFactory.getResult(requestType, text)
+        return VerifyResultFactory.getResult(requestType, text,token)
     }
 }

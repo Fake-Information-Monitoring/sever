@@ -1,15 +1,18 @@
 package com.fake.information.sever.demo.Http.Api.Controller
 
 import com.fake.information.sever.demo.Config.Redis.FakeNewsRedisTemplate
+import com.fake.information.sever.demo.DTO.CDKeyRepository
 import com.fake.information.sever.demo.DTO.UserRepository
 import com.fake.information.sever.demo.Http.Api.Response.Result
 import com.fake.information.sever.demo.Http.Api.Response.StatusCode
-import com.fake.information.sever.demo.Http.Api.Response.TokenType
+import com.fake.information.sever.demo.Http.Until.AISeverURL
 import com.fake.information.sever.demo.Model.CDKey
 import com.fake.information.sever.demo.Model.Commit
+import com.fake.information.sever.demo.Model.DIYModel
 import com.fake.information.sever.demo.Until.AsyncTask.AsyncService
 import com.fake.information.sever.demo.Until.JWT.TokenConfig
 import com.fake.information.sever.demo.Until.OSS.OSSUpload
+import com.fake.information.sever.demo.Until.Requests.DemoOkhttp.post
 import com.fake.information.sever.demo.Until.UUID.UUID
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
@@ -17,11 +20,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 import java.io.ByteArrayInputStream
-import java.io.File
-import java.io.FileOutputStream
 import java.util.*
 import javax.servlet.http.HttpSession
-import java.text.SimpleDateFormat
 
 
 @RestController
@@ -35,6 +35,9 @@ class UploadController {
     private lateinit var redisTemplate: FakeNewsRedisTemplate
 
     @Autowired
+    private lateinit var cdKeyRepository: CDKeyRepository
+
+    @Autowired
     private lateinit var asyncService: AsyncService
 
     fun verifyToken(token: String): Boolean {
@@ -44,6 +47,24 @@ class UploadController {
             return false
         }
         return true
+    }
+
+    @PostMapping("/addTrainModel")
+    fun postAddTrainModel(
+        @RequestBody file: MultipartFile,
+        session: HttpSession,
+        @RequestHeader("uuid") uuid: String,
+        @RequestHeader("type") type: String
+    ) {
+//        asyncService.asyncTask {
+        val key = cdKeyRepository.findByKey(uuid)
+        val model = DIYModel()
+        model.key = key
+        model.type = type
+        model.model = file.bytes
+        key.model = model
+        cdKeyRepository.save(key)
+//        }
     }
 
     @PostMapping("/uploadFile")
@@ -73,11 +94,20 @@ class UploadController {
             key.user = user
             key.type = "Model"
             commit.indexOSSUrl = filename
-            redisTemplate.setRedis(filename, TokenType.DIY_MODEL.toString())
-            redisTemplate.setRedis(filename + "nums", 0)
+            val model = DIYModel()
+            model.type = type
+            model.key = key
             commit.commitTime = Date()
             user.commitList.add(commit)
             userRepository.save(user)
+            post(
+                header = mapOf(
+                    "url" to "https://${OSSUpload.bucketName}.${OSSUpload.endpoint}/" +
+                            "${OSSUpload.fileHost}/${OSSUpload.dateStr}/${filename}",
+                    "type" to type,
+                    "uuid" to key.key.toString()
+                ), url = AISeverURL.TRAIN_URL.toString()
+            )
         }
         return Result(
             success = true,

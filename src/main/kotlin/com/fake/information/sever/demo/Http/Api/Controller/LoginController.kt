@@ -96,8 +96,8 @@ class LoginController {
             checkVerifyCode(session, verify)
             val tempUser = userRepository.findByEmail(account)
             Check.checkAccount(VerifyCode(redisTemplate), session, tempUser, password)
+            request.cookies[0].maxAge = 2592000
             asyncService.asyncTask {
-                request.cookies[0].maxAge = 2592000
                 redisTemplate.setRedis(tempUser?.id.toString(), StatusCode.Status200.statusCode)
                 redisTemplate.setRedis(session.id, StatusCode.Status200.statusCode)
                 tempUser?.id?.let { redisTemplate.setRedis(session.id + "user", it) }

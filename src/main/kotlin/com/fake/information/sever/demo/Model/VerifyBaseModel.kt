@@ -9,7 +9,7 @@ data class VerifyBaseModel<T>(
     val success: Boolean = false,
     @SerializedName("data")
     val data: T,
-    ) {
+) {
     data class RumorsModel(
         @SerializedName("谣言")
         val rumor: Double = 0.0,
@@ -17,6 +17,19 @@ data class VerifyBaseModel<T>(
         val nonRumor: Double = 0.0
     )
 
+    data class DIYModel(
+        @SerializedName("result")
+        val result: Result,
+        @SerializedName("text")
+        val text: String = ""
+    ) {
+        data class Result(
+            @SerializedName("words")
+            val words: List<String>?,
+            @SerializedName("type")
+            val type: String = ""
+        )
+    }
 
     data class SensitiveModel(
         @SerializedName("result")

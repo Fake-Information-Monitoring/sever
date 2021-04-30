@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import javax.persistence.*
 
 @Entity
-@Table(name="key")
+@Table(name="key",indexes = [Index(columnList = "key_str")])
 @JsonIgnoreProperties(value = ["user"])
 class CDKey {
     @Id

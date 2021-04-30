@@ -5,24 +5,36 @@ import com.fake.information.sever.demo.Model.VerifyBaseModel
 import com.fake.information.sever.demo.Until.Requests.DemoOkhttp
 
 object VerifyResultFactory {
-    fun getResult(type: String, text: String): VerifyBaseModel<*> {
+    fun getResult(type: String, text: String, UUID: String = ""): VerifyBaseModel<*> {
         return when (type) {
             TokenType.RUMORS.toString() -> DemoOkhttp.post<VerifyBaseModel<VerifyBaseModel.RumorsModel>>(
-                text = text,
+                header = mapOf(
+                    "text" to text
+                ),
                 url = AISeverURL.RUMOR_URL.toString()
             )
             TokenType.SENSITIVE_WORD.toString() -> DemoOkhttp.post<VerifyBaseModel<VerifyBaseModel.SensitiveModel>>(
-                text = text,
+                header = mapOf(
+                    "text" to text
+                ),
                 url = AISeverURL.SENSITIVE_WORD_URL.toString()
             )
             TokenType.ZOMBIES.toString() -> DemoOkhttp.post<VerifyBaseModel<VerifyBaseModel.ZombiesModel>>(
-                text = text,
+                header = mapOf(
+                    "text" to text
+                ),
                 url = AISeverURL.ZOMBIES_URL.toString()
             )
-            TokenType.DIY_MODEL.toString() -> DemoOkhttp.post<VerifyBaseModel<VerifyBaseModel.RumorsModel>>(
-                text = text,
-                url = AISeverURL.MODEL_URL.toString()
-            )
+            TokenType.DIY_MODEL.toString() -> {
+                val body = mapOf(
+                    "uuid" to UUID,
+                    "text" to text
+                )
+                DemoOkhttp.post<VerifyBaseModel<VerifyBaseModel.DIYModel>>(
+                    url = AISeverURL.MODEL_URL.toString(),
+                    header = body
+                )
+            }
             else -> throw NullPointerException("不存在该类型")
         }
     }
