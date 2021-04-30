@@ -18,40 +18,36 @@ import java.util.*
 class OSSUpload {
 
     companion object {
-        val endpoint = OSSConfiguration.OSS_END_POINT
-        val accessKeyId = OSSConfiguration.OSS_ACCESS_KEY_ID
-        val accessKeySecret = OSSConfiguration.OSS_ACCESS_KEY_SECRET
-        val bucketName: String? = OSSConfiguration.OSS_BUCKET_NAME
-        val fileHost = OSSConfiguration.OSS_FILE_HOST
         val format = SimpleDateFormat("yyyy-MM-dd")
         val dateStr = format.format(Date())
 
-        fun upload(input: InputStream?,name:String): String? {
-            val ossClient = OSSConfiguration().getOSSClient()
+        fun upload(input: InputStream?, name: String): String? {
+            val ossConfiguration = OSSConfiguration()
+            val ossClient = ossConfiguration.getOSSClient()
             ossClient.clientConfiguration.socketTimeout = 100000
             try {
                 //容器不存在，就创建
-                if (!ossClient.doesBucketExist(bucketName)) {
-                    ossClient.createBucket(bucketName)
-                    val createBucketRequest = CreateBucketRequest(bucketName)
+                if (!ossClient.doesBucketExist(OSSConfiguration.OSS_BUCKET_NAME)) {
+                    ossClient.createBucket(OSSConfiguration.OSS_BUCKET_NAME)
+                    val createBucketRequest = CreateBucketRequest(OSSConfiguration.OSS_BUCKET_NAME)
                     createBucketRequest.cannedACL = CannedAccessControlList.PublicRead
                     ossClient.createBucket(createBucketRequest)
                 }
                 //修改文件名字
-                val fileName = "$fileHost/${dateStr}/${name}"
+                val fileName = "${OSSConfiguration.OSS_FILE_HOST}/${dateStr}/${name}"
                 //创建文件路径
-                val fileUrl = "https://$bucketName.$endpoint/$fileName"
+                val fileUrl = "https://${OSSConfiguration.OSS_BUCKET_NAME}${OSSConfiguration.OSS_END_POINT}/$fileName"
                 //上传文件
 
                 val result = ossClient.putObject(
                     PutObjectRequest(
-                        bucketName!!,
+                        OSSConfiguration.OSS_BUCKET_NAME!!,
                         fileName,
                         input
                     )
                 )
                 //设置权限 这里是公开读
-                ossClient.setBucketAcl(bucketName, CannedAccessControlList.PublicRead)
+                ossClient.setBucketAcl(OSSConfiguration.OSS_BUCKET_NAME, CannedAccessControlList.PublicRead)
                 if (null != result) {
                     return fileUrl
                 }

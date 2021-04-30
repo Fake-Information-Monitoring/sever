@@ -11,6 +11,7 @@ import com.fake.information.sever.demo.Model.Commit
 import com.fake.information.sever.demo.Model.DIYModel
 import com.fake.information.sever.demo.Until.AsyncTask.AsyncService
 import com.fake.information.sever.demo.Until.JWT.TokenConfig
+import com.fake.information.sever.demo.Until.OSS.OSSConfiguration
 import com.fake.information.sever.demo.Until.OSS.OSSUpload
 import com.fake.information.sever.demo.Until.Requests.DemoOkhttp.post
 import com.fake.information.sever.demo.Until.UUID.UUID
@@ -107,8 +108,8 @@ class UploadController {
             redisTemplate.setRedis(key.key + "type", key.type.toString())
             post(
                 header = mapOf(
-                    "url" to "https://${OSSUpload.bucketName}.${OSSUpload.endpoint}/" +
-                            "${OSSUpload.fileHost}/${OSSUpload.dateStr}/${filename}",
+                    "url" to "https://${OSSConfiguration.OSS_BUCKET_NAME}.${OSSConfiguration.OSS_END_POINT}/" +
+                            "${OSSConfiguration.OSS_FILE_HOST}/${OSSUpload.dateStr}/${filename}",
                     "type" to type,
                     "uuid" to key.key.toString()
                 ), url = AISeverURL.TRAIN_URL.toString()
@@ -118,8 +119,8 @@ class UploadController {
             success = true,
             code = StatusCode.Status200.statusCode,
             msg = key.key.toString(),
-            data = "https://${OSSUpload.bucketName}.${OSSUpload.endpoint}/" +
-                    "${OSSUpload.fileHost}/${OSSUpload.dateStr}/${filename}"
+            data = "https://${OSSConfiguration.OSS_BUCKET_NAME}.${OSSConfiguration.OSS_END_POINT}/" +
+                    "${OSSConfiguration.OSS_FILE_HOST}/${OSSUpload.dateStr}/${filename}",
         )
     }
 

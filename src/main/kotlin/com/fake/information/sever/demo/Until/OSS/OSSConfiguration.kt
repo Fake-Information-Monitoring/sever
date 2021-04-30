@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Scope
 
 @Component
-@Configuration
 class OSSConfiguration : InitializingBean {
 
     @Value("\${oss.file.endpoint}")
@@ -38,7 +37,7 @@ class OSSConfiguration : InitializingBean {
     @Bean
     @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
     public fun getOSSClient(): OSSClient {
-        return OSSClient(OSSUpload.endpoint, OSSUpload.accessKeyId, OSSUpload.accessKeySecret)
+        return OSSClient(OSS_END_POINT, OSS_ACCESS_KEY_ID, OSS_ACCESS_KEY_SECRET)
     }
     @Throws(Exception::class)
     override fun afterPropertiesSet() {
