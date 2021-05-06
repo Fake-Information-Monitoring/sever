@@ -49,6 +49,8 @@ class CDKeyController {
         key.user = user
         val name = params["name"].toString()
         val type = params["type"].toString()
+        val enterpriseName = params["enterpriseName"]?.toString()
+        key.enterpriseName= enterpriseName
         key.type = type
         key.name = name
         if (!TokenType.hasValue(type)) {
