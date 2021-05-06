@@ -19,7 +19,7 @@ class VerifyCode(private var redisTemplate: FakeNewsRedisTemplate) {
     fun createCode(session: HttpSession, subject: String): LineCaptcha {
 
         val captcha: LineCaptcha? = CaptchaUtil
-                .createLineCaptcha(200, 90)
+                .createLineCaptcha(150, 60)
             redisTemplate.setRedis(session.id + subject, captcha!!)
             redisTemplate.setTime(
                 session.id + subject,
