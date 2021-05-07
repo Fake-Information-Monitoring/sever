@@ -22,8 +22,8 @@ class DIYModel {
     var model: ByteArray? = null
 
     @Column(name = "type")
-    var type: String? = null
+    var modelName: String? = null
 
     @Column(name = "status")
-    var status: Int = -1
+    var trainStatus: Int = -1
 }

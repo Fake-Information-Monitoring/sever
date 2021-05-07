@@ -14,7 +14,7 @@ class CDKey {
     @Column(name = "key_str",nullable = false)
     var key:String? = null
     @Column(name = "name",nullable = false)
-    var name:String? = null
+    var keyName:String? = null
     @ManyToOne(targetEntity = User::class,cascade = [CascadeType.ALL],optional = false)
     @JoinColumn(name = "user_id",referencedColumnName = "id")
     var user:User? = null
@@ -22,7 +22,7 @@ class CDKey {
         return this.key!!
     }
     @Column(name = "type",nullable = false)
-    var type: String? = null
+    var keyType: String? = null
 
     @OneToOne(cascade = [CascadeType.ALL], mappedBy = "key")
     var model: DIYModel? = null
