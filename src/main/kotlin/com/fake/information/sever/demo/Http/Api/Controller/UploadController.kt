@@ -62,9 +62,9 @@ class UploadController {
             val key = cdKeyRepository.findByKey(uuid)
             val model = DIYModel()
             model.key = key
-            model.type = type
+            model.modelName = type
             model.model = b
-            model.status = 1
+            model.trainStatus = 1
             key.model = model
             cdKeyRepository.save(key)
         }
@@ -92,20 +92,20 @@ class UploadController {
             println("上传成功！")
             val commit = Commit()
             commit.user = user
-            key.name = appName
+            key.keyName = appName
             user.keyList.add(key)
             key.user = user
-            key.type = "Model"
+            key.keyType = "Model"
             commit.indexOSSUrl = filename
             val model = DIYModel()
-            model.type = type
+            model.modelName = type
             model.key = key
-            model.status = -1
+            model.trainStatus = -1
             commit.commitTime = Date()
             user.commitList.add(commit)
             userRepository.save(user)
             redisTemplate.setRedis(key.key + "nums", 0)
-            redisTemplate.setRedis(key.key + "type", key.type.toString())
+            redisTemplate.setRedis(key.key + "type", key.keyType.toString())
             post(
                 header = mapOf(
                     "url" to "https://${OSSConfiguration.OSS_BUCKET_NAME}.${OSSConfiguration.OSS_END_POINT}/" +

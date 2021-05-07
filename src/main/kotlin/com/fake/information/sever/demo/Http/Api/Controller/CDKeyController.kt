@@ -51,8 +51,8 @@ class CDKeyController {
         val type = params["type"].toString()
         val enterpriseName = params["enterpriseName"]?.toString()
         key.enterpriseName= enterpriseName
-        key.type = type
-        key.name = name
+        key.keyType = type
+        key.keyName = name
         if (!TokenType.hasValue(type)) {
             throw IllegalAccessException("不存在该类别")
         }
