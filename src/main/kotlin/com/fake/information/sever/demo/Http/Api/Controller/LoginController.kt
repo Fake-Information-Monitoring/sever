@@ -58,7 +58,7 @@ class LoginController {
         )
     }
 
-    @DeleteMapping("/logout")
+    @GetMapping("/logout")
     @ApiOperation("注销登录")
     fun deleteLogout(
         request: HttpServletRequest,

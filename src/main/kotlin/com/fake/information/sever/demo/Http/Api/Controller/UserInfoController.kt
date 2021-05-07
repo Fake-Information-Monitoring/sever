@@ -55,16 +55,17 @@ class UserInfoController {
         if (!Check.checkCardId(cardId)) {
             throw IllegalArgumentException("身份证号格式有误")
         }
-        asyncService.asyncTask{
         val work = param["work"].toString()
         val name = param["name"].toString()
         val personCertified = PersonCertified()
-        personCertified.user = user
-        personCertified.name = name
-        personCertified.cardId = cardId
-        personCertified.work = work
-        user.personCertified = personCertified
-        personCertifiedRepository.save(personCertified)
+        asyncService.asyncTask {
+            personCertified.user = user
+            personCertified.name = name
+            personCertified.cardId = cardId
+            personCertified.work = work
+            user.personCertified = personCertified
+            userRepository.save(user)
+            personCertifiedRepository.save(personCertified)
         }
         return Result(
             success = true,
@@ -118,6 +119,7 @@ class UserInfoController {
             )
         }
     }
+
     @GetMapping("/getUserKey")
     @ApiOperation("获取用户Key")
     fun getKey(
@@ -130,6 +132,7 @@ class UserInfoController {
             msg = user.keyList
         )
     }
+
     @ExperimentalStdlibApi
     @GetMapping("/commit")
     @ApiOperation("获取某个特定的提交验证记录")
