@@ -37,7 +37,7 @@ class User : Serializable {
 
 
     @Column(name = "ceritified_id", nullable = true)
-    var ceritifiedID: Int? = null
+    var ceritifiedID: Int? = -1
 
     @Column(name = "ceritified_type", nullable = true)
     var ceritifiedType: Int? = null
@@ -48,6 +48,10 @@ class User : Serializable {
 
     @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
     val commitList: MutableList<Commit> = LinkedList()
+
+    @OneToOne(cascade = [CascadeType.ALL])
+    @JoinColumn(name = "ceritified_admin",nullable = true)
+    var admin:Admin?=null
 
     @Column(name = "avatar_id", nullable = true)
     var avatar: String? = null

@@ -1,15 +1,13 @@
 package com.fake.information.sever.demo.Http.Api.Controller
 
-import com.fake.information.sever.demo.DTO.CommitRepository
-import com.fake.information.sever.demo.DTO.UserRepository
 import com.fake.information.sever.demo.Config.Redis.FakeNewsRedisTemplate
 import com.fake.information.sever.demo.Controller.tools.Check
-import com.fake.information.sever.demo.DTO.CorporateCertifiedRepository
-import com.fake.information.sever.demo.DTO.PersonCertifiedRepository
+import com.fake.information.sever.demo.DTO.*
 import com.fake.information.sever.demo.Http.Api.Response.StatusCode
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 import com.fake.information.sever.demo.Http.Api.Response.Result
+import com.fake.information.sever.demo.Model.CertifiedPool
 import com.fake.information.sever.demo.Model.CorporateCertified
 import com.fake.information.sever.demo.Model.PersonCertified
 import com.fake.information.sever.demo.Model.User
@@ -22,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile
 import javax.security.auth.login.AccountNotFoundException
 import javax.servlet.http.HttpSession
 import javax.websocket.server.PathParam
+import kotlin.coroutines.coroutineContext
 
 @Api(value = "用户信息管理接口")
 @RestController
@@ -43,6 +42,9 @@ class UserInfoController {
     private lateinit var coroutinesRepository: CorporateCertifiedRepository
 
     @Autowired
+    private lateinit var certificatePoolRepository: CertifiedPoolRepository
+
+    @Autowired
     private lateinit var asyncService: AsyncService
 
     @PostMapping("/corporateCertified")
@@ -57,11 +59,11 @@ class UserInfoController {
         val user = userRepository.findById(
             redisTemplate.getUserId(session)
         ).get()
-        if (user.ceritifiedID != null) {
+        if (user.ceritifiedID != -1 && user.ceritifiedID != null) {
             throw AccountNotFoundException("您已认证")
         }
         val corporate = CorporateCertified()
-        asyncService.asyncTask {
+//        asyncService.asyncTask {
             corporate.license = license.originalFilename?.let { OSSUpload.upload(license.inputStream, it) }
             corporate.email = email
             corporate.name = name
@@ -71,12 +73,15 @@ class UserInfoController {
             user.ceritifiedType = 0
             user.ceritifiedID = corporate.id
             userRepository.save(user)
-        }
-
+            val certifiedPool = CertifiedPool()
+            certifiedPool.setUser(user)
+            certificatePoolRepository.save(certifiedPool)
+//        }
         return Result(
             success = true,
             code = StatusCode.Status200.statusCode,
-            msg = "success"
+            msg = "success",
+            data = "认证已提交，请等待审核"
         )
     }
 
@@ -89,7 +94,7 @@ class UserInfoController {
         val user = userRepository.findById(
             redisTemplate.getUserId(session)
         ).get()
-        if (user.ceritifiedID != null) {
+        if (user.ceritifiedID != -1 && user.ceritifiedID != null) {
             throw AccountNotFoundException("您已认证")
         }
 
@@ -109,11 +114,15 @@ class UserInfoController {
             user.ceritifiedID = personCertified.id
             user.ceritifiedType = 1
             userRepository.save(user)
+            val certifiedPool = CertifiedPool()
+            certifiedPool.setUser(user)
+            certificatePoolRepository.save(certifiedPool)
         }
         return Result(
             success = true,
             code = StatusCode.Status200.statusCode,
-            msg = "success"
+            msg = "success",
+            data = "认证已提交，请等待审核"
         )
     }
 

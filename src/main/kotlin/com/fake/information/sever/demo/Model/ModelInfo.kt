@@ -7,6 +7,7 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "model_info")
+
 @JsonIgnoreProperties(value = ["model","key"])
 class ModelInfo {
     @Id
