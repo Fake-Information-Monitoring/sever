@@ -36,8 +36,11 @@ class User : Serializable {
     var lastActive: Date? = null
 
 
-    @OneToOne(cascade = [CascadeType.ALL], mappedBy = "user")
-    var personCertified: PersonCertified? = null
+    @Column(name = "ceritified_id", nullable = true)
+    var ceritifiedID: Int? = null
+
+    @Column(name = "ceritified_type", nullable = true)
+    var ceritifiedType: Int? = null
 
     @Fetch(FetchMode.SUBSELECT)
     @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)

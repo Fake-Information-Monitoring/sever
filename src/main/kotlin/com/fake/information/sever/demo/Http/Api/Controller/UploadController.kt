@@ -8,7 +8,7 @@ import com.fake.information.sever.demo.Http.Api.Response.StatusCode
 import com.fake.information.sever.demo.Http.Until.AISeverURL
 import com.fake.information.sever.demo.Model.CDKey
 import com.fake.information.sever.demo.Model.Commit
-import com.fake.information.sever.demo.Model.DIYModel
+import com.fake.information.sever.demo.Model.ModelInfo
 import com.fake.information.sever.demo.Until.AsyncTask.AsyncService
 import com.fake.information.sever.demo.Until.JWT.TokenConfig
 import com.fake.information.sever.demo.Until.OSS.OSSConfiguration
@@ -57,13 +57,13 @@ class UploadController {
         @RequestHeader("uuid") uuid: String,
         @RequestHeader("type") type: String
     ) {
-        val b = file.bytes
+        val b:ByteArray = file.bytes
         asyncService.asyncTask {
             val key = cdKeyRepository.findByKey(uuid)
-            val model = DIYModel()
+            val model = ModelInfo()
             model.key = key
             model.modelName = type
-            model.model = b
+            model.setModel(b)
             model.trainStatus = 1
             key.model = model
             cdKeyRepository.save(key)
@@ -97,7 +97,7 @@ class UploadController {
             key.user = user
             key.keyType = "Model"
             commit.indexOSSUrl = filename
-            val model = DIYModel()
+            val model = ModelInfo()
             model.modelName = type
             model.key = key
             model.trainStatus = -1

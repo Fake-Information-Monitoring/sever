@@ -6,9 +6,9 @@ import java.io.File
 import javax.persistence.*
 
 @Entity
-@Table(name = "model")
+@Table(name = "model_info")
 @JsonIgnoreProperties(value = ["model","key"])
-class DIYModel {
+class ModelInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long = 0
@@ -16,14 +16,18 @@ class DIYModel {
     @OneToOne(cascade = [CascadeType.ALL])
     @JoinColumn(name = "key_id")
     var key: CDKey? = null
-    @Lob
-    @Basic(fetch = FetchType.LAZY)
-    @Column(name = "model")
-    var model: ByteArray? = null
+
+    @OneToOne(cascade = [CascadeType.ALL], mappedBy = "modelInfo")
+    var modelId: ModelData? = null
 
     @Column(name = "type")
     var modelName: String? = null
 
     @Column(name = "status")
     var trainStatus: Int = -1
+
+    fun setModel(model:ByteArray){
+        this.modelId = ModelData()
+        this.modelId!!.model = model
+    }
 }

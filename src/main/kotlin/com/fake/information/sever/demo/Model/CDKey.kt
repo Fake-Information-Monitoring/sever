@@ -25,7 +25,7 @@ class CDKey {
     var keyType: String? = null
 
     @OneToOne(cascade = [CascadeType.ALL], mappedBy = "key")
-    var model: DIYModel? = null
+    var model: ModelInfo? = null
     
     @Column(name = "enterprise_name",nullable = true)
     var enterpriseName:String? = null

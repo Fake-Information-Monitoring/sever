@@ -40,7 +40,7 @@ class CDKeyController {
         }
         val userId = redisTemplate.getRedis(session.id + "user").toString().toInt()
         val user = userRepository.getOne(userId)
-        if (user.personCertified == null){
+        if (user.ceritifiedID == null){
             throw IllegalAccessException("请先进行认证")
         }
         val key = CDKey()
