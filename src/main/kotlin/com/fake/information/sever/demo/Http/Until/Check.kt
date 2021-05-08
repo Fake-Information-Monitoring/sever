@@ -52,7 +52,7 @@ object Check {
         }
         if (info != null) {
             verifyCode.createCode(session, "verifyCode")
-            throw IllegalArgumentException(info + "请输入验证码")
+            throw IllegalArgumentException(info)
         }
         return true
     }
