@@ -1,14 +1,14 @@
 package com.fake.information.sever.demo.Http.Api.Controller
 
 import cn.hutool.extra.tokenizer.TokenizerException
+import com.fake.information.sever.demo.Config.Redis.FakeNewsRedisTemplate
 import com.fake.information.sever.demo.Http.Api.Response.TokenType
 import com.fake.information.sever.demo.Http.Until.VerifyResultFactory
 import com.fake.information.sever.demo.Model.VerifyBaseModel
-import com.fake.information.sever.demo.Config.Redis.FakeNewsRedisTemplate
-import com.fake.information.sever.demo.Until.AsyncTask.AsyncService
 import com.fake.information.sever.demo.Until.JWT.TokenConfig
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
+import org.springframework.amqp.rabbit.AsyncRabbitTemplate
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpSession
@@ -19,7 +19,6 @@ import javax.servlet.http.HttpSession
 class TextVerifyController {
     @Autowired
     private lateinit var redisTemplate: FakeNewsRedisTemplate
-
     fun verifyToken(token: String): Boolean {
         val count = redisTemplate.getRedis(token + "nums").toString().toInt()
         redisTemplate.setRedis(token + "nums", count + 1)

@@ -1,4 +1,4 @@
-package com.fake.information.sever.demo.Config
+package com.fake.information.sever.demo.Config.Swagger
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

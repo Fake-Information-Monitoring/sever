@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "com.fake.information.sever"
-version = "0.0.1-SNAPSHOT"
+version = "v1.0"
 java.sourceCompatibility = JavaVersion.VERSION_11
 
 repositories {
@@ -37,6 +37,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-freemarker")
     implementation("org.springframework.boot:spring-boot-starter-test")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2")
+    implementation("org.projectlombok:lombok:1.18.18")
+    implementation("org.projectlombok:lombok:1.18.18")
     runtimeOnly("mysql:mysql-connector-java")//Mysql Driver
     implementation("io.jsonwebtoken:jjwt-api:0.11.2") // jjwt
     implementation("io.jsonwebtoken:jjwt-impl:0.11.2") // jjwt
