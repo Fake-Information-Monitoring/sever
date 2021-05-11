@@ -1,7 +1,7 @@
 package com.fake.information.sever.demo.Http.Api.Controller
 
 import com.fake.information.sever.demo.Controller.tools.Check
-import com.fake.information.sever.demo.DTO.UserRepository
+import com.fake.information.sever.demo.DAO.UserRepository
 import com.fake.information.sever.demo.Config.Redis.FakeNewsRedisTemplate
 import com.fake.information.sever.demo.Until.EmailUntil.MailService
 import com.fake.information.sever.demo.Http.Api.Response.StatusCode

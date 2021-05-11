@@ -1,8 +1,8 @@
 package com.fake.information.sever.demo.Http.Api.Controller
 
 import com.fake.information.sever.demo.Config.Redis.FakeNewsRedisTemplate
-import com.fake.information.sever.demo.DTO.CDKeyRepository
-import com.fake.information.sever.demo.DTO.UserRepository
+import com.fake.information.sever.demo.DAO.CDKeyRepository
+import com.fake.information.sever.demo.DAO.UserRepository
 import com.fake.information.sever.demo.Http.Api.Response.Result
 import com.fake.information.sever.demo.Http.Api.Response.StatusCode
 import com.fake.information.sever.demo.Http.Until.AISeverURL

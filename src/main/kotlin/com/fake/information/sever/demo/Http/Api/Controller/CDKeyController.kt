@@ -1,6 +1,6 @@
 package com.fake.information.sever.demo.Http.Api.Controller
 
-import com.fake.information.sever.demo.DTO.UserRepository
+import com.fake.information.sever.demo.DAO.UserRepository
 import com.fake.information.sever.demo.Http.Api.Response.Result
 import com.fake.information.sever.demo.Http.Api.Response.StatusCode
 import com.fake.information.sever.demo.Http.Api.Response.TokenType
@@ -10,10 +10,8 @@ import com.fake.information.sever.demo.Until.AsyncTask.AsyncService
 import com.fake.information.sever.demo.Until.UUID.UUID
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
-import org.hamcrest.text.IsEmptyString
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
-import java.util.*
 import javax.servlet.http.HttpSession
 
 @Api(value = "Token-UUID信息管理")

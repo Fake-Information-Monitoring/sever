@@ -1,13 +1,10 @@
 package com.fake.information.sever.demo.Until.JWT
 
 
-import com.fake.information.sever.demo.DTO.CDKeyRepository
 import com.fake.information.sever.demo.Model.CDKey
 import com.fake.information.sever.demo.Model.User
 import com.fake.information.sever.demo.Until.JWT.TokenConfig.JwtExpiredException
 import io.jsonwebtoken.*
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.context.annotation.Bean
 import java.security.SignatureException
 import java.util.*
 

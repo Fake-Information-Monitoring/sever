@@ -1,6 +1,6 @@
 package com.fake.information.sever.demo.Http.Api.Controller
 
-import com.fake.information.sever.demo.DTO.UserRepository
+import com.fake.information.sever.demo.DAO.UserRepository
 import com.fake.information.sever.demo.Http.Api.Response.StatusCode
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
