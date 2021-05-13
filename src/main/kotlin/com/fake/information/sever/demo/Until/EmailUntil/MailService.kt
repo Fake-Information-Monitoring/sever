@@ -30,10 +30,8 @@ class MailService : IMailService {
     }
 
     override fun sendHtmlMail(to: String?, subject: String?, content: String?) {
-        TODO("Not yet implemented")
     }
 
     override fun sendAttachmentsMail(to: String?, subject: String?, content: String?, filePath: String?) {
-        TODO("Not yet implemented")
     }
 }
