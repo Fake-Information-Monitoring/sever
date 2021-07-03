@@ -2,9 +2,11 @@ package com.fake.information.sever.demo.Http.Api.Controller
 
 import cn.hutool.extra.tokenizer.TokenizerException
 import com.fake.information.sever.demo.Config.Redis.FakeNewsRedisTemplate
+import com.fake.information.sever.demo.DAO.CDKeyRepository
 import com.fake.information.sever.demo.Http.Api.Response.TokenType
 import com.fake.information.sever.demo.Http.Until.VerifyResultFactory
 import com.fake.information.sever.demo.Model.VerifyBaseModel
+import com.fake.information.sever.demo.Until.AsyncTask.AsyncService
 import com.fake.information.sever.demo.Until.JWT.TokenConfig
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
@@ -18,7 +20,11 @@ import javax.servlet.http.HttpSession
 @Api("AI服务管理")
 class TextVerifyController {
     @Autowired
+    private lateinit var asyncService: AsyncService
+    @Autowired
     private lateinit var redisTemplate: FakeNewsRedisTemplate
+    @Autowired
+    private lateinit var cdKeyRepository: CDKeyRepository
     fun verifyToken(token: String): Boolean {
         val count = redisTemplate.getRedis(token + "nums").toString().toInt()
         redisTemplate.setRedis(token + "nums", count + 1)
@@ -60,6 +66,9 @@ class TextVerifyController {
         var requestType = redisTemplate.getRedis(token+"type").toString() ?: throw IllegalArgumentException("无效的UUID")
         if (requestType == TokenType.TEST.toString()) {
             requestType = type
+        }
+        asyncService.asyncTask {
+            cdKeyRepository.findByKey(token).user
         }
         val text = params["text"].toString()
         return VerifyResultFactory.getResult(requestType, text,token)

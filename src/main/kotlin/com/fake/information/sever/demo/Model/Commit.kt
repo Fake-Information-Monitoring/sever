@@ -1,15 +1,17 @@
 package com.fake.information.sever.demo.Model
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import javax.persistence.*
 import java.io.Serializable
 import java.util.*
-import javax.persistence.*
+
 
 @Entity
 @Table(name="commit")
 @JsonIgnoreProperties(value = ["user"])
 class Commit: Serializable {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id",nullable = false)
     var id: Int = 0
     @ManyToOne(targetEntity = User::class,cascade = [CascadeType.ALL],optional = false)

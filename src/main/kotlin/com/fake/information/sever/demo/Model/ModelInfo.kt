@@ -1,13 +1,10 @@
 package com.fake.information.sever.demo.Model
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import org.springframework.web.multipart.MultipartFile
-import java.io.File
 import javax.persistence.*
 
 @Entity
 @Table(name = "model_info")
-
 @JsonIgnoreProperties(value = ["model","key"])
 class ModelInfo {
     @Id

@@ -40,7 +40,7 @@ class ForwardPassword {
     fun forwardPassword(
         session: HttpSession,
         @RequestHeader("verifyCode") verify: String,
-        response:HttpServletResponse
+        response: HttpServletResponse
     ): Result<String> {
         if (verifyCode == null) {
             verifyCode = VerifyCode(redisTemplate)
