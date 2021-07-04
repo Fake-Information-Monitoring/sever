@@ -19,21 +19,28 @@ import kotlin.collections.LinkedHashMap
 class WebSocketSever {
     object Clients{
         val clients = LinkedHashMap<Int, Session>()
+        val messageQueue = HashMap<Int, Queue<WarningMessage>>()
     }
-    private val messageQueue = HashMap<Int, Queue<WarningMessage>>()
     @OnOpen
     fun onOpen(session: Session, @PathParam("userId") param:Int){
         val user:Int =param
         Clients.clients[user] = session
         println("用户${param}连接成功")
-        if(messageQueue[user]!=null){
-                messageQueue[user]?.forEach{
+        if(Clients.messageQueue[user]!=null){
+            Clients.messageQueue[user]?.forEach{
                     session.asyncRemote.sendText(it.toString())
                     println("发送报警")
                 }
         }else{
-            messageQueue[user] = LinkedBlockingQueue()
+            Clients.messageQueue[user] = LinkedBlockingQueue()
         }
+    }
+    init {
+        Thread{
+            while (true){
+
+            }
+        }.start()
     }
 
     @OnClose

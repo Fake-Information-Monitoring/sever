@@ -3,6 +3,8 @@ package com.fake.information.sever.demo.Model
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import org.hibernate.annotations.Fetch
 import org.hibernate.annotations.FetchMode
+import org.hibernate.annotations.LazyCollection
+import org.hibernate.annotations.LazyCollectionOption
 import java.io.Serializable
 import java.util.*
 import javax.persistence.*
@@ -45,9 +47,12 @@ class User : Serializable {
     @Fetch(FetchMode.SUBSELECT)
     @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
     val keyList: MutableList<CDKey> = LinkedList()
-
+    @Fetch(FetchMode.SUBSELECT)
     @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
     val commitList: MutableList<Commit> = LinkedList()
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
+    var fakeMessageInfoList:MutableList<FakeMessageInfo>? = LinkedList()
 
     @OneToOne(cascade = [CascadeType.ALL])
     @JoinColumn(name = "ceritified_admin",nullable = true)
