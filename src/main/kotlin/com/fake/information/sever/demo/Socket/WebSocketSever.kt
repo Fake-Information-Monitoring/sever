@@ -1,5 +1,6 @@
 package com.fake.information.sever.demo.Socket
 
+import com.fake.information.sever.demo.Model.FakeMessageInfo
 import lombok.extern.slf4j.Slf4j
 import org.springframework.stereotype.Component
 import java.util.*
@@ -19,7 +20,7 @@ import kotlin.collections.LinkedHashMap
 class WebSocketSever {
     object Clients{
         val clients = LinkedHashMap<Int, Session>()
-        val messageQueue = HashMap<Int, Queue<WarningMessage>>()
+        val messageQueue = HashMap<Int, Queue<FakeMessageInfo>>()
     }
     @OnOpen
     fun onOpen(session: Session, @PathParam("userId") param:Int){

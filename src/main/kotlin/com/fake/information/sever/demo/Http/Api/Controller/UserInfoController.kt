@@ -122,8 +122,27 @@ class UserInfoController {
             data = "认证已提交，请等待审核"
         )
     }
-
+    @GetMapping("/WarningInfo")
     @ExperimentalStdlibApi
+    @ApiOperation("获取所有的报警信息")
+    fun getWarningInfo(session: HttpSession): Any {
+        return try {
+            val user = redisTemplate.getUserId(session)
+            Result(
+                success = true,
+                code = StatusCode.Status200.statusCode,
+                msg = "success",
+                data = userRepository.findById(user).get().fakeMessageInfoList
+            )
+
+        } catch (e: NoSuchElementException) {
+            Result<String>(
+                success = false,
+                code = StatusCode.Status502.statusCode,
+                msg = e.toString()
+            )
+        }
+    }
     @GetMapping("/")
     @ApiOperation("获取用户信息")
     fun getUserInfo(

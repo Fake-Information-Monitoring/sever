@@ -1,9 +1,11 @@
 package com.fake.information.sever.demo.Model
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import javax.persistence.*
 
 @Entity
 @Table(name = "fake_message_info")
+@JsonIgnoreProperties(value = ["user"])
 class FakeMessageInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

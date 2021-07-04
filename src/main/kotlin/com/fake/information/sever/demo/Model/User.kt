@@ -12,7 +12,7 @@ import kotlin.collections.ArrayList
 
 @Entity
 @Table(name = "User", indexes = [Index(columnList = "phone_number"), Index(columnList = "email")])
-@JsonIgnoreProperties(value = ["password", "lastActive"])
+@JsonIgnoreProperties(value = ["password", "lastActive","fakeMessageInfoList","admin"])
 class User : Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
