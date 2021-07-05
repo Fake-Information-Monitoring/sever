@@ -25,7 +25,6 @@ class DemoApplication : ApplicationRunner {
                                                                                              __/ |
                                                                                             |___/
         """.trimIndent())
-
     }
 }
 

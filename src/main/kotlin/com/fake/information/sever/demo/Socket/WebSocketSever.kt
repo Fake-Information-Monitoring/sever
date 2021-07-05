@@ -39,7 +39,7 @@ class WebSocketSever {
     init {
         Thread{
             while (true){
-
+                
             }
         }.start()
     }
