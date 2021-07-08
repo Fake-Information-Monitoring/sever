@@ -39,19 +39,32 @@ class WebSocketSever {
     init {
         Thread{
             while (true){
-                
+                if(Clients.messageQueue.isEmpty()){
+                    continue
+                }
+                Clients.messageQueue.forEach{
+                    if (it.value.isEmpty()){
+                        return@forEach
+                    }
+                    for (i in it.value){
+                        Clients.clients[it.key]?.asyncRemote?.sendText(i.toString())
+                    }
+                }
             }
         }.start()
     }
 
     @OnClose
     fun onClose(session: Session) {
-        Clients.clients.forEach {
-            if (it.value.id == session.id){
-                Clients.clients.remove(it.key)
-                return@forEach
+        run{
+            Clients.clients.forEach {
+                if (it.value.id == session.id){
+                    Clients.clients.remove(it.key)
+                    return@run
+                }
             }
         }
+
     }
 
     @OnMessage

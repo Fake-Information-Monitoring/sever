@@ -25,7 +25,8 @@ import javax.servlet.http.HttpSession
 class UserInfoController {
     @Autowired
     private lateinit var userRepository: UserRepository
-
+    @Autowired
+    private lateinit var warningFakeMessageInfoRepository: FakeMessageInfoRepository
     @Autowired
     private lateinit var commitRepository: CommitRepository
 
