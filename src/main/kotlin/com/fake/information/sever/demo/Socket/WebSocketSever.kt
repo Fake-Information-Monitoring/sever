@@ -1,6 +1,7 @@
 package com.fake.information.sever.demo.Socket
 
 import com.fake.information.sever.demo.Model.FakeMessageInfo
+import com.fake.information.sever.demo.Model.User
 import lombok.extern.slf4j.Slf4j
 import org.springframework.stereotype.Component
 import java.util.*
@@ -26,6 +27,7 @@ class WebSocketSever {
     fun onOpen(session: Session, @PathParam("userId") param:Int){
         val user:Int =param
         Clients.clients[user] = session
+
         println("用户${param}连接成功")
         if(Clients.messageQueue[user]!=null){
             Clients.messageQueue[user]?.forEach{
@@ -42,29 +44,35 @@ class WebSocketSever {
                 if(Clients.messageQueue.isEmpty()){
                     continue
                 }
-                Clients.messageQueue.forEach{
-                    if (it.value.isEmpty()){
-                        return@forEach
-                    }
-                    for (i in it.value){
-                        Clients.clients[it.key]?.asyncRemote?.sendText(i.toString())
+                Clients.clients.forEach{
+                    val mq = Clients.messageQueue[it.key]
+                    while(!mq.isNullOrEmpty()){
+                        val message = mq.poll()
+                        it.value.asyncRemote.sendObject(message)
                     }
                 }
             }
         }.start()
     }
-
+    object Sender{
+        fun sendMessage(user: User,message: FakeMessageInfo){
+            if(Clients.messageQueue[user.id] == null){
+                Clients.messageQueue[user.id] = LinkedBlockingQueue()
+            }
+            Clients.messageQueue[user.id]?.add(message)
+        }
+    }
     @OnClose
     fun onClose(session: Session) {
-        run{
-            Clients.clients.forEach {
-                if (it.value.id == session.id){
-                    Clients.clients.remove(it.key)
+        session.close()
+        kotlin.run {
+            repeat(Clients.clients.values.size) {
+                if(Clients.clients[it]?.id == session.id){
+                    Clients.clients.remove(Clients.clients[it]?.id)
                     return@run
                 }
             }
         }
-
     }
 
     @OnMessage
