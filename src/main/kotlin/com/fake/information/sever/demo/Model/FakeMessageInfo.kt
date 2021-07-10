@@ -19,5 +19,6 @@ class FakeMessageInfo {
     var name:String? = null
     @Column(name = "worse_info")
     var info:String? = null
-
+    @Column(name = "worse_type")
+    var type:String? = null
 }

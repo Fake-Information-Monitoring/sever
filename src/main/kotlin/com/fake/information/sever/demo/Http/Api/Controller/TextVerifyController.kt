@@ -10,7 +10,6 @@ import com.fake.information.sever.demo.Until.AsyncTask.AsyncService
 import com.fake.information.sever.demo.Until.JWT.TokenConfig
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
-import org.springframework.amqp.rabbit.AsyncRabbitTemplate
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpSession
@@ -50,7 +49,7 @@ class TextVerifyController {
             redisTemplate.setRedis(session.id + "TempUUID" + "nums", num + 1)
         }
         val text = params["text"].toString()
-        return VerifyResultFactory.getResult(type, text)
+        return VerifyResultFactory.getResult(type = type,text = text)
     }
 
     @PostMapping("/")
@@ -67,10 +66,8 @@ class TextVerifyController {
         if (requestType == TokenType.TEST.toString()) {
             requestType = type
         }
-        asyncService.asyncTask {
-            cdKeyRepository.findByKey(token).user
-        }
+        val user = cdKeyRepository.findByKey(token).user
         val text = params["text"].toString()
-        return VerifyResultFactory.getResult(requestType, text,token)
+        return VerifyResultFactory.getResult(user,requestType, text,token)
     }
 }

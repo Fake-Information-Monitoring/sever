@@ -1,12 +1,15 @@
 package com.fake.information.sever.demo.Http.Until
 
 import com.fake.information.sever.demo.Http.Api.Response.TokenType
+import com.fake.information.sever.demo.Model.FakeMessageInfo
+import com.fake.information.sever.demo.Model.User
 import com.fake.information.sever.demo.Model.VerifyBaseModel
+import com.fake.information.sever.demo.Socket.WebSocketSever
 import com.fake.information.sever.demo.Until.Requests.DemoOkhttp
 
 object VerifyResultFactory {
-    fun getResult(type: String, text: String, UUID: String = ""): VerifyBaseModel<*> {
-        return when (type) {
+    fun getResult(user: User? = null, type: String, text: String, UUID: String = ""): VerifyBaseModel<*> {
+        val result = when (type) {
             TokenType.RUMORS.toString() -> DemoOkhttp.post<VerifyBaseModel<VerifyBaseModel.RumorsModel>>(
                 header = mapOf(
                     "text" to text
@@ -37,5 +40,13 @@ object VerifyResultFactory {
             }
             else -> throw NullPointerException("不存在该类型")
         }
+        if(user == null) return result
+        if (result.isFake){
+            val fakeInfo = FakeMessageInfo()
+            fakeInfo.info = text
+            fakeInfo.type = type
+            WebSocketSever.Sender.sendMessage(user,fakeInfo)
+        }
+        return result
     }
 }

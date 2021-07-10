@@ -9,6 +9,8 @@ data class VerifyBaseModel<T>(
     val success: Boolean = false,
     @SerializedName("data")
     val data: T,
+    @SerializedName("isFake")
+    val isFake: Boolean
 ) {
     data class RumorsModel(
         @SerializedName("谣言")
