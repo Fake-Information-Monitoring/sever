@@ -68,6 +68,6 @@ class TextVerifyController {
         }
         val user = cdKeyRepository.findByKey(token).user
         val text = params["text"].toString()
-        return VerifyResultFactory.getResult(user,requestType, text,token)
+        return VerifyResultFactory.getResult(user,type = requestType, text,token)
     }
 }

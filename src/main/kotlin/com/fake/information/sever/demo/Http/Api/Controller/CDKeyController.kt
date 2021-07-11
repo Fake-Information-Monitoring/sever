@@ -54,9 +54,9 @@ class CDKeyController {
         if (!TokenType.hasValue(type)) {
             throw IllegalAccessException("不存在该类别")
         }
+        redisTemplate.setRedis(key.toString()+"type", type)
+        redisTemplate.setRedis(key.toString() + "nums", 0)
         asyncService.asyncTask {
-            redisTemplate.setRedis(key.toString(), type)
-            redisTemplate.setRedis(key.toString() + "nums", 0)
             userRepository.save(user)
         }
         return Result(
