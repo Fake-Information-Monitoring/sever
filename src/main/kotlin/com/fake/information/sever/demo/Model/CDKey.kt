@@ -1,11 +1,12 @@
 package com.fake.information.sever.demo.Model
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import java.util.*
 import javax.persistence.*
 
 @Entity
 @Table(name="key",indexes = [Index(columnList = "key_str")])
-@JsonIgnoreProperties(value = ["user"])
+@JsonIgnoreProperties(value = ["user","fakeMessageInfoList"])
 class CDKey {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,6 +19,11 @@ class CDKey {
     @ManyToOne(targetEntity = User::class,cascade = [CascadeType.ALL],optional = false)
     @JoinColumn(name = "user_id",referencedColumnName = "id")
     var user:User? = null
+
+
+    @OneToMany(mappedBy = "cdKey", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
+    var fakeMessageInfoList:MutableList<FakeMessageInfo>? = LinkedList()
+
     override fun toString(): String {
         return this.key!!
     }

@@ -7,6 +7,7 @@ import com.fake.information.sever.demo.Model.User
 import com.fake.information.sever.demo.Model.VerifyBaseModel
 import com.fake.information.sever.demo.Socket.WebSocketSever
 import com.fake.information.sever.demo.Until.Requests.DemoOkhttp
+import java.util.*
 
 object VerifyResultFactory {
     fun getResult(user: User? = null, type: String, message: FakeMessageInfo, UUID: String = "",fakeMessageInfoRepository: FakeMessageInfoRepository? = null): VerifyBaseModel<*> {
@@ -44,6 +45,7 @@ object VerifyResultFactory {
         }
         if(user == null) return result
         if (result.isFake){
+            message.time = Date()
             fakeMessageInfoRepository!!.save(message)
             WebSocketSever.Sender.sendMessage(user,message)
         }

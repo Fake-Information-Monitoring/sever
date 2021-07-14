@@ -71,13 +71,14 @@ class TextVerifyController {
         type: String,
         @RequestBody params: Map<String, Any>,
     ): VerifyBaseModel<*> {
-        val token = params["token"].toString()
+        var token = params["token"].toString()
         if(cdKeyRepository.findByKey(token)==null){
             throw NullPointerException("不存在该KEY")
         }
         if (!verifyToken(token)) {
             throw TokenizerException("该UUID已失效,请申请新UUID")
         }
+        val tokenObj = cdKeyRepository.findByKey(token)
         logger.info("")
         val requestType = if (redisTemplate.getRedis(token+"type").toString() == TokenType.TEST.toString()) {
             type
@@ -91,7 +92,7 @@ class TextVerifyController {
         val name = params["name"].toString()
         val message = FakeMessageInfo()
         message.info = text
-        message.user = user
+        message.cdKey = tokenObj
         message.type = requestType
         message.account = account
         message.name = name

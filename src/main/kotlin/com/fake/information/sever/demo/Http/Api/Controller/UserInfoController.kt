@@ -7,10 +7,7 @@ import com.fake.information.sever.demo.Http.Api.Response.StatusCode
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 import com.fake.information.sever.demo.Http.Api.Response.Result
-import com.fake.information.sever.demo.Model.CertifiedPool
-import com.fake.information.sever.demo.Model.CorporateCertified
-import com.fake.information.sever.demo.Model.PersonCertified
-import com.fake.information.sever.demo.Model.User
+import com.fake.information.sever.demo.Model.*
 import com.fake.information.sever.demo.Until.AsyncTask.AsyncService
 import com.fake.information.sever.demo.Until.OSS.OSSUpload
 import io.swagger.annotations.Api
@@ -25,6 +22,8 @@ import javax.servlet.http.HttpSession
 class UserInfoController {
     @Autowired
     private lateinit var userRepository: UserRepository
+    @Autowired
+    private lateinit var cdKeyRepository: CDKeyRepository
     @Autowired
     private lateinit var warningFakeMessageInfoRepository: FakeMessageInfoRepository
     @Autowired
@@ -123,17 +122,41 @@ class UserInfoController {
             data = "认证已提交，请等待审核"
         )
     }
+    @GetMapping("/KeyWarningInfo/{keyId}")
+    @ExperimentalStdlibApi
+    @ApiOperation("获取所有的报警信息")
+    fun getTokenWarningInfo(session: HttpSession,@PathVariable keyId:Int): Any {
+        return try {
+            Result(
+                success = true,
+                code = StatusCode.Status200.statusCode,
+                msg = "success",
+                data = cdKeyRepository.findById(keyId).get().fakeMessageInfoList
+            )
+
+        } catch (e: NoSuchElementException) {
+            Result<String>(
+                success = false,
+                code = StatusCode.Status502.statusCode,
+                msg = e.toString()
+            )
+        }
+    }
     @GetMapping("/WarningInfo")
     @ExperimentalStdlibApi
     @ApiOperation("获取所有的报警信息")
     fun getWarningInfo(session: HttpSession): Any {
         return try {
             val user = redisTemplate.getUserId(session)
+            val info:MutableMap<CDKey,MutableList<FakeMessageInfo>?> = HashMap()
+            userRepository.findById(user).get().keyList.forEach {
+                info[it] = it.fakeMessageInfoList
+            }
             Result(
                 success = true,
                 code = StatusCode.Status200.statusCode,
                 msg = "success",
-                data = userRepository.findById(user).get().fakeMessageInfoList
+                data = info
             )
 
         } catch (e: NoSuchElementException) {

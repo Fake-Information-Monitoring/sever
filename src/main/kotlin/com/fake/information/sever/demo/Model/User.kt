@@ -12,7 +12,7 @@ import kotlin.collections.ArrayList
 
 @Entity
 @Table(name = "User", indexes = [Index(columnList = "phone_number"), Index(columnList = "email")])
-@JsonIgnoreProperties(value = ["password", "lastActive","fakeMessageInfoList","admin"])
+@JsonIgnoreProperties(value = ["password", "lastActive","admin"])
 class User : Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,9 +50,6 @@ class User : Serializable {
     @Fetch(FetchMode.SUBSELECT)
     @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
     val commitList: MutableList<Commit> = LinkedList()
-    @LazyCollection(LazyCollectionOption.FALSE)
-    @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
-    var fakeMessageInfoList:MutableList<FakeMessageInfo>? = LinkedList()
 
     @OneToOne(cascade = [CascadeType.ALL])
     @JoinColumn(name = "ceritified_admin",nullable = true)
