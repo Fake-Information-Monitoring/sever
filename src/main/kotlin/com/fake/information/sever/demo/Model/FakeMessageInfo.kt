@@ -9,7 +9,7 @@ import javax.persistence.*
 class FakeMessageInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Int? = null
+    var id: Int? = 0
     @ManyToOne(targetEntity = User::class,cascade = [CascadeType.ALL],optional = false)
     @JoinColumn(name = "user_id",referencedColumnName = "id")
     var user:User? = null

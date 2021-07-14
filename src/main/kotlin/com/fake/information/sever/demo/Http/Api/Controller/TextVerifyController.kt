@@ -3,8 +3,10 @@ package com.fake.information.sever.demo.Http.Api.Controller
 import cn.hutool.extra.tokenizer.TokenizerException
 import com.fake.information.sever.demo.Config.Redis.FakeNewsRedisTemplate
 import com.fake.information.sever.demo.DAO.CDKeyRepository
+import com.fake.information.sever.demo.DAO.FakeMessageInfoRepository
 import com.fake.information.sever.demo.Http.Api.Response.TokenType
 import com.fake.information.sever.demo.Http.Until.VerifyResultFactory
+import com.fake.information.sever.demo.Model.FakeMessageInfo
 import com.fake.information.sever.demo.Model.VerifyBaseModel
 import com.fake.information.sever.demo.Until.AsyncTask.AsyncService
 import com.fake.information.sever.demo.Until.JWT.TokenConfig
@@ -20,6 +22,8 @@ import javax.servlet.http.HttpSession
 class TextVerifyController {
     @Autowired
     private lateinit var asyncService: AsyncService
+    @Autowired
+    private lateinit var warningFakeMessageInfoRepository: FakeMessageInfoRepository
     @Autowired
     private lateinit var redisTemplate: FakeNewsRedisTemplate
     @Autowired
@@ -49,7 +53,9 @@ class TextVerifyController {
             redisTemplate.setRedis(session.id + "TempUUID" + "nums", num + 1)
         }
         val text = params["text"].toString()
-        return VerifyResultFactory.getResult(type = type,text = text)
+        val message = FakeMessageInfo()
+        message.info = text
+        return VerifyResultFactory.getResult(type = type, message = message)
     }
 
     @PostMapping("/")
@@ -57,8 +63,8 @@ class TextVerifyController {
     fun postVerifyText(
         type: String,
         @RequestBody params: Map<String, Any>,
-        @RequestHeader("token") token: String
     ): VerifyBaseModel<*> {
+        val token = params["token"].toString()
         if (!verifyToken(token)) {
             throw TokenizerException("该UUID已失效,请申请新UUID")
         }
@@ -68,6 +74,15 @@ class TextVerifyController {
         }
         val user = cdKeyRepository.findByKey(token).user
         val text = params["text"].toString()
-        return VerifyResultFactory.getResult(user,type = requestType, text,token)
+        val account = params["account"].toString()
+        val name = params["name"].toString()
+        val message = FakeMessageInfo()
+        message.info = text
+        message.user = user
+        message.type = requestType
+        message.account = account
+        message.name = name
+        return VerifyResultFactory.getResult(user,type = requestType, message,token,
+            fakeMessageInfoRepository = warningFakeMessageInfoRepository)
     }
 }

@@ -1,5 +1,6 @@
 package com.fake.information.sever.demo.Http.Until
 
+import com.fake.information.sever.demo.DAO.FakeMessageInfoRepository
 import com.fake.information.sever.demo.Http.Api.Response.TokenType
 import com.fake.information.sever.demo.Model.FakeMessageInfo
 import com.fake.information.sever.demo.Model.User
@@ -8,7 +9,8 @@ import com.fake.information.sever.demo.Socket.WebSocketSever
 import com.fake.information.sever.demo.Until.Requests.DemoOkhttp
 
 object VerifyResultFactory {
-    fun getResult(user: User? = null, type: String, text: String, UUID: String = ""): VerifyBaseModel<*> {
+    fun getResult(user: User? = null, type: String, message: FakeMessageInfo, UUID: String = "",fakeMessageInfoRepository: FakeMessageInfoRepository? = null): VerifyBaseModel<*> {
+        val text = message.info.toString()
         val result = when (type) {
             TokenType.RUMORS.toString() -> DemoOkhttp.post<VerifyBaseModel<VerifyBaseModel.RumorsModel>>(
                 header = mapOf(
@@ -42,10 +44,8 @@ object VerifyResultFactory {
         }
         if(user == null) return result
         if (result.isFake){
-            val fakeInfo = FakeMessageInfo()
-            fakeInfo.info = text
-            fakeInfo.type = type
-            WebSocketSever.Sender.sendMessage(user,fakeInfo)
+            fakeMessageInfoRepository!!.save(message)
+            WebSocketSever.Sender.sendMessage(user,message)
         }
         return result
     }
