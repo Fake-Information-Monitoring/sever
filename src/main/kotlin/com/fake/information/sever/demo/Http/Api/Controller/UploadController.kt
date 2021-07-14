@@ -59,7 +59,7 @@ class UploadController {
     ) {
         val b:ByteArray = file.bytes
         asyncService.asyncTask {
-            val key = cdKeyRepository.findByKey(uuid)
+            val key = cdKeyRepository.findByKey(uuid)!!
             val model = ModelInfo()
             model.key = key
             model.modelName = type
