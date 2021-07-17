@@ -66,7 +66,7 @@ class WebSocketSever {
             if(Clients.messageQueue[user.id] == null){
                 Clients.messageQueue[user.id] = LinkedBlockingQueue()
             }
-            logger?.info("纳入报警队列！${user.name}")
+            logger?.info("纳入报警队列！${user.name}${message.words}")
             Clients.messageQueue[user.id]?.add(message)
         }
     }

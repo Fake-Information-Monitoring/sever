@@ -7,25 +7,41 @@ import com.fake.information.sever.demo.Model.User
 import com.fake.information.sever.demo.Model.VerifyBaseModel
 import com.fake.information.sever.demo.Socket.WebSocketSever
 import com.fake.information.sever.demo.Until.Requests.DemoOkhttp
+import com.google.gson.internal.LinkedTreeMap
 import java.util.*
 
 object VerifyResultFactory {
-    fun getResult(user: User? = null, type: String, message: FakeMessageInfo, UUID: String = "",fakeMessageInfoRepository: FakeMessageInfoRepository? = null): VerifyBaseModel<*> {
+    fun getResult(user: User? = null, type: String, message: FakeMessageInfo, UUID: String = "",fakeMessageInfoRepository: FakeMessageInfoRepository? = null): Any {
         val text = message.info.toString()
         val result = when (type) {
-            TokenType.RUMORS.toString() -> DemoOkhttp.post<VerifyBaseModel<VerifyBaseModel.RumorsModel>>(
+            TokenType.RUMORS.toString() -> DemoOkhttp.post(
                 header = mapOf(
                     "text" to text
                 ),
                 url = AISeverURL.RUMOR_URL.toString()
             )
-            TokenType.SENSITIVE_WORD.toString() -> DemoOkhttp.post<VerifyBaseModel<VerifyBaseModel.SensitiveModel>>(
-                header = mapOf(
-                    "text" to text
-                ),
-                url = AISeverURL.SENSITIVE_WORD_URL.toString()
-            )
-            TokenType.ZOMBIES.toString() -> DemoOkhttp.post<VerifyBaseModel<VerifyBaseModel.ZombiesModel>>(
+            TokenType.SENSITIVE_WORD.toString() ->{
+                val response = DemoOkhttp.post(
+                    header = mapOf(
+                        "text" to text
+                    ),
+                    url = AISeverURL.SENSITIVE_WORD_URL.toString()
+                )
+                message.words = buildString {
+                    append("[")
+                    val map:HashMap<String,Any> = response.data!!
+                    map.forEach { t, u ->
+                        if(u is List<*>){
+                            if(u.size > 0){
+                                append("\"$t\",")
+                            }
+                        }
+                    }
+                    append("]")
+                }
+                response
+            }
+            TokenType.ZOMBIES.toString() -> DemoOkhttp.post(
                 header = mapOf(
                     "text" to text
                 ),
@@ -36,7 +52,7 @@ object VerifyResultFactory {
                     "uuid" to UUID,
                     "text" to text
                 )
-                DemoOkhttp.post<VerifyBaseModel<VerifyBaseModel.DIYModel>>(
+                DemoOkhttp.post(
                     url = AISeverURL.MODEL_URL.toString(),
                     header = body
                 )

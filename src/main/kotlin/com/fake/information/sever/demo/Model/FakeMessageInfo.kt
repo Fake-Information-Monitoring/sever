@@ -26,8 +26,9 @@ class FakeMessageInfo {
                 "\"name\":\"$name\"," +
                 "\"info\":\"$info\"," +
                 "\"type\":\"$type\"," +
-                "\"time\":\"$time\"}"
-
+                "\"time\":\"$time\"," +
+                "\"appId\":\"${cdKey?.id}\"" +
+                "\"words\":\"${words}\"}"
     }
 
     @Column(name = "worse_info")
@@ -36,4 +37,6 @@ class FakeMessageInfo {
     var type:String? = null
     @Column(name = "time")
     var time: Date? = null
+    @Column(name = "words",nullable = true)
+    var words:String? = null
 }

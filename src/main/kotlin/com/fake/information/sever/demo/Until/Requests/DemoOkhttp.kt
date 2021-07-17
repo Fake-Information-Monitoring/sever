@@ -1,10 +1,16 @@
 package com.fake.information.sever.demo.Until.Requests
 
+import com.fake.information.sever.demo.Model.VerifyBaseModel
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.google.gson.reflect.TypeToken
 import okhttp3.*
+import java.util.*
+
 
 object DemoOkhttp {
-    inline fun <reified T> post(url:String,header:Map<String,String>?=null):T{
+    inline fun post(url:String,header:Map<String,String>?=null):VerifyBaseModel{
         val client= OkHttpClient()
         val formBodyBuilder = FormBody.Builder()
         header?.forEach{
@@ -19,8 +25,7 @@ object DemoOkhttp {
                 .build()
         val responseBody = client.newCall(requestBody)
             .execute().body()?.string()
-        return GsonBuilder().create()
-            .fromJson(responseBody, T::class.java)
+        return  Gson().fromJson(responseBody,VerifyBaseModel::class.java);
     }
 }
 

@@ -51,7 +51,7 @@ class TextVerifyController {
         type: String,
         @RequestBody params: Map<String, Any>,
         session: HttpSession
-    ): VerifyBaseModel<*> {
+    ): Any {
         if (redisTemplate.getRedis(session.id + "TempUUID") == null){
                 redisTemplate.setRedis(session.id + "TempUUID", TokenType.TEST.toString())
                 redisTemplate.setRedis(session.id + "TempUUID" + "nums", 0)
@@ -70,7 +70,7 @@ class TextVerifyController {
     fun postVerifyText(
         type: String,
         @RequestBody params: Map<String, Any>,
-    ): VerifyBaseModel<*> {
+    ): Any {
         var token = params["token"].toString()
         if(cdKeyRepository.findByKey(token)==null){
             throw NullPointerException("不存在该KEY")
