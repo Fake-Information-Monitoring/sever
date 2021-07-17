@@ -32,9 +32,10 @@ class WebSocketSever {
         val user:Int =param
         Clients.clients[user] = session
         logger?.info("用户${param}连接成功")
+        session.asyncRemote.sendText("连接确认")
         if(Clients.messageQueue[user]!=null){
             Clients.messageQueue[user]?.forEach{
-                session.asyncRemote.sendText(it.toString())
+                session.asyncRemote.sendText(it.toJsonString())
                 logger?.info("发送报警")
             }
         }else{
@@ -44,6 +45,7 @@ class WebSocketSever {
     init {
         Thread{
             while (true){
+                Thread.sleep(500)
                 if(Clients.messageQueue.isEmpty()){
                     continue
                 }
@@ -51,8 +53,8 @@ class WebSocketSever {
                     val mq = Clients.messageQueue[it.key]
                     while(!mq.isNullOrEmpty()){
                         val message = mq.poll()
-                        logger?.info("报警！$message")
-                        it.value.asyncRemote.sendText(message.toString())
+                        logger?.info("报警！${message.toJsonString()}")
+                        it.value.asyncRemote.sendText(message.toJsonString())
                     }
                 }
             }

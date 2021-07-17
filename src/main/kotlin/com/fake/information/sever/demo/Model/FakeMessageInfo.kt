@@ -20,8 +20,14 @@ class FakeMessageInfo {
     var account:String? = null
     @Column(name = "worse_name")
     var name:String? = null
-    override fun toString(): String {
-        return super.toString()
+    @OptIn(ExperimentalStdlibApi::class)
+    fun toJsonString(): String {
+        return "{\"account\":\"$account\"," +
+                "\"name\":\"$name\"," +
+                "\"info\":\"$info\"," +
+                "\"type\":\"$type\"," +
+                "\"time\":\"$time\"}"
+
     }
 
     @Column(name = "worse_info")
