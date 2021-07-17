@@ -20,6 +20,10 @@ class FakeMessageInfo {
     var account:String? = null
     @Column(name = "worse_name")
     var name:String? = null
+    override fun toString(): String {
+        return super.toString()
+    }
+
     @Column(name = "worse_info")
     var info:String? = null
     @Column(name = "worse_type")

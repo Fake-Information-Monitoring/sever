@@ -51,8 +51,8 @@ class WebSocketSever {
                     val mq = Clients.messageQueue[it.key]
                     while(!mq.isNullOrEmpty()){
                         val message = mq.poll()
-                        logger?.info("报警！")
-                        it.value.asyncRemote.sendObject(message)
+                        logger?.info("报警！$message")
+                        it.value.asyncRemote.sendText(message.toString())
                     }
                 }
             }
@@ -64,7 +64,7 @@ class WebSocketSever {
             if(Clients.messageQueue[user.id] == null){
                 Clients.messageQueue[user.id] = LinkedBlockingQueue()
             }
-            logger?.info("报警队列！${user.name}")
+            logger?.info("纳入报警队列！${user.name}")
             Clients.messageQueue[user.id]?.add(message)
         }
     }
