@@ -28,16 +28,14 @@ object VerifyResultFactory {
                     url = AISeverURL.SENSITIVE_WORD_URL.toString()
                 )
                 message.words = buildString {
-                    append("[")
                     val map:HashMap<String,Any> = response.data!!
                     map.forEach { t, u ->
                         if(u is List<*>){
                             if(u.size > 0){
-                                append("\"$t\",")
+                                append("${t},")
                             }
                         }
                     }
-                    append("]")
                 }
                 response
             }

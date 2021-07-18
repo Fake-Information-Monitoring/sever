@@ -27,7 +27,7 @@ class FakeMessageInfo {
                 "\"info\":\"$info\"," +
                 "\"type\":\"$type\"," +
                 "\"time\":\"$time\"," +
-                "\"appId\":\"${cdKey?.id}\"" +
+                "\"appId\":\"${cdKey?.id}\"," +
                 "\"words\":\"${words}\"}"
     }
 
