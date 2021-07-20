@@ -4,10 +4,8 @@ import com.fake.information.sever.demo.DAO.FakeMessageInfoRepository
 import com.fake.information.sever.demo.Http.Api.Response.TokenType
 import com.fake.information.sever.demo.Model.FakeMessageInfo
 import com.fake.information.sever.demo.Model.User
-import com.fake.information.sever.demo.Model.VerifyBaseModel
 import com.fake.information.sever.demo.Socket.WebSocketSever
 import com.fake.information.sever.demo.Until.Requests.DemoOkhttp
-import com.google.gson.internal.LinkedTreeMap
 import java.util.*
 
 object VerifyResultFactory {
@@ -29,9 +27,9 @@ object VerifyResultFactory {
                 )
                 message.words = buildString {
                     val map:HashMap<String,Any> = response.data!!
-                    map.forEach { t, u ->
+                    map.forEach { (t, u) ->
                         if(u is List<*>){
-                            if(u.size > 0){
+                            if(u.size > 0 && t.isNotEmpty()){
                                 append("${t},")
                             }
                         }

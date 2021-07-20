@@ -1,9 +1,9 @@
 package com.fake.information.sever.demo.Model
 
+import cn.hutool.json.JSONObject
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import java.util.*
 import javax.persistence.*
-
 @Entity
 @Table(name = "fake_message_info")
 @JsonIgnoreProperties(value = ["cdKey"])
@@ -22,15 +22,16 @@ class FakeMessageInfo {
     var name:String? = null
     @OptIn(ExperimentalStdlibApi::class)
     fun toJsonString(): String {
-        return "{\"account\":\"$account\"," +
-                "\"name\":\"$name\"," +
-                "\"info\":\"$info\"," +
-                "\"type\":\"$type\"," +
-                "\"time\":\"$time\"," +
-                "\"appId\":\"${cdKey?.id}\"," +
-                "\"words\":\"${words}\"}"
+        val result = JSONObject()
+        result["account"] = account
+        result["name"] = name
+        result["info"] = info
+        result["type"] = type
+        result["appId"] = cdKey?.id
+        result["words"] = words?.split(",")
+        result["time"] = time
+        return result.toString()
     }
-
     @Column(name = "worse_info")
     var info:String? = null
     @Column(name = "worse_type")
