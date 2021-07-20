@@ -1,5 +1,6 @@
 package com.fake.information.sever.demo.Http.Api.Controller
 
+import cn.hutool.json.JSONObject
 import com.fake.information.sever.demo.Config.Redis.FakeNewsRedisTemplate
 import com.fake.information.sever.demo.Controller.tools.Check
 import com.fake.information.sever.demo.DAO.*
@@ -13,8 +14,12 @@ import com.fake.information.sever.demo.Until.OSS.OSSUpload
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
 import org.springframework.web.multipart.MultipartFile
+import java.util.*
 import javax.security.auth.login.AccountNotFoundException
 import javax.servlet.http.HttpSession
+import kotlin.NoSuchElementException
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 @Api(value = "用户信息管理接口")
 @RestController
@@ -142,6 +147,32 @@ class UserInfoController {
             )
         }
     }
+
+    @GetMapping("/WarningInfo/time/{keyId}")
+    @ApiOperation("分时段报警信息")
+    fun getWarningInfoByTime(session: HttpSession,@PathVariable keyId: Int):Any{
+        val infoList = cdKeyRepository.findById(keyId).get().fakeMessageInfoList
+        val timeObjs = HashMap<String,ArrayList<FakeMessageInfo>>()
+        if(infoList?.isNotEmpty() == true){
+            infoList.forEach { it
+                val calendar = Calendar.getInstance()
+                calendar.time = it.time
+                val date = "${calendar.get(Calendar.YEAR)}年" +
+                        "${calendar.get(Calendar.MONTH)}月" +
+                        "${calendar.get(Calendar.DAY_OF_MONTH)}日"
+                if (!timeObjs.containsKey(date)){
+                    timeObjs[date] = ArrayList()
+                }
+                timeObjs[date]?.add(it)
+            }
+        }
+        return Result<String>(
+            success = true,
+            code = StatusCode.Status200.statusCode,
+            msg = timeObjs
+        )
+    }
+
     @GetMapping("/WarningInfo")
     @ExperimentalStdlibApi
     @ApiOperation("获取所有的报警信息")
