@@ -57,7 +57,7 @@ class UploadController {
         @RequestHeader("uuid") uuid: String,
         @RequestHeader("type") type: String
     ) {
-        val b:ByteArray = file.bytes
+        val b: ByteArray = file.bytes
         asyncService.asyncTask {
             val key = cdKeyRepository.findByKey(uuid)!!
             val model = ModelInfo()
@@ -87,34 +87,32 @@ class UploadController {
         key.key = UUID.getUuid()
         val filename = "${key.key}.txt"
         val input = ByteArrayInputStream(file.bytes)
-        asyncService.asyncTask {
-            OSSUpload.upload(input, filename)
-            println("上传成功！")
-            val commit = Commit()
-            commit.user = user
-            key.keyName = appName
-            user.keyList.add(key)
-            key.user = user
-            key.keyType = "Model"
-            commit.indexOSSUrl = filename
-            val model = ModelInfo()
-            model.modelName = type
-            model.key = key
-            model.trainStatus = -1
-            commit.commitTime = Date()
-            user.commitList.add(commit)
-            userRepository.save(user)
-            redisTemplate.setRedis(key.key + "nums", 0)
-            redisTemplate.setRedis(key.key + "type", key.keyType.toString())
-            post(
-                header = mapOf(
-                    "url" to "https://${OSSConfiguration.OSS_BUCKET_NAME}.${OSSConfiguration.OSS_END_POINT}/" +
-                            "${OSSConfiguration.OSS_FILE_HOST}/${OSSUpload.dateStr}/${filename}",
-                    "type" to type,
-                    "uuid" to key.key.toString()
-                ), url = AISeverURL.TRAIN_URL.toString()
-            )
-        }
+        OSSUpload.upload(input, filename)
+        println("上传成功！")
+        val commit = Commit()
+        commit.user = user
+        key.keyName = appName
+        user.keyList.add(key)
+        key.user = user
+        key.keyType = "Model"
+        commit.indexOSSUrl = filename
+        val model = ModelInfo()
+        model.modelName = type
+        model.key = key
+        model.trainStatus = -1
+        commit.commitTime = Date()
+        user.commitList.add(commit)
+        userRepository.save(user)
+        redisTemplate.setRedis(key.key + "nums", 0)
+        redisTemplate.setRedis(key.key + "type", key.keyType.toString())
+        post(
+            header = mapOf(
+                "url" to "https://${OSSConfiguration.OSS_BUCKET_NAME}.${OSSConfiguration.OSS_END_POINT}/" +
+                        "${OSSConfiguration.OSS_FILE_HOST}/${OSSUpload.dateStr}/${filename}",
+                "type" to type,
+                "uuid" to key.key.toString()
+            ), url = AISeverURL.TRAIN_URL.toString()
+        )
         return Result(
             success = true,
             code = StatusCode.Status200.statusCode,

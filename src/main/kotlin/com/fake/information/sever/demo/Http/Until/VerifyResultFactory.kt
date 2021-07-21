@@ -56,7 +56,7 @@ object VerifyResultFactory {
             else -> throw NullPointerException("不存在该类型")
         }
         if(user == null) return result
-        if (result.isFake){
+        if (result.isFake == true){
             message.time = Date()
             fakeMessageInfoRepository!!.save(message)
             WebSocketSever.Sender.sendMessage(user,message)

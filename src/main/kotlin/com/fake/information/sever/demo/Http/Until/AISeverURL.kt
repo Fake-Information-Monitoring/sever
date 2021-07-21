@@ -26,7 +26,7 @@ enum class AISeverURL(var url: String) {
             return this.url
         }
     },
-    MODEL_URL("$ROOT_URL/VerifyDIYModel") {
+    MODEL_URL("http://127.0.0.1:5678/VerifyDIYModel") {
         override fun toString(): String {
             return this.url
         }

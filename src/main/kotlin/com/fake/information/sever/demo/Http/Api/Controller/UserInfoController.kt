@@ -13,6 +13,7 @@ import com.fake.information.sever.demo.Until.AsyncTask.AsyncService
 import com.fake.information.sever.demo.Until.OSS.OSSUpload
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
+import org.springframework.expression.AccessException
 import org.springframework.web.multipart.MultipartFile
 import java.util.*
 import javax.security.auth.login.AccountNotFoundException
@@ -148,19 +149,35 @@ class UserInfoController {
         }
     }
 
-    @GetMapping("/WarningInfo/time/{keyId}")
+
+    @GetMapping("/WarningInfo/time/{keyId}/{decentDay}")
     @ApiOperation("分时段报警信息")
-    fun getWarningInfoByTime(session: HttpSession,@PathVariable keyId: Int):Any{
+    fun getWarningInfoByTime(session: HttpSession,@PathVariable keyId: Int,@PathVariable decentDay:Int):Any{
         val infoList = cdKeyRepository.findById(keyId).get().fakeMessageInfoList
         val timeObjs = HashMap<String,ArrayList<FakeMessageInfo>>()
+        val beforeDay = Calendar.getInstance()
+        beforeDay.time = Date()
+        if(decentDay < 0){
+            throw AccessException("不能为负值")
+        }
+        beforeDay.add(Calendar.DATE,-decentDay)
         if(infoList?.isNotEmpty() == true){
             infoList.forEach { it
                 val calendar = Calendar.getInstance()
                 calendar.time = it.time
-                val date = "${calendar.get(Calendar.YEAR)}年" +
-                        "${calendar.get(Calendar.MONTH)}月" +
-                        "${calendar.get(Calendar.DAY_OF_MONTH)}日"
-                if (!timeObjs.containsKey(date)){
+                val month = if(calendar.get(Calendar.MONTH)+1 < 10){
+                    "0${calendar.get(Calendar.MONTH)+1}"
+                }else{
+                    "${calendar.get(Calendar.MONTH)+1}"
+                }
+                val day = if(calendar.get(Calendar.DAY_OF_MONTH) < 10){
+                    "0${calendar.get(Calendar.DAY_OF_MONTH)}"
+                }else{
+                    "${calendar.get(Calendar.DAY_OF_MONTH)}"
+                }
+                val date = "${calendar.get(Calendar.YEAR)}-" +
+                        "${month}-$day"
+                if (!timeObjs.containsKey(date) && calendar.after(beforeDay)){
                     timeObjs[date] = ArrayList()
                 }
                 timeObjs[date]?.add(it)

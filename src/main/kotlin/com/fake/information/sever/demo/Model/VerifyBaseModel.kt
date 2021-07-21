@@ -14,5 +14,5 @@ class VerifyBaseModel{
     val data: HashMap<String,Any>? = null
 
     @SerializedName("isFake")
-    val isFake: Boolean = false
+    val isFake: Boolean? = null
 }
