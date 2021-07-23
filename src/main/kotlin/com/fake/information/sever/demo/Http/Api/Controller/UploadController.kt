@@ -73,9 +73,9 @@ class UploadController {
     @PostMapping("/uploadFile")
     @ApiOperation("上传文件")
     fun postCommitFile(
-        @RequestHeader("appName") appName: String,
-        @RequestHeader("type") type: String,
-        @RequestBody file: MultipartFile,
+        appName: String,
+        type: String,
+        file: MultipartFile,
         session: HttpSession
     ): Result<String> {
         if (appName.isEmpty()) {
