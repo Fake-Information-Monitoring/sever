@@ -68,6 +68,7 @@ class UploadController {
             model.setModel(b)
             model.trainStatus = 1
             key.model = model
+            key.enterpriseName = model.modelName
             cdKeyRepository.save(key)
         }
     }
