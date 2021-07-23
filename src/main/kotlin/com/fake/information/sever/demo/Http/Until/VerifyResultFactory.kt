@@ -48,6 +48,7 @@ object VerifyResultFactory {
                     "uuid" to UUID,
                     "text" to text
                 )
+                message.words = type
                 DemoOkhttp.post(
                     url = AISeverURL.MODEL_URL.toString(),
                     header = body
