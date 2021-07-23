@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 import java.io.ByteArrayInputStream
+import java.net.URLDecoder
 import java.util.*
 import javax.servlet.http.HttpSession
 
@@ -57,12 +58,13 @@ class UploadController {
         @RequestHeader("uuid") uuid: String,
         @RequestHeader("type") type: String
     ) {
+        val DecodeType=URLDecoder.decode(type,"UTF-8")
         val b: ByteArray = file.bytes
         asyncService.asyncTask {
             val key = cdKeyRepository.findByKey(uuid)!!
             val model = ModelInfo()
             model.key = key
-            model.modelName = type
+            model.modelName = DecodeType
             model.setModel(b)
             model.trainStatus = 1
             key.model = model
