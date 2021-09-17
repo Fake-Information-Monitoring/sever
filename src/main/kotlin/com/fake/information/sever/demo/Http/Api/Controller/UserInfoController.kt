@@ -153,7 +153,8 @@ class UserInfoController {
     @GetMapping("/WarningInfo/time/{keyId}/{decentDay}")
     @ApiOperation("分时段报警信息")
     fun getWarningInfoByTime(session: HttpSession,@PathVariable keyId: Int,@PathVariable decentDay:Int):Any{
-        val infoList = cdKeyRepository.findById(keyId).get().fakeMessageInfoList
+        val key = cdKeyRepository.findById(keyId).get()
+        val infoList = key.fakeMessageInfoList
         val timeObjs = HashMap<String,ArrayList<FakeMessageInfo>>()
         val beforeDay = Calendar.getInstance()
         beforeDay.time = Date()
@@ -186,7 +187,8 @@ class UserInfoController {
         return Result<String>(
             success = true,
             code = StatusCode.Status200.statusCode,
-            msg = timeObjs
+            msg = timeObjs,
+            data = key.keyType
         )
     }
 
